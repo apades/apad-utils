@@ -1,0 +1,6 @@
+{
+  "name": "@apad/env",
+  "version": "1.0.0",
+  "description": "用来打包工具的process.env.*用的工具",
+  "main": "lib/index.js"
+}
