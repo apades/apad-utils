@@ -3,30 +3,35 @@ import path from 'path'
 import dotenv from 'dotenv'
 import fs from 'fs-extra'
 import { merge } from 'lodash-es'
+import { getFileInParents } from './utils'
 
-export function getEnvConf() {
-  try {
-    let envFile = path.resolve(__dirname, `../.env.${process.env.envFile}`)
-    return dotenv.parse(fs.readFileSync(envFile, 'utf-8'))
-  } catch (error) {
-    try {
-      let envFile = path.resolve(__dirname, `../.env.dev`)
-      return dotenv.parse(fs.readFileSync(envFile, 'utf-8'))
-    } catch (error) {
-      return {}
-    }
+export function getEnvConf(type?: string) {
+  let selfEnvFile = getFileInParents('.env'),
+    tarEnvFile = ''
+  if (type) {
+    tarEnvFile = getFileInParents(`.env.${type}`)
   }
+
+  let selfEnv = selfEnvFile
+      ? dotenv.parse(fs.readFileSync(selfEnvFile, 'utf-8'))
+      : {},
+    tarEnv = tarEnvFile
+      ? dotenv.parse(fs.readFileSync(tarEnvFile, 'utf-8'))
+      : {}
+
+  return merge(tarEnv, selfEnv)
 }
 
-// TODO 还要把所有的数据整合成json放到process.env.____env____中
-export function getWebpackDefinePlugin(data: Record<any, any> = {}) {
-  let env = merge(data)
-  let envData = {}
+export function getDefinesObject(type?: string, coverData?: Rec) {
+  let env = merge(getEnvConf(type), coverData ?? {})
+  let envData: Rec = {}
 
   Object.entries(env).forEach(([key, val]) => {
     envData[`process.env.${key}`] = /^(\d+|true|false)$/.test(val as string)
       ? val
       : `"${val}"`
   })
+  envData[`process.env.____env____`] = JSON.stringify(env)
+
   return envData
 }
