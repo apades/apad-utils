@@ -10,9 +10,11 @@
         "inlineSources": false,
         "isolatedModules": true,
         "moduleResolution": "node",
+        "noImplicitAny": true,
         "skipLibCheck": true,
-        "strict": true,
         "noEmit": true,
+        "downlevelIteration": true,
+        "resolveJsonModule": true,
         "allowSyntheticDefaultImports": true
     },
     "exclude": [

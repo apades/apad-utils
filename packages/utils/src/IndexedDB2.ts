@@ -1,5 +1,5 @@
 import { isEqual, isObject, isUndefined, omit } from 'lodash-es'
-import { AsyncLock } from '../src/AsyncLock'
+import AsyncLock from './AsyncLock'
 
 type Option<T> = Partial<{
   /**不建议主动传入ver，只用传入特定的store就行 */
