@@ -2,12 +2,25 @@
   "name": "@apad/env-tools",
   "version": "1.0.0",
   "description": "用来打包工具的process.env.*用的工具",
-  "main": "lib/index.js",
+  "homepage": "https://github.com/apades/apad-utils/tree/master/packages/env-tools",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/apades/apad-utils",
+    "directory": "packages/env-tools"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "tsup web.ts bundler.ts --clean --out-dir lib --dts --format esm,cjs,iife --global-name env-tools",
+    "build": "tsup web.ts bundler.ts --clean --out-dir lib --dts --format esm,cjs --global-name envTools",
     "build:dependencies": "cd ../.. && turbo run build --filter=@apad/env-tools^..."
   },
   "dependencies": {
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "fs-extra": "^11.1.0",
+    "lodash-es": "^4.17.21"
   }
 }

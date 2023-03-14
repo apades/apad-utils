@@ -12,32 +12,32 @@ importers:
     dependencies:
       fs-extra: 11.1.0
       lodash-es: 4.17.21
-      turbo: 1.8.3
     devDependencies:
       '@types/fs-extra': 11.0.1
       '@types/lodash-es': 4.17.6
+      turbo: 1.8.3
 
-  packages/env:
+  packages/env-tools:
     specifiers:
       dotenv: ^16.0.3
-    devDependencies:
+      fs-extra: ^11.1.0
+      lodash-es: ^4.17.21
+    dependencies:
       dotenv: 16.0.3
+      fs-extra: 11.1.0
+      lodash-es: 4.17.21
 
   packages/tsconfig:
     specifiers: {}
 
   packages/utils:
     specifiers:
-      '@types/lodash-es': ^4.17.6
       '@types/react': ^18.0.28
       axios: ^1.3.4
-      lodash-es: ^4.17.21
       tsconfig: workspace:*
     dependencies:
       axios: 1.3.4
-      lodash-es: 4.17.21
     devDependencies:
-      '@types/lodash-es': 4.17.6
       '@types/react': 18.0.28
       tsconfig: link:../tsconfig
 
@@ -119,7 +119,7 @@ packages:
   /dotenv/16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
-    dev: true
+    dev: false
 
   /follow-redirects/1.15.2:
     resolution: {integrity: sha512-VQLG33o04KaQ8uYi2tVNbdrWp1QWxNNea+nmIB4EVM28v0hmP17z7aG1+wAkNzVq4KeXTq3221ye5qTJP91JwA==}
@@ -186,7 +186,7 @@ packages:
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-darwin-arm64/1.8.3:
@@ -194,7 +194,7 @@ packages:
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-linux-64/1.8.3:
@@ -202,7 +202,7 @@ packages:
     cpu: [x64]
     os: [linux]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-linux-arm64/1.8.3:
@@ -210,7 +210,7 @@ packages:
     cpu: [arm64]
     os: [linux]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-windows-64/1.8.3:
@@ -218,7 +218,7 @@ packages:
     cpu: [x64]
     os: [win32]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo-windows-arm64/1.8.3:
@@ -226,7 +226,7 @@ packages:
     cpu: [arm64]
     os: [win32]
     requiresBuild: true
-    dev: false
+    dev: true
     optional: true
 
   /turbo/1.8.3:
@@ -240,7 +240,7 @@ packages:
       turbo-linux-arm64: 1.8.3
       turbo-windows-64: 1.8.3
       turbo-windows-arm64: 1.8.3
-    dev: false
+    dev: true
 
   /universalify/2.0.0:
     resolution: {integrity: sha512-hAZsKq7Yy11Zu1DE0OzWjw7nnLZmJZYTDZZyEFHZdUhV8FkH5MCfoU1XMaxXovpyW5nq5scPqq0ZDP9Zyl04oQ==}
