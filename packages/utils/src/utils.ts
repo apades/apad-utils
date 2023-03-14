@@ -41,3 +41,14 @@ export function copyText(text: string): void {
   document.execCommand('copy')
   document.body.removeChild(el)
 }
+
+export function createElement<T extends HTMLElement>(
+  tag: keyof HTMLElementTagNameMap,
+  op?:
+    | Partial<T>
+    | (Partial<Omit<T, 'style'>> & { style: CSSStyleDeclaration | string })
+): T {
+  let el = document.createElement(tag)
+  Object.assign(el, op)
+  return el as T
+}

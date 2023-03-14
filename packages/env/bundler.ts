@@ -4,6 +4,7 @@ import dotenv from 'dotenv'
 import fs from 'fs-extra'
 import { merge } from 'lodash-es'
 import { getFileInParents } from './utils'
+import { Rec } from '@pkgs/tsconfig/types/global'
 
 export function getEnvConf(type?: string) {
   let selfEnvFile = getFileInParents('.env'),
