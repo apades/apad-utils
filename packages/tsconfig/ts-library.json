@@ -3,10 +3,19 @@
     "display": "TypeScript Library",
     "extends": "./base.json",
     "compilerOptions": {
+        "paths": {
+            "@pkgs/*": [
+                "../*"
+            ]
+        },
         "lib": [
-            "ESNext"
+            "ESNext",
+            "DOM"
         ],
         "module": "ESNext",
         "target": "es6"
-    }
+    },
+    "include": [
+        "../**/*"
+    ]
 }
