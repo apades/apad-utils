@@ -8,3 +8,5 @@ debug.log
 .DS_Store
 videoClip-*.zip
 sider.ai.zip
+lib
+.turbo
