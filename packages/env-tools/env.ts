@@ -1,4 +1,4 @@
-import { merge } from 'lodash-es'
+import merge from 'lodash/merge'
 import { Rec } from '../tsconfig/types/global'
 
 // 这是给web用的
