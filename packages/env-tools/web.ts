@@ -2,6 +2,8 @@ import { createElement } from '@pkgs/utils/src/utils'
 import { isBoolean, isNumber, isString } from 'lodash-es'
 import { getEnv } from './env'
 
+export * from './env'
+
 export function getEnvConfigurePanel() {
   let handleOnChange = (key: string, val: any, isClear?: boolean) => {
     let cover_env = JSON.parse(localStorage['cover_env'] || `{}`)
