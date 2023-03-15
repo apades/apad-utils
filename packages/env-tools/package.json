@@ -1,6 +1,6 @@
 {
   "name": "@apad/env-tools",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "用来打包工具的process.env.*用的工具",
   "homepage": "https://github.com/apades/apad-utils/tree/master/packages/env-tools",
   "repository": {

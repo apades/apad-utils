@@ -34,6 +34,7 @@ export function getEnvConfigurePanel() {
             handleOnChange(key, val)
           },
           defaultValue: val + '',
+          style: 'width: 100%',
         })
       }
       return createElement('div', { innerText: 'not support' }) as HTMLElement
@@ -58,7 +59,7 @@ export function getEnvConfigurePanel() {
 
     const rowEl = createElement('div', {
       className: 'configure-row',
-      style: 'display:flex',
+      style: 'display:flex;gap:4px',
     })
     rowEl.appendChild(leftEl)
     rowEl.appendChild(centerEl)
@@ -71,7 +72,7 @@ export function getEnvConfigurePanel() {
 }
 
 let modalEl: HTMLElement
-export function showEnvConfigureModal() {
+export function showEnvConfigureModal(width = 300) {
   if (!modalEl) {
     const panel = getEnvConfigurePanel()
     modalEl = createElement('div', {
@@ -87,8 +88,7 @@ export function showEnvConfigureModal() {
       onclick: () => (modalEl.style.visibility = 'hidden'),
     })
 
-    ;(panel as any).style =
-      'display: flex; flex-direction: column; gap: 4px;width: 300px;'
+    ;(panel as any).style = `display: flex; flex-direction: column; gap: 4px;width: ${width}px;`
     modalEl.appendChild(panel)
     modalEl.appendChild(closeBtn)
     document.body.appendChild(modalEl)
