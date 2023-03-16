@@ -8,6 +8,14 @@ export function extendEnv(extendEnv: Rec = {}) {
   Object.assign(env, extendEnv)
 }
 export function getEnv() {
-  const coverEnv = JSON.parse(localStorage['cover_env'] || '{}')
-  return merge(env, coverEnv)
+  return merge(env, getCoverEnv())
+}
+
+export function getCoverEnv() {
+  try {
+    const coverEnv = JSON.parse(localStorage['cover_env'] || '{}')
+    return coverEnv
+  } catch (error) {
+    return {}
+  }
 }
