@@ -52,3 +52,8 @@ export function createElement<T extends HTMLElement>(
   Object.assign(el, op)
   return el as T
 }
+
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function isPromiseFunction(fn: Function): boolean {
+  return (fn as any).__proto__.constructor.toString().includes('AsyncFunction')
+}
