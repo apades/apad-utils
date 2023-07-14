@@ -16,5 +16,6 @@ const { configStore, observe } = initSetting({
 window.configStore = configStore
 observe('a1', (change) => {
   console.log('change', change.newValue)
+  return () => {}
 })
 console.log('configStore', configStore)

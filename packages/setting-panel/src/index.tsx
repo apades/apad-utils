@@ -7,7 +7,7 @@ import {
   makeAutoObservable,
   observe,
 } from 'mobx'
-import { isString } from 'lodash'
+import { isFunction, isString } from 'lodash'
 
 export type ConfigField<T> = {
   defaultValue?: T
@@ -39,11 +39,11 @@ type InitOptions<Map extends Record<string, any>> = {
 type Observe<Map extends Record<string, any>> = {
   <Key extends keyof Map>(
     property: Key,
-    listener: (change: IValueDidChange<Map[Key]>) => void,
+    listener: (change: IValueDidChange<Map[Key]>) => (() => void) | void,
     fireImmediately?: boolean
   ): Lambda
   (
-    listener: (change: IObjectDidChange) => void,
+    listener: (change: IObjectDidChange) => (() => void) | void,
     fireImmediately?: boolean
   ): Lambda
 }
@@ -54,7 +54,11 @@ export function initSetting<Map extends Record<string, any>>(
   configStore: Map
   /**打开设置面板的UI */
   openSettingPanel: () => void
-  /**mobx的监听 */
+  /**
+   * mobx的监听
+   *
+   * listener的return返回函数的话可以像react useEffect那样在重新触发listener时运行该函数，可以用来清除上一次函数里相关的挂载操作然后重新挂载相关数据
+   *  */
   observe: Observe<Map>
 } {
   const rootEl = document.createElement('div')
@@ -76,6 +80,15 @@ export function initSetting<Map extends Record<string, any>>(
     openSettingPanel,
     configStore,
     observe(...args: [any]) {
+      let reLoadCb = () => 1
+      args.forEach((arg, i) => {
+        if (isFunction(arg)) {
+          args[i] = (...listenFnArgs: [any]) => {
+            reLoadCb()
+            reLoadCb = arg(...listenFnArgs)
+          }
+        }
+      })
       return observe(configStore, ...args)
     },
   }
