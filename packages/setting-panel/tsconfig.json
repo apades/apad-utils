@@ -1,0 +1,13 @@
+{
+    "extends": "../tsconfig/ts-library.json",
+    "compilerOptions": {
+        "jsx": "react-jsx",
+        "lib": [
+            "DOM",
+            "ESNext"
+        ]
+    },
+    "exclude": [
+        "lib"
+    ]
+}
