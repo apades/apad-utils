@@ -9,20 +9,36 @@ import {
 } from 'mobx'
 import { isFunction, isString } from 'lodash'
 
-export type ConfigField<T> = {
+type ConfigFieldBase<T> = {
   defaultValue?: T
   desc?: string
   /**不填默认使用key作为label */
   label?: string
   notRecommended?: boolean
-  group?: string
+  /**分类 */
+  category?: string
 }
+export type ConfigField<T> = ConfigFieldBase<T> &
+  (
+    | ConfigFieldBase<T>
+    | {
+        type: 'colorPicker' | 'date'
+      }
+    | {
+        type: 'group'
+        group: T[]
+      }
+    | {
+        type: 'group-unlimited'
+        group: any[]
+      }
+  )
 
 export function config<T>(config: ConfigField<T>) {
   return config
 }
 
-type InitOptions<Map extends Record<string, any>> = {
+export type InitOptions<Map extends Record<string, any>> = {
   settings: {
     [K in keyof Map]: ConfigField<Map[K]>
   }
@@ -34,6 +50,10 @@ type InitOptions<Map extends Record<string, any>> = {
   savePosition?: 'localStorage' | 'indexedDB'
   /**保存到本地，默认为true */
   saveInLocal?: boolean
+  /**渲染的位置，不传默认是开全局modal */
+  renderTarget?: HTMLElement
+  /**是否使用shadow dom，避免css污染，默认开启 */
+  useShadowDom?: boolean
 }
 
 type Observe<Map extends Record<string, any>> = {
@@ -54,6 +74,7 @@ export function initSetting<Map extends Record<string, any>>(
   configStore: Map
   /**打开设置面板的UI */
   openSettingPanel: () => void
+  closeSettingPanel: () => void
   /**
    * mobx的监听
    *
@@ -63,21 +84,29 @@ export function initSetting<Map extends Record<string, any>>(
 } {
   const rootEl = document.createElement('div')
   rootEl.attachShadow({ mode: 'open' })
-  function openSettingPanel() {
-    ReactDOM.createRoot(rootEl.shadowRoot).render(<UIComponent />)
+  if (!window.domRoot) {
+    window.domRoot = ReactDOM.createRoot(rootEl.shadowRoot)
+    document.body.appendChild(rootEl)
   }
-  const configStore: any = makeAutoObservable(
-    Object.entries(options.settings).reduce(
-      (configMap, [key, config]: [string, ConfigField<any>]) => {
-        configMap[key] = config.defaultValue
-        return configMap
-      },
-      {} as Record<any, any>
+
+  function openSettingPanel() {
+    window.domRoot.render(
+      <UIComponent
+        settings={options.settings}
+        configStore={configStore}
+        rootEl={rootEl.shadowRoot}
+      />
     )
-  )
+  }
+  function closeSettingPanel() {
+    // console.log('close 2')
+    // domRoot.unmount()
+  }
+  const configStore = createConfigStore(options.settings)
 
   return {
     openSettingPanel,
+    closeSettingPanel,
     configStore,
     observe(...args: [any]) {
       let reLoadCb = () => 1
@@ -92,4 +121,20 @@ export function initSetting<Map extends Record<string, any>>(
       return observe(configStore, ...args)
     },
   }
+}
+
+export function createConfigStore<Map extends Record<string, any>>(
+  settings: {
+    [K in keyof Map]: ConfigField<Map[K]>
+  }
+) {
+  return makeAutoObservable(
+    Object.entries(settings).reduce(
+      (configMap, [key, config]: [string, ConfigField<any>]) => {
+        configMap[key] = config.defaultValue
+        return configMap
+      },
+      {} as Record<any, any>
+    )
+  )
 }
