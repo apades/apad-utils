@@ -7,27 +7,6 @@
   max-height: @h;
 }
   
-.bg-image(@url) {
-  background-image: ~"url(@{url}.png)";
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-    only screen and (-moz-min-device-pixel-ratio: 1.5),
-    only screen and (-o-min-device-pixel-ratio: 3/2),
-    only screen and (min-device-pixel-ratio: 1.5) {
-    background-image: ~"url(@{url}@2x.png)";
-  }
-}
-  
-.bg-image-w(@width, @url) {
-  background-image: ~"url(@{url}.png)";
-  background-size: @width auto;
-  @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-    only screen and (-moz-min-device-pixel-ratio: 1.5),
-    only screen and (-o-min-device-pixel-ratio: 3/2),
-    only screen and (min-device-pixel-ratio: 1.5) {
-    background-image: ~"url(@{url}@2x.png)";
-  }
-}
-  
 .text-ellipsis(@width) {
   max-width: @width;
   overflow: hidden;
@@ -84,7 +63,7 @@
 .mobile(@rules){
   @media screen and (max-width: 768px){
     @rules()
-    }
+  }
 }
   
 .f-center(){
