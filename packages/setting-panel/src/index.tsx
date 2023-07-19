@@ -18,7 +18,9 @@ type ConfigFieldBase<T> = {
   /**分类 */
   category?: string
 }
-export type ConfigField<T> = ConfigFieldBase<T> &
+export type ConfigField<T> = ConfigFieldBase<T>
+// TODO 进阶版设置
+/* &
   (
     | ConfigFieldBase<T>
     | {
@@ -32,7 +34,7 @@ export type ConfigField<T> = ConfigFieldBase<T> &
         type: 'group-unlimited'
         group: any[]
       }
-  )
+  ) */
 
 export function config<T>(config: ConfigField<T>) {
   return config
@@ -42,18 +44,27 @@ export type InitOptions<Map extends Record<string, any>> = {
   settings: {
     [K in keyof Map]: ConfigField<Map[K]>
   }
-  /**初始化时载入设置 */
-  onInitLoadConfig?: () => Promise<Map> | Map
-  /**保存时的数据 */
+  /**初始化时载入设置，saveInLocal为false时返回的是空object */
+  onInitLoadConfig?: (config?: Map) => Promise<Map> | Map
+  /**保存时的数据，如果不关闭saveInLocal默认也会保存一份本地 */
   onSave?: (config: Map) => Promise<void> | void
-  /**保存的位置，默认用localStorage */
-  savePosition?: 'localStorage' | 'indexedDB'
+  /**保存的位置，默认用localStorage
+   *
+   * TODO indexedDB
+   *  */
+  savePosition?: 'localStorage' /* | 'indexedDB' */
   /**保存到本地，默认为true */
   saveInLocal?: boolean
   /**渲染的位置，不传默认是开全局modal */
   renderTarget?: HTMLElement
   /**是否使用shadow dom，避免css污染，默认开启 */
   useShadowDom?: boolean
+  /**默认为true，如果不想设置面板设置改动设置时修改configStore可以关闭 */
+  changeConfigStoreWithSettingPanelChange?: boolean
+  /**默认为true，输入停止{autoSaveTriggerMs}(默认500ms)后自动触发onSave */
+  autoSave?: boolean
+  /**默认500，自动保存用的 */
+  autoSaveTriggerMs?: number
 }
 
 type Observe<Map extends Record<string, any>> = {
@@ -82,6 +93,16 @@ export function initSetting<Map extends Record<string, any>>(
    *  */
   observe: Observe<Map>
 } {
+  const baseOption: Partial<InitOptions<Map>> = {
+    savePosition: 'localStorage',
+    saveInLocal: true,
+    useShadowDom: true,
+    changeConfigStoreWithSettingPanelChange: true,
+    autoSave: true,
+    autoSaveTriggerMs: 500,
+  }
+  const _options = Object.assign(baseOption, options)
+
   const rootEl = document.createElement('div')
   rootEl.attachShadow({ mode: 'open' })
   if (!window.domRoot) {
@@ -92,9 +113,10 @@ export function initSetting<Map extends Record<string, any>>(
   function openSettingPanel() {
     window.domRoot.render(
       <UIComponent
-        settings={options.settings}
+        settings={_options.settings}
         configStore={configStore}
         rootEl={rootEl.shadowRoot}
+        {..._options}
       />
     )
   }

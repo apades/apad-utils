@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vite serve test",
+    "dev": "vite serve -c vite.config.js test",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,6 +14,7 @@
     "@chakra-ui/react": "^2.7.1",
     "@emotion/cache": "^11.11.0",
     "mobx": "^6.9.1",
+    "mobx-react": "^9.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
