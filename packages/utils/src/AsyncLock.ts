@@ -4,7 +4,7 @@ export default class AsyncLock {
   isOk = false
 
   waiting = () => {
-    if (this.isOk) return
+    if (this.isOk) return Promise.resolve()
     return new Promise((resolve) => {
       this.checkingAsyncQueue.push(resolve)
     })
