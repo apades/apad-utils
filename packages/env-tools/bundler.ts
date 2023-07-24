@@ -33,6 +33,7 @@ export function getDefinesObject(type?: string, coverData?: Rec) {
       : `"${val}"`
   })
   envData[`process.env.____env____`] = JSON.stringify(env)
+  envData['process.env'] = '({})'
 
   return envData
 }
