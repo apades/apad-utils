@@ -1,8 +1,8 @@
 import { config, createConfigStore, initSetting } from '../src'
-import { observe as _observe, observe } from 'mobx'
+// import { observe as _observe, observe } from 'mobx'
 import { FC, useEffect } from 'react'
 import UIComponent, { UISettings } from '../src/UI'
-import { observer } from 'mobx-react'
+// import { observer } from 'mobx-react'
 import { wait } from '@pkgs/utils/src/utils'
 
 const settings: UISettings = {
@@ -21,9 +21,9 @@ const settings: UISettings = {
 window.settings = settings
 const configStore = createConfigStore(settings)
 window.configStore = configStore
-observe(configStore, (change) => {
-  console.log('change', change)
-})
+// observe(configStore, (change) => {
+//   console.log('change', change)
+// })
 
 const App: FC = () => {
   return (
@@ -54,12 +54,12 @@ const App: FC = () => {
   )
 }
 
-const ObservePanel: FC = observer(() => {
+const ObservePanel: FC = () => {
   return (
     <div>
       <div>a1: {configStore.a1}</div>
     </div>
   )
-})
+}
 
 export default App

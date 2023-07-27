@@ -1,4 +1,5 @@
-import ReactDOM from 'react-dom/client'
+import { isFunction } from '@pkgs/utils/src/utils'
+import { render } from 'preact'
 import UIComponent from './UI'
 import {
   IObjectDidChange,
@@ -7,7 +8,7 @@ import {
   makeAutoObservable,
   observe,
 } from './mobx-mini'
-import { isFunction, isString } from 'lodash-es'
+import './tailwind.css'
 
 type ConfigFieldBase<T> = {
   defaultValue?: T
@@ -105,20 +106,20 @@ export function initSetting<Map extends Record<string, any>>(
 
   const rootEl = document.createElement('div')
   rootEl.attachShadow({ mode: 'open' })
-  if (!window.domRoot) {
-    window.domRoot = ReactDOM.createRoot(rootEl.shadowRoot)
-    document.body.appendChild(rootEl)
-  }
 
   function openSettingPanel() {
-    window.domRoot.render(
-      <UIComponent
-        settings={_options.settings}
-        configStore={configStore}
-        rootEl={rootEl.shadowRoot}
-        {..._options}
-      />
-    )
+    if (!window.domRoot) {
+      window.domRoot = render(
+        <UIComponent
+          settings={_options.settings}
+          configStore={configStore}
+          rootEl={rootEl.shadowRoot}
+          {..._options}
+        />,
+        rootEl.shadowRoot
+      )
+      document.body.appendChild(rootEl)
+    }
   }
   function closeSettingPanel() {
     // console.log('close 2')

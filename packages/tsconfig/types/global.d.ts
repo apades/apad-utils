@@ -1,6 +1,7 @@
 export type Rec<T = any> = {
   [key: string]: T
 }
+export type noop = (this: any, ...args: any[]) => any
 
 type IfEquals<X, Y, A = X, B = never> = (<T>() => T extends X ? 1 : 2) extends <
   T

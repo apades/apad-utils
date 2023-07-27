@@ -1,7 +1,7 @@
-import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
+import { cloneDeep, isString } from '@pkgs/utils/src/utils'
 import { EventEmitter } from 'events'
+import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import { Rec } from '../../tsconfig/types/global'
-import { cloneDeep, isString } from 'lodash-es'
 
 const obverseMap = new Map<any, { eventEmitter: EventEmitter }>()
 

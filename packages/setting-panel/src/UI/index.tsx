@@ -1,23 +1,14 @@
 import {
-  Box,
-  Button,
-  Center,
-  ChakraProvider,
-  Flex,
-  Input,
-  Switch,
-  useToast,
-} from '@chakra-ui/react'
-import createCache from '@emotion/cache'
-import { CacheProvider } from '@emotion/react'
-import LoadingContainer from '@pkgs/react-utils/components/LoadingContainer'
-import { useOnce } from '@pkgs/react-utils/hooks'
-// import { useMemoizedFn } from 'ahooks'
-import { debounce, isBoolean, isEqual, isUndefined } from 'lodash-es'
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+  debounce,
+  isBoolean,
+  isEqual,
+  isUndefined,
+} from '@pkgs/utils/src/utils'
+import type { FC } from 'preact/compat'
+import { useCallback, useEffect, useState } from 'preact/hooks'
 import { ConfigField, InitOptions } from '..'
-import useMemoizedFn from '@pkgs/react-utils/hooks/useMemoizedFn'
-// import { observer } from 'mobx-react'
+import LoadingContainer from '../components/LoadingContainer'
+import { useMemoizedFn, useOnce } from '../hooks'
 
 type ConfigEntries = [string, ConfigField<any>][]
 type BaseConfig = UISettings
@@ -39,7 +30,7 @@ const SettingPanel: FC<Props> = (props) => {
   }, [props.savedConfig])
   window.newConfig = newConfig
   let configEntries = Object.entries(props.settings)
-  const toast = useToast()
+  // const toast = useToast()
 
   const setNewConfig = useMemoizedFn((key: string, val: any) => {
     if (props.changeConfigStoreWithSettingPanelChange)
@@ -70,7 +61,7 @@ const SettingPanel: FC<Props> = (props) => {
       }
     }
     if (props.onSave) await props.onSave(newConfig)
-    toast({ title: '保存成功', status: 'success' })
+    // toast({ title: '保存成功', status: 'success' })
   })
   const saveConfig = useCallback(
     debounce(_saveConfig, props.autoSaveTriggerMs),
@@ -86,38 +77,14 @@ const SettingPanel: FC<Props> = (props) => {
     else baseConfigEntries.push([key, val])
   })
 
-  const cache = useMemo(() => {
-    if (!props.rootEl) return null
-    return createCache({
-      container: props.rootEl,
-      key: 'setting',
-    })
-  }, [props.rootEl])
-
-  if (cache)
-    return (
-      <CacheProvider value={cache}>
-        <ChakraProvider>
-          <ConfigEntriesBox
-            config={baseConfigEntries}
-            newConfig={newConfig}
-            setNewConfig={setNewConfig}
-            resetConfig={resetConfig}
-          />
-        </ChakraProvider>
-      </CacheProvider>
-    )
-  else
-    return (
-      <ChakraProvider>
-        <ConfigEntriesBox
-          config={baseConfigEntries}
-          newConfig={newConfig}
-          setNewConfig={setNewConfig}
-          resetConfig={resetConfig}
-        />
-      </ChakraProvider>
-    )
+  return (
+    <ConfigEntriesBox
+      config={baseConfigEntries}
+      newConfig={newConfig}
+      setNewConfig={setNewConfig}
+      resetConfig={resetConfig}
+    />
+  )
 }
 
 const ConfigEntriesBox: FC<{
@@ -127,7 +94,7 @@ const ConfigEntriesBox: FC<{
   resetConfig: (key: string) => void
 }> = (props) => {
   return (
-    <Box>
+    <div>
       {props.config.map(([key, val]: [string, ConfigField<any>], i) => {
         const hasChange =
           !isUndefined(props.newConfig[key]) &&
@@ -139,25 +106,24 @@ const ConfigEntriesBox: FC<{
           val.defaultValue
         )
         return (
-          <Box
-            padding={'6px 8px'}
-            backgroundColor={i % 2 == 0 ? 'blackAlpha.50' : 'white'}
-            className="row"
+          <div
+            className={`py-[6px] px-[6px] ${
+              i % 2 == 0 ? 'bg-gray-200' : 'bg-white'
+            }`}
             role="group"
             key={i}
           >
-            <Flex gap={'12px'}>
-              <Center
-                textAlign={'center'}
-                width={140}
-                whiteSpace={'pre-wrap'}
-                color={hasChange && 'blue'}
+            <div className="gap-[12px] flex">
+              <div
+                className={`items-center justify-center text-center w-[140px] whitespace-pre-wrap ${
+                  hasChange && 'text-blue-500'
+                }`}
               >
                 {val.label ?? key}:
-              </Center>
-              <Box flex={1}>
-                <Flex gap={'12px'}>
-                  <Center flex={1}>
+              </div>
+              <div className="flex-1">
+                <div className="flex gap-[12px]">
+                  <div className="flex-1 items-center justify-center">
                     <ConfigRowAction
                       config={val}
                       onChange={(v) => {
@@ -165,36 +131,34 @@ const ConfigEntriesBox: FC<{
                       }}
                       newVal={(props.newConfig as any)[key]}
                     />
-                  </Center>
-                  <Center
-                    opacity={0}
-                    transition={'ease-in-out'}
-                    _groupHover={hasChange && { opacity: 1 }}
+                  </div>
+                  <div
+                    className={`items-center justify-center ${
+                      hasChange && 'group-hover:opacity-100'
+                    } transition-all`}
                   >
-                    <Button
-                      isDisabled={!(props.newConfig as any)[key]}
-                      colorScheme="red"
-                      height={'24px'}
-                      size={'sm'}
+                    <button
+                      className="bg-red-700 h-[24px]"
+                      disabled={!(props.newConfig as any)[key]}
                       onClick={() => {
                         props.resetConfig(key)
                       }}
                     >
                       重置
-                    </Button>
-                  </Center>
-                </Flex>
+                    </button>
+                  </div>
+                </div>
                 {val.desc && (
-                  <Box mt={'2px'} flex={1} fontSize={'12px'} color={'blue.500'}>
+                  <div className="mt-[2px] flex-1 text-[12px] text-blue-500">
                     {val.desc}
-                  </Box>
+                  </div>
                 )}
-              </Box>
-            </Flex>
-          </Box>
+              </div>
+            </div>
+          </div>
         )
       })}
-    </Box>
+    </div>
   )
 }
 
@@ -206,22 +170,21 @@ const ConfigRowAction = (props: {
   let val = props.config.defaultValue
   if (isBoolean(val))
     return (
-      <Switch
-        isChecked={props.newVal ?? val}
-        marginRight={'auto'}
+      <input
+        className="mr-auto"
+        type="checkbox"
+        checked={props.newVal ?? val}
         onChange={(e) => {
-          props.onChange(e.target.checked)
+          props.onChange((e.target as HTMLInputElement).checked)
         }}
       />
     )
   return (
-    <Input
-      height={'24px'}
-      fontSize={'14px'}
-      px={'8px'}
+    <input
+      className="h-[24px] text-[14px] px-[8px]"
       value={props.newVal ?? val}
       onChange={(e) => {
-        props.onChange(e.target.value)
+        props.onChange((e.target as HTMLInputElement).value)
       }}
     />
   )
