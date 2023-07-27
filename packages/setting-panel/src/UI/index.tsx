@@ -45,6 +45,8 @@ const SettingPanel: FC<Props> = (props) => {
   const resetConfig = useMemoizedFn((key: string) => {
     delete newConfig[key]
     _setNewConfig({ ...newConfig })
+    if (props.changeConfigStoreWithSettingPanelChange)
+      props.configStore[key] = props.settings[key].defaultValue
     saveConfig()
   })
 
@@ -107,10 +109,9 @@ const ConfigEntriesBox: FC<{
         )
         return (
           <div
-            className={`py-[6px] px-[6px] ${
+            className={`group py-[6px] px-[6px] ${
               i % 2 == 0 ? 'bg-gray-200' : 'bg-white'
             }`}
-            role="group"
             key={i}
           >
             <div className="gap-[12px] flex">
@@ -133,7 +134,7 @@ const ConfigEntriesBox: FC<{
                     />
                   </div>
                   <div
-                    className={`items-center justify-center ${
+                    className={`items-center justify-center opacity-0 ${
                       hasChange && 'group-hover:opacity-100'
                     } transition-all`}
                   >
