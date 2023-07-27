@@ -7,7 +7,7 @@ import {
   makeAutoObservable,
   observe,
 } from 'mobx'
-import { isFunction, isString } from 'lodash'
+import { isFunction, isString } from 'lodash-es'
 
 type ConfigFieldBase<T> = {
   defaultValue?: T

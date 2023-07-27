@@ -89,5 +89,3 @@ export function createAxios<ResType = any>(
   return request
 }
 
-const axios = createAxios()
-export default axios
