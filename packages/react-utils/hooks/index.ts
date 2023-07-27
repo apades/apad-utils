@@ -1,6 +1,6 @@
-import { AsyncLock } from '@pkgs/utils/src'
+import AsyncLock from '@pkgs/utils/src/AsyncLock'
 import { isPromiseFunction } from '@pkgs/utils/src/utils'
-import { isFunction } from 'lodash'
+import { isFunction } from 'lodash-es'
 import { useEffect } from 'react'
 
 type ueRe = void | (() => void)

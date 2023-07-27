@@ -1,4 +1,4 @@
-import { isArray, isUndefined } from 'lodash'
+import { isArray, isUndefined } from 'lodash-es'
 import { Children, FC, ReactNode, cloneElement, useEffect, useRef } from 'react'
 import React from 'react'
 

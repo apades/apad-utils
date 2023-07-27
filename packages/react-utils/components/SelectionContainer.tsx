@@ -1,7 +1,7 @@
 import { getClientRect, wait } from '@pkgs/utils/src/utils'
 import { useEventListener } from 'ahooks'
 import classNames from 'classnames'
-import { isArray, isEqual } from 'lodash'
+import { isArray, isEqual } from 'lodash-es'
 import React, {
   Children,
   FC,

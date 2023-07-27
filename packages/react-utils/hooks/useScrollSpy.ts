@@ -1,5 +1,5 @@
 import { useMap } from 'ahooks'
-import { isArray, isString } from 'lodash'
+import { isArray, isString } from 'lodash-es'
 import { useEffect, useMemo, useRef } from 'react'
 
 function useScrollSpy(

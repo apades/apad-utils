@@ -10,7 +10,7 @@ import React, {
 } from 'react'
 import { createPortal } from 'react-dom'
 import './index.less'
-import { isArray } from 'lodash'
+import { isArray } from 'lodash-es'
 import { getClientRect } from '@pkgs/utils/src/utils'
 
 type Props = {

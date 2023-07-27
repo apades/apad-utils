@@ -1,4 +1,4 @@
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 import { useCallback, useEffect, useRef } from 'react'
 
 export function useResizeObserver<T extends HTMLElement = HTMLDivElement>(

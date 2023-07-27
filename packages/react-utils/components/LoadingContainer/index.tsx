@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { isFunction } from 'lodash'
+import { isFunction } from 'lodash-es'
 import React, { CSSProperties, FC, ReactElement, ReactNode } from 'react'
 import './index.less'
 
