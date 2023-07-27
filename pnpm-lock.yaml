@@ -82,6 +82,7 @@ importers:
       '@emotion/styled': ^11.11.0
       '@types/react': ^18.0.28
       '@types/react-dom': ^18.2.5
+      '@types/use-sync-external-store': ^0.0.3
       autoprefixer: ^10.4.14
       framer-motion: ^10.12.22
       mobx: ^6.10.0
@@ -93,6 +94,7 @@ importers:
       react-dom: ^18.2.0
       rollup-plugin-visualizer: ^5.9.2
       tailwindcss: ^3.3.3
+      use-sync-external-store: ^1.2.0
     dependencies:
       '@chakra-ui/react': 2.8.0_cuvdwifgepjbwtvbmf3kgbp54y
       '@emotion/cache': 11.11.0
@@ -104,10 +106,12 @@ importers:
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       tailwindcss: 3.3.3
+      use-sync-external-store: 1.2.0_react@18.2.0
     devDependencies:
       '@emotion/styled': 11.11.0_an6myre7qnjujvwbgrze3dq43q
       '@types/react': 18.0.28
       '@types/react-dom': 18.2.5
+      '@types/use-sync-external-store': 0.0.3
       framer-motion: 10.12.22_biqbaboplfbrettd7655fr4n2y
       preact: 10.16.0
       preact-compat: 3.19.0_preact@10.16.0
@@ -1875,6 +1879,10 @@ packages:
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
+
+  /@types/use-sync-external-store/0.0.3:
+    resolution: {integrity: sha512-EwmlvuaxPNej9+T4v5AuBPJa2x2UOJVdjCtDHgcDqitUeOtjnJKJ+apYjVcAoBEMjKW1VVFGZLUb5+qqa09XFA==}
+    dev: true
 
   /@vitejs/plugin-react/4.0.3_vite@4.4.4:
     resolution: {integrity: sha512-pwXDog5nwwvSIzwrvYYmA2Ljcd/ZNlcsSG2Q9CNDBwnsd55UGAyr2doXtB5j+2uymRCnCfExlznzzSFbBRcoCg==}

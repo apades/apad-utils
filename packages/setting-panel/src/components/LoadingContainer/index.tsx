@@ -1,5 +1,10 @@
 import { isFunction } from '@pkgs/utils/src/utils'
-import type { CSSProperties, FC } from 'preact/compat'
+import type {
+  CSSProperties,
+  DetailedHTMLProps,
+  FC,
+  HTMLAttributes,
+} from 'preact/compat'
 import './index.less'
 import type { VNode } from 'preact'
 
@@ -12,10 +17,7 @@ type Props = {
   children: VNode | (() => VNode)
   /**骨架屏加载动画模式 */
   skeletonMode?: boolean
-} & React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->
+} & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
 /**
  * 显示加载中的包裹组件

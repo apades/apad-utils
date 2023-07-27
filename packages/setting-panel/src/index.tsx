@@ -9,6 +9,7 @@ import {
   observe,
 } from './mobx-mini'
 import './tailwind.css'
+import type mobx from 'mobx'
 
 type ConfigFieldBase<T> = {
   defaultValue?: T
@@ -66,6 +67,8 @@ export type InitOptions<Map extends Record<string, any>> = {
   autoSave?: boolean
   /**默认500，自动保存用的 */
   autoSaveTriggerMs?: number
+  /**默认的mobx是自己魔改的残缺版本，需要完整功能请传入mobx的module */
+  mobx?: typeof mobx
 }
 
 type Observe<Map extends Record<string, any>> = {
