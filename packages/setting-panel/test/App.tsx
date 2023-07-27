@@ -4,6 +4,7 @@ import { FC, useEffect } from 'react'
 import UIComponent, { UISettings } from '../src/UI'
 // import { observer } from 'mobx-react'
 import { wait } from '@pkgs/utils/src/utils'
+import { observer } from '../src/react'
 
 const settings: UISettings = {
   a1: { defaultValue: 1, category: 'a系列', desc: 'asdfadf' },
@@ -54,12 +55,12 @@ const App: FC = () => {
   )
 }
 
-const ObservePanel: FC = () => {
+const ObservePanel: FC = observer(() => {
   return (
     <div>
       <div>a1: {configStore.a1}</div>
     </div>
   )
-}
+})
 
 export default App

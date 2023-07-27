@@ -19,8 +19,9 @@ export default defineConfig({
   resolve: {
     alias: {
       '@pkgs': pr('../'),
-      react: pr('node_modules/preact/compat'),
-      'react-dom': pr('node_modules/preact/compat'),
+      'preact/hooks': pr('node_modules/react'),
+      'preact/compat': pr('node_modules/react'),
+      preact: pr('node_modules/react'),
     },
   },
   css: {

@@ -4,6 +4,7 @@ import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import { Rec } from '../../tsconfig/types/global'
 
 const obverseMap = new Map<any, { eventEmitter: EventEmitter }>()
+;(globalThis as any).__obverseMap = obverseMap
 
 type EventProps = { oldValue: any; newValue: any; key: any }
 export function makeAutoObservable<T extends Rec>(target: T): T {
