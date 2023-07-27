@@ -21,6 +21,9 @@ const settings: UISettings = {
 window.settings = settings
 const configStore = createConfigStore(settings)
 window.configStore = configStore
+observe(configStore, (change) => {
+  console.log('change', change)
+})
 
 const App: FC = () => {
   return (

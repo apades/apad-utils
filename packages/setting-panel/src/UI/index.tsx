@@ -14,11 +14,10 @@ import LoadingContainer from '@pkgs/react-utils/components/LoadingContainer'
 import { useOnce } from '@pkgs/react-utils/hooks'
 // import { useMemoizedFn } from 'ahooks'
 import { debounce, isBoolean, isEqual, isUndefined } from 'lodash-es'
-import { runInAction } from 'mobx'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { ConfigField, InitOptions } from '..'
 import useMemoizedFn from '@pkgs/react-utils/hooks/useMemoizedFn'
-import { observer } from 'mobx-react'
+// import { observer } from 'mobx-react'
 
 type ConfigEntries = [string, ConfigField<any>][]
 type BaseConfig = UISettings
@@ -33,7 +32,7 @@ type Props = {
   rootEl?: HTMLElement | ShadowRoot
 } & InitOptions<Record<string, any>>
 
-const SettingPanel: FC<Props> = observer((props) => {
+const SettingPanel: FC<Props> = (props) => {
   let [newConfig, _setNewConfig] = useState<Partial<BaseConfig>>({})
   useEffect(() => {
     if (props.savedConfig) _setNewConfig(props.savedConfig)
@@ -44,9 +43,9 @@ const SettingPanel: FC<Props> = observer((props) => {
 
   const setNewConfig = useMemoizedFn((key: string, val: any) => {
     if (props.changeConfigStoreWithSettingPanelChange)
-      runInAction(() => {
-        props.configStore[key] = val
-      })
+      // runInAction(() => {
+      props.configStore[key] = val
+    // })
 
     _setNewConfig({ ...newConfig, [key]: val })
 
@@ -119,7 +118,7 @@ const SettingPanel: FC<Props> = observer((props) => {
         />
       </ChakraProvider>
     )
-})
+}
 
 const ConfigEntriesBox: FC<{
   config: ConfigEntries
@@ -245,11 +244,11 @@ const UIComponent: FC<Props> = (props) => {
     if (props.onInitLoadConfig)
       savedConfig = await props.onInitLoadConfig(savedConfig)
 
-    runInAction(() => {
-      Object.entries(savedConfig).forEach(([key, val]) => {
-        props.configStore[key] = val
-      })
+    // runInAction(() => {
+    Object.entries(savedConfig).forEach(([key, val]) => {
+      props.configStore[key] = val
     })
+    // })
     setSavedConfig(savedConfig)
     setLoading(false)
   })

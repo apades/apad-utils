@@ -6,7 +6,7 @@ import {
   Lambda,
   makeAutoObservable,
   observe,
-} from 'mobx'
+} from './mobx-mini'
 import { isFunction, isString } from 'lodash-es'
 
 type ConfigFieldBase<T> = {
