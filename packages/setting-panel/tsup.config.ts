@@ -7,4 +7,6 @@ const pr = (...p: any) => path.resolve(__dirname, ...p)
 export default defineConfig({
   esbuildPlugins: [lessLoader()],
   treeshake: true,
+  shims: true,
+  target: 'esnext',
 })

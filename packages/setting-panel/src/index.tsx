@@ -59,7 +59,7 @@ export type InitOptions<Map extends Record<string, any>> = {
   saveInLocal?: boolean
   /**渲染的位置，不传默认是开全局modal */
   renderTarget?: HTMLElement
-  /**是否使用shadow dom，避免css污染，默认开启 */
+  /**是否使用shadow dom，避免css污染，默认关闭 */
   useShadowDom?: boolean
   /**默认为true，如果不想设置面板设置改动设置时修改configStore可以关闭 */
   changeConfigStoreWithSettingPanelChange?: boolean
@@ -69,6 +69,8 @@ export type InitOptions<Map extends Record<string, any>> = {
   autoSaveTriggerMs?: number
   /**默认的mobx是自己魔改的残缺版本，需要完整功能请传入mobx的module */
   mobx?: typeof mobx
+  /**针对 非打包工具 + useShadowDom:true 的用户 */
+  styleHref?: string
 }
 
 type Observe<Map extends Record<string, any>> = {
@@ -100,7 +102,7 @@ export function initSetting<Map extends Record<string, any>>(
   const baseOption: Partial<InitOptions<Map>> = {
     savePosition: 'localStorage',
     saveInLocal: true,
-    useShadowDom: true,
+    useShadowDom: false,
     changeConfigStoreWithSettingPanelChange: true,
     autoSave: true,
     autoSaveTriggerMs: 500,
@@ -112,6 +114,16 @@ export function initSetting<Map extends Record<string, any>>(
 
   function openSettingPanel() {
     if (!window.domRoot) {
+      if (_options.styleHref || import.meta.url) {
+        let style = document.createElement('link')
+        style.rel = 'stylesheet'
+        style.type = 'text/css'
+        style.href =
+          _options.styleHref || new URL('./index.css', import.meta.url).href
+        _options.useShadowDom
+          ? rootEl.shadowRoot.appendChild(style)
+          : document.head.appendChild(style)
+      }
       window.domRoot = render(
         <UIComponent
           settings={_options.settings}
