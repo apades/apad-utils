@@ -108,7 +108,7 @@ export function initSetting<Map extends Record<string, any>>(
   const _options = Object.assign(baseOption, options)
 
   const rootEl = document.createElement('div')
-  rootEl.attachShadow({ mode: 'open' })
+  if (_options.useShadowDom) rootEl.attachShadow({ mode: 'open' })
 
   function openSettingPanel() {
     if (!window.domRoot) {
@@ -119,7 +119,7 @@ export function initSetting<Map extends Record<string, any>>(
           rootEl={rootEl.shadowRoot}
           {..._options}
         />,
-        rootEl.shadowRoot
+        _options.useShadowDom ? rootEl.shadowRoot : rootEl
       )
       document.body.appendChild(rootEl)
     }

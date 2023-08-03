@@ -184,7 +184,7 @@ const ConfigRowAction = (props: {
     <input
       className="h-[24px] text-[14px] px-[8px]"
       value={props.newVal ?? val}
-      onChange={(e) => {
+      onInput={(e) => {
         props.onChange((e.target as HTMLInputElement).value)
       }}
     />
