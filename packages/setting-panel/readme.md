@@ -64,9 +64,13 @@ const { configStore, openSettingPanel} = initSetting({
 
 > 如果你在用mobx，推荐传入完整版mobx
 ```ts
-import mobx from 'mobx'
+import * as mobx from 'mobx'
 const { configStore, openSettingPanel} = initSetting({
-    mobx,
     // ....
+    mobx,
 })
+
+// 然后之前的observer推荐替换成mobx-react
+// import { observer } from '@apad/setting-panel/lib/react'
+import { observer } from 'mobx-react'
 ```
