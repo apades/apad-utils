@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite serve -c vite.config.js test",
-    "build": "vite build -c vite.config.js test",
-    "build2": "pnpm run clearLib && pnpm run build:iife && pnpm run build:m",
+    "build:testWeb": "vite build -c vite.config.js test",
+    "build": "pnpm run clearLib && pnpm run build:iife && pnpm run build:m",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clearLib": "rm -rf ./lib && rm -rf ./dist",
-    "build:iife": "tsup src/index.tsx lib --dts --format iife --global-name settingPanel --config ./build/tsup.iife.ts --minify --metafile --env.NODE_ENV production",
-    "build:m": "tsup src/index.tsx lib --dts --format esm,cjs --config ./build/tsup.m.ts --minify --metafile --env.NODE_ENV production"
+    "build:iife": "tsup src/index.tsx --dts --format iife --global-name settingPanel --config ./build/tsup.iife.ts --minify --metafile --env.NODE_ENV production lib",
+    "build:m": "tsup src/index.tsx --dts --format esm,cjs --config ./build/tsup.m.ts --minify --metafile --env.NODE_ENV production lib"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +23,7 @@
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.2.5",
     "autoprefixer": "^10.4.14",
+    "esbuild-plugin-replace": "^1.4.0",
     "mobx": "^6.10.0",
     "mobx-react": "^9.0.0",
     "postcss": "^8.4.27",

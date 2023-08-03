@@ -1,4 +1,4 @@
-import { initSetting, config } from '../lib'
+import { initSetting, config } from '../dist'
 
 const {
   configStore,

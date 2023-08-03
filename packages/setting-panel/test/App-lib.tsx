@@ -1,4 +1,4 @@
-import { initSetting } from '../lib/index'
+import { initSetting } from '../dist/index'
 import { config } from '../src'
 import { FC } from 'react'
 import { UISettings } from '../src/UI'
