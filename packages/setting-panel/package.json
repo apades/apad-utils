@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "vite serve -c vite.config.js test",
     "build": "vite build -c vite.config.js test",
-    "build2": "tsup src/index.tsx --clean --out-dir lib --dts --format esm,cjs,iife --global-name settingPanel --minify --metafile",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build2": "pnpm run clearLib && pnpm run build:iife && pnpm run build:m",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clearLib": "rm -rf ./lib && rm -rf ./dist",
+    "build:iife": "tsup src/index.tsx lib --dts --format iife --global-name settingPanel --config ./build/tsup.iife.ts --minify --metafile --env.NODE_ENV production",
+    "build:m": "tsup src/index.tsx lib --dts --format esm,cjs --config ./build/tsup.m.ts --minify --metafile --env.NODE_ENV production"
   },
   "keywords": [],
   "author": "",

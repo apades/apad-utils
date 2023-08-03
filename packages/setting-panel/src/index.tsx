@@ -1,5 +1,5 @@
 import { isFunction } from '@pkgs/utils/src/utils'
-import { render } from 'preact'
+import { render } from 'entry'
 import UIComponent from './UI'
 import {
   IObjectDidChange,
