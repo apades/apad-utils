@@ -107,31 +107,31 @@ export function initSetting<Map extends Record<string, any>>(
     autoSave: true,
     autoSaveTriggerMs: 500,
   }
-  const _options = Object.assign(baseOption, options)
+  options = Object.assign(baseOption, options)
 
   const rootEl = document.createElement('div')
-  if (_options.useShadowDom) rootEl.attachShadow({ mode: 'open' })
+  if (options.useShadowDom) rootEl.attachShadow({ mode: 'open' })
 
   function openSettingPanel() {
     if (!window.domRoot) {
-      if (_options.styleHref || import.meta.url) {
+      if (options.styleHref || import.meta.url) {
         let style = document.createElement('link')
         style.rel = 'stylesheet'
         style.type = 'text/css'
         style.href =
-          _options.styleHref || new URL('./index.css', import.meta.url).href
-        _options.useShadowDom
+          options.styleHref || new URL('./index.css', import.meta.url).href
+        options.useShadowDom
           ? rootEl.shadowRoot.appendChild(style)
           : document.head.appendChild(style)
       }
       window.domRoot = render(
         <UIComponent
-          settings={_options.settings}
+          settings={options.settings}
           configStore={configStore}
           rootEl={rootEl.shadowRoot}
-          {..._options}
+          {...options}
         />,
-        _options.useShadowDom ? rootEl.shadowRoot : rootEl
+        options.useShadowDom ? rootEl.shadowRoot : rootEl
       )
       document.body.appendChild(rootEl)
     }
@@ -140,7 +140,7 @@ export function initSetting<Map extends Record<string, any>>(
     // console.log('close 2')
     // domRoot.unmount()
   }
-  const configStore = createConfigStore(options.settings)
+  const configStore = createConfigStore(options.settings, options.mobx)
 
   return {
     openSettingPanel,
@@ -156,7 +156,9 @@ export function initSetting<Map extends Record<string, any>>(
           }
         }
       })
-      return observe(configStore, ...args)
+      return options.mobx
+        ? options.mobx.observe(configStore, ...args)
+        : observe(configStore, ...args)
     },
   }
 }
@@ -164,9 +166,13 @@ export function initSetting<Map extends Record<string, any>>(
 export function createConfigStore<Map extends Record<string, any>>(
   settings: {
     [K in keyof Map]: ConfigField<Map[K]>
-  }
-) {
-  return makeAutoObservable(
+  },
+  _mobx?: typeof mobx
+): Map {
+  const _makeAutoObservable: any = _mobx
+    ? _mobx.makeAutoObservable
+    : makeAutoObservable
+  return _makeAutoObservable(
     Object.entries(settings).reduce(
       (configMap, [key, config]: [string, ConfigField<any>]) => {
         configMap[key] = config.defaultValue
