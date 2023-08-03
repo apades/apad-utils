@@ -1,4 +1,4 @@
-import { initSetting, config } from '../src'
+import { initSetting, config } from '../lib'
 
 const {
   configStore,
@@ -19,6 +19,7 @@ const {
     },
     un: { defaultValue: '111' },
   },
+  useShadowDom: false,
 })
 
 window.configStore_simple = configStore
