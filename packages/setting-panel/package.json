@@ -1,8 +1,26 @@
 {
-  "name": "setting-panel",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@apad/setting-panel",
+  "version": "0.0.1",
+  "description": "开发配套设置工具",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apades/apad-utils.git",
+    "directory": "packages/setting-panel"
+  },
+  "files": [
+    "dist"
+  ],
+  "bugs": {
+    "url": "https://github.com/apades/apad-utils/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
     "dev": "vite serve -c vite.config.js test",
     "build:testWeb": "vite build -c vite.config.js test",
@@ -13,8 +31,8 @@
     "build:m": "tsup src/index.tsx --dts --format esm,cjs --config ./build/tsup.m.ts --minify --metafile --env.NODE_ENV production lib"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "apades",
+  "license": "MIT",
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
