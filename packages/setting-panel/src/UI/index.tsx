@@ -16,11 +16,12 @@ type BaseConfig = UISettings
 export type UISettings = {
   [K: string]: ConfigField<any>
 }
-type Props = {
+export type Props = {
   settings: UISettings
   configStore: Record<string, any>
   savedConfig?: UISettings
   rootEl?: HTMLElement | ShadowRoot
+  isLoading: boolean
 } & InitOptions<Record<string, any>>
 
 const SettingPanel: FC<Props> = (props) => {
@@ -191,30 +192,19 @@ const ConfigRowAction = (props: {
   )
 }
 
-const saveKey = '__settingPanel_config_save'
+export const saveKey = '__settingPanel_config_save'
 const UIComponent: FC<Props> = (props) => {
-  let [isLoading, setLoading] = useState(!!props.onInitLoadConfig)
-  let [savedConfig, setSavedConfig] = useState<Partial<BaseConfig>>()
+  let [isLoading, setLoading] = useState(props.isLoading)
+  let [savedConfig, setSavedConfig] = useState<Partial<BaseConfig>>(
+    props.savedConfig
+  )
   useOnce(async () => {
-    let savedConfig: Props['configStore'] = {}
-    if (props.saveInLocal) {
-      switch (props.savePosition) {
-        case 'localStorage': {
-          savedConfig = JSON.parse(localStorage[saveKey] || '{}')
-          break
-        }
-      }
+    ;(globalThis as any).__spSetLoading = setLoading
+    ;(globalThis as any).__spSetSavedConfig = setSavedConfig
+    return () => {
+      delete (globalThis as any).__spSetLoading
+      delete (globalThis as any).__spSetSavedConfig
     }
-    if (props.onInitLoadConfig)
-      savedConfig = await props.onInitLoadConfig(savedConfig)
-
-    // runInAction(() => {
-    Object.entries(savedConfig).forEach(([key, val]) => {
-      props.configStore[key] = val
-    })
-    // })
-    setSavedConfig(savedConfig)
-    setLoading(false)
   })
 
   return (

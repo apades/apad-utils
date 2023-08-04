@@ -1,6 +1,7 @@
-import { isFunction } from '@pkgs/utils/src/utils'
+import { createElement, isFunction } from '@pkgs/utils/src/utils'
 import { render } from 'entry'
-import UIComponent from './UI'
+import type mobx from 'mobx'
+import UIComponent, { saveKey } from './UI'
 import {
   IObjectDidChange,
   IValueDidChange,
@@ -9,7 +10,6 @@ import {
   observe,
 } from './mobx-mini'
 import './tailwind.css'
-import type mobx from 'mobx'
 
 type ConfigFieldBase<T> = {
   defaultValue?: T
@@ -71,6 +71,8 @@ export type InitOptions<Map extends Record<string, any>> = {
   mobx?: typeof mobx
   /**针对 非打包工具 + useShadowDom:true 的用户 */
   styleHref?: string
+  /**默认为true */
+  isModal?: boolean
 }
 
 type Observe<Map extends Record<string, any>> = {
@@ -106,20 +108,58 @@ export function initSetting<Map extends Record<string, any>>(
     changeConfigStoreWithSettingPanelChange: true,
     autoSave: true,
     autoSaveTriggerMs: 500,
+    isModal: true,
   }
   options = Object.assign(baseOption, options)
 
   const rootEl = document.createElement('div')
   if (options.useShadowDom) rootEl.attachShadow({ mode: 'open' })
 
+  let isLoading = true
+  let savedConfig = {}
+  const configStore = createConfigStore(options.settings, options.mobx)
+
+  const updateSavedConfig = () => {
+    Object.entries(savedConfig).forEach(([key, val]) => {
+      ;(configStore as any)[key] = val
+    })
+  }
+  // 加载本地保存数据
+  if (options.saveInLocal) {
+    switch (options.savePosition) {
+      case 'localStorage': {
+        savedConfig = JSON.parse(localStorage[saveKey] || '{}')
+        break
+      }
+    }
+  }
+  updateSavedConfig()
+  // 加载options的异步/同步方法数据
+  if (options.onInitLoadConfig) {
+    ;(async () => {
+      if (options.onInitLoadConfig)
+        return options.onInitLoadConfig(savedConfig as any)
+    })().then((_savedConfig) => {
+      isLoading = false
+      savedConfig = _savedConfig
+      updateSavedConfig()
+      ;(globalThis as any)?.__spSetLoading?.(false)
+      ;(globalThis as any)?.__spSetSavedConfig?.(_savedConfig)
+    })
+  } else {
+    isLoading = false
+  }
+
   function openSettingPanel() {
     if (!window.domRoot) {
       if (options.styleHref || import.meta.url) {
-        let style = document.createElement('link')
-        style.rel = 'stylesheet'
-        style.type = 'text/css'
-        style.href =
-          options.styleHref || new URL('./index.css', import.meta.url).href
+        let style = createElement('link', {
+          rel: 'stylesheet',
+          type: 'stylesheet',
+          href:
+            options.styleHref || new URL('./index.css', import.meta.url).href,
+        })
+
         options.useShadowDom
           ? rootEl.shadowRoot.appendChild(style)
           : document.head.appendChild(style)
@@ -129,6 +169,8 @@ export function initSetting<Map extends Record<string, any>>(
           settings={options.settings}
           configStore={configStore}
           rootEl={rootEl.shadowRoot}
+          isLoading={isLoading}
+          savedConfig={savedConfig}
           {...options}
         />,
         options.useShadowDom ? rootEl.shadowRoot : rootEl
@@ -136,11 +178,7 @@ export function initSetting<Map extends Record<string, any>>(
       document.body.appendChild(rootEl)
     }
   }
-  function closeSettingPanel() {
-    // console.log('close 2')
-    // domRoot.unmount()
-  }
-  const configStore = createConfigStore(options.settings, options.mobx)
+  function closeSettingPanel() {}
 
   return {
     openSettingPanel,

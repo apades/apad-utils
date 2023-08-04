@@ -3,8 +3,7 @@ import * as mobx from 'mobx'
 import { observer } from 'mobx-react'
 import { FC } from 'react'
 import ReactDOM from 'react-dom/client'
-import { initSetting } from '../dist/index'
-import { config } from '../src'
+import { config, initSetting } from '../src'
 
 const settings = {
   a1: { defaultValue: 1, category: 'a系列', desc: 'asdfadf' },
@@ -14,8 +13,6 @@ const settings = {
   b2: {
     defaultValue: 11,
     category: 'b系列',
-    // type: 'group',
-    // group: [2, 1, 11, '33'],
   },
   un: { defaultValue: '111' },
 }
@@ -34,9 +31,6 @@ const { configStore, openSettingPanel } = initSetting({
   mobx,
 })
 window.configStore = configStore
-// observe(configStore, (change) => {
-//   console.log('change', change)
-// })
 
 const App: FC = () => {
   return (

@@ -1,12 +1,10 @@
-import { config, createConfigStore, initSetting } from '../src'
-// import { observe as _observe, observe } from 'mobx'
-import { FC, useEffect } from 'react'
-import UIComponent, { UISettings } from '../src/UI'
-// import { observer } from 'mobx-react'
+import { config, createConfigStore } from '../src'
+import { FC } from 'react'
+import UIComponent from '../src/UI'
 import { wait } from '@pkgs/utils/src/utils'
 import { observer } from '../src/react'
 
-const settings: UISettings = {
+const settings = {
   a1: { defaultValue: 1, category: 'a系列', desc: 'asdfadf' },
   a2: config<'adf' | 'bbb'>({ defaultValue: 'adf', category: 'a系列' }),
   a3: { defaultValue: 'a' as 'a' | 'b', category: 'a系列' },

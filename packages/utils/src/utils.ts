@@ -45,9 +45,11 @@ export function copyText(text: string): void {
 
 export function createElement<T extends HTMLElement>(
   tag: keyof HTMLElementTagNameMap,
-  op?:
-    | Partial<T>
-    | (Partial<Omit<T, 'style'>> & { style: CSSStyleDeclaration | string })
+  op?: // | Partial<T>
+  Partial<Omit<T, 'style'>> & {
+    style?: CSSStyleDeclaration | string
+    [k: string]: any
+  }
 ): T {
   let el = document.createElement(tag)
   Object.assign(el, op)
