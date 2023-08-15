@@ -47,7 +47,8 @@ const SettingPanel: FC<Props> = (props) => {
     delete newConfig[key]
     _setNewConfig({ ...newConfig })
     if (props.changeConfigStoreWithSettingPanelChange)
-      props.configStore[key] = props.settings[key].defaultValue
+      props.configStore[key] =
+        props.settings[key].defaultValue ?? props.settings[key]
     saveConfig()
   })
 
@@ -75,7 +76,10 @@ const SettingPanel: FC<Props> = (props) => {
     advConfigEntries: ConfigEntries = []
 
   configEntries.forEach(([key, _val]) => {
-    const val = { ..._val, defaultValue: props.settings[key].defaultValue }
+    const val = {
+      ..._val,
+      defaultValue: props.settings[key].defaultValue ?? props.settings[key],
+    }
     if (val.notRecommended) advConfigEntries.push([key, val])
     else baseConfigEntries.push([key, val])
   })
@@ -99,19 +103,20 @@ const ConfigEntriesBox: FC<{
   return (
     <div>
       {props.config.map(([key, val]: [string, ConfigField<any>], i) => {
-        const isNumber = typeof val.defaultValue == 'number'
+        const defaultValue = val.defaultValue ?? val
+        const isNumber = typeof defaultValue == 'number'
         const hasChange =
           !isUndefined(props.newConfig[key]) &&
           !isEqual(
             props.newConfig[key],
-            isNumber ? val.defaultValue + '' : val.defaultValue
+            isNumber ? defaultValue + '' : defaultValue
           )
 
         console.log(
           `key ${key} hasChange`,
           hasChange,
           props.newConfig[key],
-          val.defaultValue
+          defaultValue
         )
         return (
           <div
@@ -174,7 +179,7 @@ const ConfigRowAction = (props: {
   onChange: (v: any) => void
   newVal: any
 }) => {
-  let val = props.config.defaultValue
+  let val = props.config.defaultValue ?? props.config
   if (isBoolean(val))
     return (
       <input

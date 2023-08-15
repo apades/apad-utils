@@ -12,15 +12,17 @@ import {
 import './tailwind.css'
 import './index.less'
 
-type ConfigFieldBase<T> = {
-  defaultValue?: T
-  desc?: string
-  /**不填默认使用key作为label */
-  label?: string
-  notRecommended?: boolean
-  /**分类 */
-  category?: string
-}
+type ConfigFieldBase<T> =
+  | {
+      defaultValue?: T
+      desc?: string
+      /**不填默认使用key作为label */
+      label?: string
+      notRecommended?: boolean
+      /**分类 */
+      category?: string
+    }
+  | T
 export type ConfigField<T> = ConfigFieldBase<T>
 // TODO 进阶版设置
 /* &
@@ -243,7 +245,7 @@ export function createConfigStore<Map extends Record<string, any>>(
   return _makeAutoObservable(
     Object.entries(settings).reduce(
       (configMap, [key, config]: [string, ConfigField<any>]) => {
-        configMap[key] = config.defaultValue
+        configMap[key] = config.defaultValue ?? config
         return configMap
       },
       {} as Record<any, any>

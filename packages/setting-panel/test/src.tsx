@@ -15,6 +15,7 @@ const settings = {
     category: 'b系列',
   },
   un: { defaultValue: '111' },
+  s1: 99999,
 }
 window.settings = settings
 // 打包的
