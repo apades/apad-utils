@@ -198,7 +198,7 @@ export function initSetting<Map extends Record<string, any>>(
           className: 'cover-bg',
           onclick: closeSettingPanel,
         })
-        rootEl.appendChild(coverBg)
+        renderTarget.appendChild(coverBg)
       }
       hasInit = true
     }
