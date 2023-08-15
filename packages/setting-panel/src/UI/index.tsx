@@ -99,9 +99,14 @@ const ConfigEntriesBox: FC<{
   return (
     <div>
       {props.config.map(([key, val]: [string, ConfigField<any>], i) => {
+        const isNumber = typeof val.defaultValue == 'number'
         const hasChange =
           !isUndefined(props.newConfig[key]) &&
-          !isEqual(props.newConfig[key], val.defaultValue)
+          !isEqual(
+            props.newConfig[key],
+            isNumber ? val.defaultValue + '' : val.defaultValue
+          )
+
         console.log(
           `key ${key} hasChange`,
           hasChange,
