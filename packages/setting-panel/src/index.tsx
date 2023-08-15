@@ -1,4 +1,4 @@
-import { createElement, isFunction } from '@pkgs/utils/src/utils'
+import { createElement, isFunction, wait } from '@pkgs/utils/src/utils'
 import { render } from 'entry'
 import type mobx from 'mobx'
 import UIComponent, { saveKey } from './UI'
@@ -198,7 +198,9 @@ export function initSetting<Map extends Record<string, any>>(
           className: 'cover-bg',
           onclick: closeSettingPanel,
         })
-        renderTo.appendChild(coverBg)
+        wait(100).then(() => {
+          renderTo.appendChild(coverBg)
+        })
       }
       hasInit = true
     }
