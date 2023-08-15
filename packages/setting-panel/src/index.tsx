@@ -169,7 +169,7 @@ export function initSetting<Map extends Record<string, any>>(
       if (options.styleHref || import.meta.url) {
         let style = createElement('link', {
           rel: 'stylesheet',
-          type: 'stylesheet',
+          type: 'text/css',
           href:
             options.styleHref || new URL('./index.css', import.meta.url).href,
         })
