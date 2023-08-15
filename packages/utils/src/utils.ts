@@ -145,3 +145,7 @@ export function cloneDeep<T>(obj: T): T {
 
   return result
 }
+
+export function classNames(...args: any[]) {
+  return args.filter((a) => !!a).join(' ')
+}

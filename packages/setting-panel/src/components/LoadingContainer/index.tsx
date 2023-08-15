@@ -1,4 +1,4 @@
-import { isFunction } from '@pkgs/utils/src/utils'
+import { classNames, isFunction } from '@pkgs/utils/src/utils'
 import type {
   CSSProperties,
   DetailedHTMLProps,
@@ -41,9 +41,11 @@ let LoadingContainer: FC<Props> = (props) => {
   return (
     <div
       {..._props}
-      className={`${_props.className} ${isLoading && 'loading-container'} ${
+      className={classNames(
+        _props.className,
+        isLoading && 'loading-container',
         skeletonMode && 'skeleton-mode'
-      }`}
+      )}
       style={{
         minHeight: isLoading && minHeight,
         ...(props.style || {}),

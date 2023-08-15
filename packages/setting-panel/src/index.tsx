@@ -10,6 +10,7 @@ import {
   observe,
 } from './mobx-mini'
 import './tailwind.css'
+import './index.less'
 
 type ConfigFieldBase<T> = {
   defaultValue?: T
@@ -57,8 +58,6 @@ export type InitOptions<Map extends Record<string, any>> = {
   savePosition?: 'localStorage' /* | 'indexedDB' */
   /**保存到本地，默认为true */
   saveInLocal?: boolean
-  /**渲染的位置，不传默认是开全局modal */
-  renderTarget?: HTMLElement
   /**是否使用shadow dom，避免css污染，默认关闭 */
   useShadowDom?: boolean
   /**默认为true，如果不想设置面板设置改动设置时修改configStore可以关闭 */
@@ -92,7 +91,10 @@ export function initSetting<Map extends Record<string, any>>(
   /**从options.settings转化成的mobx结构数据 */
   configStore: Map
   /**打开设置面板的UI */
-  openSettingPanel: () => void
+  openSettingPanel: (
+    /**渲染的位置，不传默认是开全局modal */
+    renderTarget?: HTMLElement
+  ) => void
   closeSettingPanel: () => void
   /**
    * mobx的监听
@@ -112,8 +114,16 @@ export function initSetting<Map extends Record<string, any>>(
   }
   options = Object.assign(baseOption, options)
 
-  const rootEl = document.createElement('div')
-  if (options.useShadowDom) rootEl.attachShadow({ mode: 'open' })
+  const rootEl = createElement('div')
+  const renderEl = createElement('div', {
+    className: 'render-root',
+  })
+  if (options.useShadowDom) {
+    rootEl.attachShadow({ mode: 'open' })
+    rootEl.shadowRoot.appendChild(renderEl)
+  } else {
+    rootEl.appendChild(renderEl)
+  }
 
   let isLoading = true
   let savedConfig = {}
@@ -150,8 +160,12 @@ export function initSetting<Map extends Record<string, any>>(
     isLoading = false
   }
 
-  function openSettingPanel() {
-    if (!window.domRoot) {
+  let hasInit = false
+  function openSettingPanel(
+    /**渲染的位置，不传默认是开全局modal */
+    renderTarget?: HTMLElement
+  ) {
+    if (!hasInit) {
       if (options.styleHref || import.meta.url) {
         let style = createElement('link', {
           rel: 'stylesheet',
@@ -164,21 +178,35 @@ export function initSetting<Map extends Record<string, any>>(
           ? rootEl.shadowRoot.appendChild(style)
           : document.head.appendChild(style)
       }
-      window.domRoot = render(
+      const renderTo = renderTarget ?? renderEl
+
+      render(
         <UIComponent
           settings={options.settings}
           configStore={configStore}
-          rootEl={rootEl.shadowRoot}
+          rootEl={renderEl}
           isLoading={isLoading}
           savedConfig={savedConfig}
           {...options}
         />,
-        options.useShadowDom ? rootEl.shadowRoot : rootEl
+        renderTo
       )
-      document.body.appendChild(rootEl)
+
+      if (!renderTarget) {
+        renderEl.classList.add('is-modal')
+        const coverBg = createElement('div', {
+          className: 'cover-bg',
+          onclick: closeSettingPanel,
+        })
+        rootEl.appendChild(coverBg)
+      }
+      hasInit = true
     }
+    document.body.appendChild(rootEl)
   }
-  function closeSettingPanel() {}
+  function closeSettingPanel() {
+    document.body.removeChild(rootEl)
+  }
 
   return {
     openSettingPanel,

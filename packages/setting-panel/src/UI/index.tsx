@@ -208,7 +208,7 @@ const UIComponent: FC<Props> = (props) => {
   })
 
   return (
-    <LoadingContainer isLoading={isLoading}>
+    <LoadingContainer isLoading={isLoading} className="setting-panel">
       <SettingPanel {...props} savedConfig={savedConfig} />
     </LoadingContainer>
   )
