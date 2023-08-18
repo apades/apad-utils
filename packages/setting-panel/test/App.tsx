@@ -1,5 +1,5 @@
 import { config, createConfigStore } from '../src'
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import UIComponent from '../src/UI'
 import { wait } from '@pkgs/utils/src/utils'
 import { observer } from '../src/react'
@@ -54,9 +54,23 @@ const App: FC = () => {
 }
 
 const ObservePanel: FC = observer(() => {
+  let [isA2, setA2] = useState(false)
   return (
     <div>
-      <div>a1: {configStore.a1}</div>
+      <div>
+        切换A2
+        <input
+          type="checkbox"
+          onChange={(e) => setA2((e.target as HTMLInputElement).checked)}
+        />
+      </div>
+      <div>
+        {isA2 ? (
+          <div>a2: {configStore.a2}</div>
+        ) : (
+          <div>a1: {configStore.a1}</div>
+        )}
+      </div>
     </div>
   )
 })

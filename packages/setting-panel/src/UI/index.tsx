@@ -112,12 +112,12 @@ const ConfigEntriesBox: FC<{
             isNumber ? defaultValue + '' : defaultValue
           )
 
-        console.log(
-          `key ${key} hasChange`,
-          hasChange,
-          props.newConfig[key],
-          defaultValue
-        )
+        // console.log(
+        //   `key ${key} hasChange`,
+        //   hasChange,
+        //   props.newConfig[key],
+        //   defaultValue
+        // )
         return (
           <div
             className={`group py-[6px] px-[6px] ${

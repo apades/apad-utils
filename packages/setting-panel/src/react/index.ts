@@ -1,5 +1,5 @@
 import React, { forwardRef, memo } from 'react'
-import { useObserver } from './useObserser'
+import { useObserver } from './useObserver'
 import { Rec } from '../../../tsconfig/types/global'
 
 const hasSymbol = typeof Symbol === 'function' && Symbol.for

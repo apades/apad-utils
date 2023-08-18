@@ -12,6 +12,10 @@ export function makeAutoObservable<T extends Rec>(target: T): T {
 
   const proxy = new Proxy(_target, {
     get(target, key: string, receiver) {
+      obverseMap.get(proxy).eventEmitter.emit(`get`, {
+        value: _target[key],
+        key,
+      })
       return _target[key]
     },
     set(target, key: string, newValue, receiver) {
@@ -19,7 +23,7 @@ export function makeAutoObservable<T extends Rec>(target: T): T {
         oldValue: _target[key],
         newValue,
         key,
-      } as EventProps)
+      })
       ;(_target as any)[key] = newValue
       return true
     },
