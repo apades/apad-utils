@@ -54,7 +54,9 @@ export function observer<P extends object, TRef = Rec>(
 
   // Support legacy context: `contextTypes` must be applied before `memo`
   if ((baseComponent as any).contextTypes) {
-    ;(observerComponent as React.FunctionComponent).contextTypes = (baseComponent as any).contextTypes
+    ;(observerComponent as React.FunctionComponent).contextTypes = (
+      baseComponent as any
+    ).contextTypes
   }
 
   // memo; we are not interested in deep updates

@@ -1,16 +1,18 @@
 {
   "name": "@apad/setting-panel",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "开发配套设置工具",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./lib/index.js",
+  "module": "./lib/index.mjs",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apades/apad-utils.git",
     "directory": "packages/setting-panel"
   },
   "files": [
-    "dist"
+    "lib",
+    "react",
+    "preact"
   ],
   "bugs": {
     "url": "https://github.com/apades/apad-utils/issues"
@@ -24,11 +26,12 @@
   "scripts": {
     "dev": "vite serve -c vite.config.js test",
     "build:testWeb": "vite build -c vite.config.js test",
-    "build": "pnpm run clearLib && pnpm run build:iife && pnpm run build:m",
+    "build": "pnpm run clearLib && pnpm run build:preact && pnpm run build:react && pnpm run build:react-utils",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clearLib": "rm -rf ./lib && rm -rf ./dist",
-    "build:iife": "tsup src/index.tsx --dts --format iife --global-name settingPanel --config ./build/tsup.iife.ts --minify --metafile --env.NODE_ENV production lib",
-    "build:m": "tsup src/index.tsx --dts --format esm,cjs --config ./build/tsup.m.ts --minify --metafile --env.NODE_ENV production lib"
+    "build:preact": "tsup src/index.tsx --dts --format esm,cjs,iife --global-name settingPanel --config ./build/tsup.preact.ts --minify --metafile --env.NODE_ENV production -d preact",
+    "build:react": "tsup src/index.tsx --dts --format esm,cjs --config ./build/tsup.react.ts --minify --metafile --env.NODE_ENV production -d lib",
+    "build:react-utils": "tsup src/react/index.ts --dts --format esm,cjs --minify --metafile --env.NODE_ENV production -d react --shims --treeshake"
   },
   "keywords": [],
   "author": "apades",

@@ -16,7 +16,7 @@ export const { configStore, openSettingPanel,observe  } = initSetting({
 在react中
 ```tsx
 import { configStore, openSettingPanel } from './env'
-import { observer } from '@apad/setting-panel/dist/react'
+import { observer } from '@apad/setting-panel/react'
 
 export default observer(()=>{
     return <div style={{backgroundColor:configStore.bg}}>
@@ -43,10 +43,10 @@ export default function ui(){
 
 ## 使用
 
-### 如果你是非react/简单web应用用户
-推荐使用压缩打包的min.js，该js已将react替换成preact以达到更小的效果，相比原本减少了30kb+的react
+### 如果你是非react用户
+推荐使用`@apad/setting-panel/preact`，该js已将react替换成preact以达到更小的效果
 ```ts
-import { initSetting } from '@apad/setting-panel/dist/index.preact.min.js'
+import { initSetting } from '@apad/setting-panel/preact'
 const { configStore, openSettingPanel} = initSetting({
     // ....
 })

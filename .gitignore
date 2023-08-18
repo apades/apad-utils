@@ -10,3 +10,5 @@ videoClip-*.zip
 sider.ai.zip
 lib
 .turbo
+/packages/setting-panel/react
+/packages/setting-panel/preact
