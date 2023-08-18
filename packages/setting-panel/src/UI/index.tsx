@@ -179,7 +179,8 @@ const ConfigRowAction = (props: {
   onChange: (v: any) => void
   newVal: any
 }) => {
-  let val = props.config.defaultValue ?? props.config
+  let val = props.config.defaultValue ?? props.config,
+    isNumber = typeof props.config.defaultValue == 'number'
   if (isBoolean(val))
     return (
       <input
@@ -196,8 +197,10 @@ const ConfigRowAction = (props: {
       className="h-[24px] text-[14px] px-[8px]"
       value={props.newVal ?? val}
       onInput={(e) => {
-        props.onChange((e.target as HTMLInputElement).value)
+        let val = (e.target as HTMLInputElement).value
+        props.onChange(isNumber ? +val : val)
       }}
+      onKeyDown={(e) => e.stopPropagation()}
     />
   )
 }
