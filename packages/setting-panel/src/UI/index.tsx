@@ -179,14 +179,30 @@ const ConfigRowAction = (props: {
   onChange: (v: any) => void
   newVal: any
 }) => {
-  let val = props.config.defaultValue ?? props.config,
+  let defaultValue = props.config.defaultValue ?? props.config,
     isNumber = typeof props.config.defaultValue == 'number'
-  if (isBoolean(val))
+
+  const value = props.newVal ?? defaultValue
+  if (props.config?.type == 'group')
+    return (
+      <select
+        class="h-[24px] min-w-[120px]"
+        value={value}
+        onChange={(e) => props.onChange((e.target as HTMLSelectElement).value)}
+      >
+        {props.config.group.map((val: any, i: number) => (
+          <option key={i} value={val}>
+            {val}
+          </option>
+        ))}
+      </select>
+    )
+  if (isBoolean(defaultValue))
     return (
       <input
         className="mr-auto"
         type="checkbox"
-        checked={props.newVal ?? val}
+        checked={value}
         onChange={(e) => {
           props.onChange((e.target as HTMLInputElement).checked)
         }}
@@ -195,7 +211,7 @@ const ConfigRowAction = (props: {
   return (
     <input
       className="h-[24px] text-[14px] px-[8px]"
-      value={props.newVal ?? val}
+      value={value}
       onInput={(e) => {
         let val = (e.target as HTMLInputElement).value
         props.onChange(isNumber ? +val : val)

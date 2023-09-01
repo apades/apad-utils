@@ -6,7 +6,14 @@ import { observer } from '../src/react'
 
 const settings = {
   a1: { defaultValue: 1, category: 'a系列', desc: 'asdfadf' },
-  a2: config<'adf' | 'bbb'>({ defaultValue: 'adf', category: 'a系列' }),
+  a2: config<'a' | 'b'>({
+    defaultValue: 'b',
+    category: 'a系列',
+    type: 'group',
+    // TODO 支持复杂数据传入
+    // group: { a: { value: 'a' }, b: 'b' },
+    group: ['a', 'b'],
+  }),
   a3: { defaultValue: 'a' as 'a' | 'b', category: 'a系列' },
   b1: { defaultValue: false, category: 'b系列' },
   b2: {
@@ -44,6 +51,7 @@ const App: FC = () => {
         savePosition="localStorage"
         saveInLocal
         onInitLoadConfig={async (config) => {
+          console.log('config', config)
           await wait(2000)
           return { ...config, un: 'change 111' }
         }}

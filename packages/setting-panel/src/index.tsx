@@ -12,34 +12,34 @@ import {
 import './tailwind.css'
 import './index.less'
 
-type ConfigFieldBase<T> =
-  | {
-      defaultValue?: T
-      desc?: string
-      /**不填默认使用key作为label */
-      label?: string
-      notRecommended?: boolean
-      /**分类 */
-      category?: string
-    }
+type ConfigFieldBase<T> = {
+  defaultValue?: T
+  desc?: string
+  /**不填默认使用key作为label */
+  label?: string
+  notRecommended?: boolean
+  /**分类 */
+  category?: string
+}
+type ConfigGroupField<T> = {
+  value: T
+  desc?: string
+  label?: string
+}
+
+export type ConfigField<T> =
+  | ConfigFieldBase<T>
   | T
-export type ConfigField<T> = ConfigFieldBase<T>
-// TODO 进阶版设置
-/* &
-  (
-    | ConfigFieldBase<T>
-    | {
-        type: 'colorPicker' | 'date'
-      }
-    | {
-        type: 'group'
-        group: T[]
-      }
-    | {
-        type: 'group-unlimited'
-        group: any[]
-      }
-  ) */
+  | (ConfigFieldBase<T> & {
+      type: 'group'
+      // TODO 支持复杂数据传入
+      // group: Record<T & string, ConfigGroupField<T> | T> | T[]
+      group: T[]
+    })
+// | {
+//     type: 'group-unlimited'
+//     group: any[]
+//   }
 
 export function config<T>(config: ConfigField<T>) {
   return config
