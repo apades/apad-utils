@@ -21,6 +21,7 @@ const settings = {
     defaultValue: 11,
     category: 'b系列',
   },
+  b3: true,
   un: { defaultValue: '111' },
   s1: 99999,
 }

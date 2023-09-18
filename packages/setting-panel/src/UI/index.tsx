@@ -151,7 +151,6 @@ const ConfigEntriesBox: FC<{
                   >
                     <button
                       className="bg-red-700 h-[24px]"
-                      disabled={!(props.newConfig as any)[key]}
                       onClick={() => {
                         props.resetConfig(key)
                       }}
@@ -186,7 +185,7 @@ const ConfigRowAction = (props: {
   if (props.config?.type == 'group')
     return (
       <select
-        class="h-[24px] min-w-[120px]"
+        className="h-[24px] min-w-[120px]"
         value={value}
         onChange={(e) => props.onChange((e.target as HTMLSelectElement).value)}
       >
