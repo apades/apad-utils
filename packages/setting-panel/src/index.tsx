@@ -11,6 +11,7 @@ import {
 } from './mobx-mini'
 import './tailwind.css'
 import './index.less'
+import AsyncLock from '@pkgs/utils/src/AsyncLock'
 
 type ConfigFieldBase<T> = {
   defaultValue?: T
@@ -104,6 +105,10 @@ export function initSetting<Map extends Record<string, any>>(
    * listener的return返回函数的话可以像react useEffect那样在重新触发listener时运行该函数，可以用来清除上一次函数里相关的挂载操作然后重新挂载相关数据
    *  */
   observe: Observe<Map>
+  temporarySetConfigStore<k extends keyof Map>(
+    key: k,
+    val: Map[k]
+  ): Promise<void>
 } {
   const baseOption: Partial<InitOptions<Map>> = {
     savePosition: 'localStorage',
@@ -129,6 +134,7 @@ export function initSetting<Map extends Record<string, any>>(
 
   let isLoading = true
   let savedConfig = {}
+  let asyncInitLock = new AsyncLock()
   const configStore = createConfigStore(options.settings, options.mobx)
 
   const updateSavedConfig = () => {
@@ -149,16 +155,17 @@ export function initSetting<Map extends Record<string, any>>(
   // 加载options的异步/同步方法数据
   if (options.onInitLoadConfig) {
     ;(async () => {
-      if (options.onInitLoadConfig)
-        return options.onInitLoadConfig(savedConfig as any)
+      return options.onInitLoadConfig(savedConfig as any)
     })().then((_savedConfig) => {
+      asyncInitLock.ok()
       isLoading = false
       savedConfig = _savedConfig
       updateSavedConfig()
       ;(globalThis as any)?.__spSetLoading?.(false)
-      ;(globalThis as any)?.__spSetSavedConfig?.(_savedConfig)
+      ;(globalThis as any)?.__spSetSavedConfig?.(savedConfig)
     })
   } else {
+    asyncInitLock.ok()
     isLoading = false
   }
 
@@ -212,23 +219,24 @@ export function initSetting<Map extends Record<string, any>>(
     document.body.removeChild(rootEl)
   }
 
+  function _observe(...args: [any]): any {
+    return options.mobx
+      ? options.mobx.observe(configStore, ...args)
+      : observe(configStore, ...args)
+  }
+
+  let tempConfigKeys: string[] = []
   return {
     openSettingPanel,
     closeSettingPanel,
     configStore,
-    observe(...args: [any]) {
-      let reLoadCb = () => 1
-      args.forEach((arg, i) => {
-        if (isFunction(arg)) {
-          args[i] = (...listenFnArgs: [any]) => {
-            reLoadCb()
-            reLoadCb = arg(...listenFnArgs)
-          }
-        }
-      })
-      return options.mobx
-        ? options.mobx.observe(configStore, ...args)
-        : observe(configStore, ...args)
+    observe: _observe,
+    temporarySetConfigStore: async (key, val) => {
+      await asyncInitLock.waiting()
+      savedConfig = { ...savedConfig, [key]: val }
+      tempConfigKeys = [...tempConfigKeys, key as string]
+      ;(globalThis as any)?.__spSetSavedConfig?.(savedConfig)
+      ;(globalThis as any)?.__spSetTempConfigKeys?.(tempConfigKeys)
     },
   }
 }

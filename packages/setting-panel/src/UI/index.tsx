@@ -1,4 +1,5 @@
 import {
+  classNames,
   debounce,
   isBoolean,
   isEqual,
@@ -20,6 +21,7 @@ export type Props = {
   settings: UISettings
   configStore: Record<string, any>
   savedConfig?: UISettings
+  tempConfigKeys?: string[]
   rootEl?: HTMLElement | ShadowRoot
   isLoading: boolean
 } & InitOptions<Record<string, any>>
@@ -86,6 +88,7 @@ const SettingPanel: FC<Props> = (props) => {
 
   return (
     <ConfigEntriesBox
+      tempConfigKeys={props.tempConfigKeys}
       config={baseConfigEntries}
       newConfig={newConfig}
       setNewConfig={setNewConfig}
@@ -96,6 +99,7 @@ const SettingPanel: FC<Props> = (props) => {
 
 const ConfigEntriesBox: FC<{
   config: ConfigEntries
+  tempConfigKeys: string[]
   newConfig: Partial<UISettings>
   setNewConfig: (key: string, val: any) => void
   resetConfig: (key: string) => void
@@ -111,27 +115,28 @@ const ConfigEntriesBox: FC<{
             props.newConfig[key],
             isNumber ? defaultValue + '' : defaultValue
           )
+        const isTemp = props.tempConfigKeys.includes(key)
+        const tempTips = isTemp
+          ? '这是针对当前 页面/状态 的特殊更改，不建议修改该配置'
+          : undefined
 
-        // console.log(
-        //   `key ${key} hasChange`,
-        //   hasChange,
-        //   props.newConfig[key],
-        //   defaultValue
-        // )
         return (
           <div
             className={`group py-[6px] px-[6px] ${
               i % 2 == 0 ? 'bg-gray-200' : 'bg-white'
             }`}
             key={i}
+            title={tempTips}
           >
             <div className="gap-[12px] flex">
               <div
-                className={`items-center justify-center text-center w-[140px] whitespace-pre-wrap ${
-                  hasChange && 'text-blue-500'
-                }`}
+                className={classNames(
+                  `items-center justify-center text-center w-[140px] whitespace-pre-wrap`,
+                  hasChange && 'text-blue-500',
+                  isTemp && 'text-yellow-500 cursor-help'
+                )}
               >
-                {val.label ?? key}:
+                {isTemp && '~'} {val.label ?? key}:
               </div>
               <div className="flex-1">
                 <div className="flex gap-[12px]">
@@ -150,7 +155,10 @@ const ConfigEntriesBox: FC<{
                     } transition-all`}
                   >
                     <button
-                      className="bg-red-700 h-[24px]"
+                      className={classNames(
+                        'h-[24px]',
+                        isTemp ? 'bg-yellow-500' : 'bg-red-500'
+                      )}
                       onClick={() => {
                         props.resetConfig(key)
                       }}
@@ -226,18 +234,25 @@ const UIComponent: FC<Props> = (props) => {
   let [savedConfig, setSavedConfig] = useState<Partial<BaseConfig>>(
     props.savedConfig
   )
+  let [tempConfigKeys, setTempConfigKeys] = useState<string[]>([])
   useOnce(async () => {
     ;(globalThis as any).__spSetLoading = setLoading
     ;(globalThis as any).__spSetSavedConfig = setSavedConfig
+    ;(globalThis as any).__spSetTempConfigKeys = setTempConfigKeys
     return () => {
       delete (globalThis as any).__spSetLoading
       delete (globalThis as any).__spSetSavedConfig
+      delete (globalThis as any).__spSetTempConfigKeys
     }
   })
 
   return (
     <LoadingContainer isLoading={isLoading} className="setting-panel">
-      <SettingPanel {...props} savedConfig={savedConfig} />
+      <SettingPanel
+        {...props}
+        savedConfig={savedConfig}
+        tempConfigKeys={tempConfigKeys}
+      />
     </LoadingContainer>
   )
 }

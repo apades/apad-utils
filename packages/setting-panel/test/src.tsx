@@ -27,7 +27,7 @@ const settings = {
 }
 window.settings = settings
 // 打包的
-const { configStore, openSettingPanel } = initSetting({
+const { configStore, openSettingPanel, temporarySetConfigStore } = initSetting({
   settings,
   useShadowDom: false,
   autoSave: true,
@@ -39,8 +39,14 @@ const { configStore, openSettingPanel } = initSetting({
   },
   mobx,
 })
-window.configStore = configStore
 
+temporarySetConfigStore('b1', true)
+// setTimeout(() => {
+//   temporarySetConfigStore('b1', true)
+// }, 300)
+// window.configStore = configStore
+
+// configStore.b1 = true
 const App: FC = () => {
   return (
     <div
