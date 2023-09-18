@@ -44,7 +44,7 @@ temporarySetConfigStore('b1', true)
 // setTimeout(() => {
 //   temporarySetConfigStore('b1', true)
 // }, 300)
-// window.configStore = configStore
+window.configStore = configStore
 
 // configStore.b1 = true
 const App: FC = () => {

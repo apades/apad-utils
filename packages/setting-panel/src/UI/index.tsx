@@ -31,7 +31,7 @@ const SettingPanel: FC<Props> = (props) => {
   useEffect(() => {
     if (props.savedConfig) _setNewConfig(props.savedConfig)
   }, [props.savedConfig])
-  window.newConfig = newConfig
+  // window.newConfig = newConfig
   let configEntries = Object.entries(props.settings)
   // const toast = useToast()
 
@@ -220,6 +220,10 @@ const ConfigRowAction = (props: {
       className="h-[24px] text-[14px] px-[8px]"
       value={value}
       onInput={(e) => {
+        let val = (e.target as HTMLInputElement).value
+        props.onChange(val)
+      }}
+      onBlur={(e) => {
         let val = (e.target as HTMLInputElement).value
         props.onChange(isNumber ? +val : val)
       }}
