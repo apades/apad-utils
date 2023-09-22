@@ -66,7 +66,16 @@ const SettingPanel: FC<Props> = (props) => {
         }
       }
     }
-    if (props.onSave) await props.onSave(newConfig)
+    if (props.onSave) {
+      const newSaveData = await props.onSave({ ...newConfig })
+      if (!newSaveData) return
+      // 会不会出现对象地址问题
+      const changes = Object.entries(newSaveData).filter(
+        ([key, val]) => val != newConfig[key]
+      )
+      if (!changes.length) return
+      changes.forEach((key, val) => setNewConfig(key as any, val))
+    }
     // toast({ title: '保存成功', status: 'success' })
   })
   const saveConfig = useCallback(
