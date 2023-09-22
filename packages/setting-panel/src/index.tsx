@@ -233,6 +233,12 @@ export function initSetting<Map extends Record<string, any>>(
     observe: _observe,
     temporarySetConfigStore: async (key, val) => {
       await asyncInitLock.waiting()
+      if (options.mobx) {
+        options.mobx.runInAction(() => {
+          configStore[key] = val
+        })
+      } else configStore[key] = val
+
       savedConfig = { ...savedConfig, [key]: val }
       tempConfigKeys = [...tempConfigKeys, key as string]
       ;(globalThis as any)?.__spSetSavedConfig?.(savedConfig)
