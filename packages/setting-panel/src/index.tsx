@@ -21,6 +21,11 @@ type ConfigFieldBase<T> = {
   notRecommended?: boolean
   /**分类 */
   category?: string
+  // TODO
+  /**与settings字段关联的 */
+  relateBy?: string
+  /**等于relateBy的值时，才显示该设置，默认defaultValue是boolean时为true */
+  relateByValue?: any
 }
 type ConfigGroupField<T> = {
   value: T
