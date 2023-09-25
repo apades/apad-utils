@@ -33,7 +33,9 @@
     "build:react": "tsup src/index.tsx --dts --format esm,cjs --config ./build/tsup.react.ts --minify --metafile --env.NODE_ENV production -d lib",
     "build:react-utils": "tsup src/react/index.ts --dts --format esm,cjs --minify --metafile --env.NODE_ENV production -d react --shims --treeshake"
   },
-  "keywords": [],
+  "keywords": [
+    "settings","ui","config","mobx"
+  ],
   "author": "apades",
   "license": "MIT",
   "dependencies": {
