@@ -49,6 +49,37 @@ importers:
       fs-extra: 11.1.0
       lodash: 4.17.21
 
+  packages/injector:
+    specifiers:
+      '@types/react': ^18.0.28
+      '@types/react-dom': ^18.2.5
+      autoprefixer: ^10.4.14
+      esbuild-plugin-replace: ^1.4.0
+      mitt: ^3.0.1
+      mobx: ^6.10.0
+      mobx-react: ^9.0.0
+      postcss: ^8.4.27
+      preact: ^10.16.0
+      preact-compat: ^3.19.0
+      react: ^18.2.0
+      react-dom: ^18.2.0
+      tailwindcss: ^3.3.3
+    dependencies:
+      mitt: 3.0.1
+      react: 18.2.0
+      react-dom: 18.2.0_react@18.2.0
+    devDependencies:
+      '@types/react': 18.0.28
+      '@types/react-dom': 18.2.5
+      autoprefixer: 10.4.14_postcss@8.4.27
+      esbuild-plugin-replace: 1.4.0
+      mobx: 6.10.0
+      mobx-react: 9.0.0_dbxhtfghklbsz7sz73i6e2pcva
+      postcss: 8.4.27
+      preact: 10.16.0
+      preact-compat: 3.19.0_preact@10.16.0
+      tailwindcss: 3.3.3
+
   packages/react-utils:
     specifiers:
       '@types/react': ^18.0.28
@@ -990,7 +1021,6 @@ packages:
     resolution: {integrity: sha512-lP3ZAyzyRa5JXoOd59lJbRKNObtK8pJ/RO7o6vdjwLi71GfbL32NR22ZuS7/cLZkr10/L1lutoLma8E4DLngYg==}
     dependencies:
       magic-string: 0.25.9
-    dev: false
 
   /esbuild/0.18.12:
     resolution: {integrity: sha512-XuOVLDdtsDslXStStduT41op21Ytmf4/BDS46aa3xPJ7X5h2eMWBF1oAe3QjUH3bDksocNXgzGUZ7XHIBya6Tg==}
@@ -1381,7 +1411,6 @@ packages:
     resolution: {integrity: sha512-RmF0AsMzgt25qzqqLc1+MbHmhdx0ojF2Fvs4XnOqz2ZOBXzzkEwc/dJQZCYHAn7v1jbVOjAZfK8msRn4BxO4VQ==}
     dependencies:
       sourcemap-codec: 1.4.8
-    dev: false
 
   /make-dir/2.1.0:
     resolution: {integrity: sha512-LS9X+dc8KLxXCb8dni79fLIIUA5VyZoyjSMCwTluaXA0o27cCK0bhXkpgw+sTXVpPy/lSO57ilRixqk0vDmtRA==}
@@ -1440,6 +1469,10 @@ packages:
     dependencies:
       brace-expansion: 1.1.11
     dev: true
+
+  /mitt/3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+    dev: false
 
   /mobx-react-lite/4.0.3_dbxhtfghklbsz7sz73i6e2pcva:
     resolution: {integrity: sha512-wEE1oT5zvDdvplG4HnRrFgPwg5GFVVrEtl42Er85k23zeu3om8H8wbDPgdbQP88zAihVsik6xJfw6VnzUl8fQw==}
@@ -1944,7 +1977,6 @@ packages:
   /sourcemap-codec/1.4.8:
     resolution: {integrity: sha512-9NykojV5Uih4lgo5So5dtw+f0JgJX30KCNI8gwhz2J9A15wD0Ml6tjHKwf6fTSa6fAdVBdZeNOs9eJ71qCk8vA==}
     deprecated: Please use @jridgewell/sourcemap-codec instead
-    dev: false
 
   /standalone-react-addons-pure-render-mixin/0.1.1:
     resolution: {integrity: sha512-HFkwqpJmvz4vxHyzdeUcjtsp8Am+NauLXdU2/YXT1/InPbszaRo1cLPAy/58H7oOPNNjteqHcv04JEw+d9C+Xw==}

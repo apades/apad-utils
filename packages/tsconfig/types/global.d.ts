@@ -39,3 +39,5 @@ type DeepWritableSet<T> = Set<DeepWritable<T>>
 type DeepWritableObject<T> = {
   [K in WritableKeys<T>]: DeepWritable<T[K]>
 }
+
+export type noop = (this: any, ...args: any[]) => any
