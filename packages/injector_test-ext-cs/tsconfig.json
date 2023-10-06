@@ -10,5 +10,9 @@
   },
   "exclude": [
     "lib"
+  ],
+  "include": [
+    ".plasmo/index.d.ts",
+    "../**/*"
   ]
 }

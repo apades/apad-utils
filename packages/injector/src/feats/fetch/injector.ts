@@ -1,24 +1,36 @@
-import InjectorBase, { InjectorBaseProps } from '../core/base'
+import InjectorBase, { InjectorBaseProps } from '../../core/base'
+import { FETCH } from './types'
 
-export default class InjectorFetch extends InjectorBase {
-  ofetch = fetch
-  oXMLHttpRequest = XMLHttpRequest
-  category = 'fetch'
-
-  triggerMap = new Map<RegExp, (url: string, args: any[], res: any) => void>()
-
+export default class FetchInjector extends InjectorBase {
+  static _FetchInjector: FetchInjector
   constructor(props: InjectorBaseProps) {
-    super(props)
-    this.on('add', (reg) => {
-      this.triggerMap.set(reg, (url, args, res) => {
-        this.send('trigger', { url, args, res })
+    if (!FetchInjector._FetchInjector) {
+      super({
+        category: FETCH,
+        ...props,
       })
-    })
-    this.on('remove', (reg) => {
-      this.triggerMap.delete(reg)
-    })
+      FetchInjector._FetchInjector = this
+    }
+    return FetchInjector._FetchInjector
   }
+
+  triggerMap: Map<RegExp, (url: string, args: any[], res: any) => void>
+  ofetch: typeof fetch
+  oXMLHttpRequest: typeof XMLHttpRequest
   init(): void {
+    this.injectSysAPI()
+    this.initMsgEvents()
+  }
+  protected onUnmount(): void {
+    window.fetch = this.ofetch
+    window.XMLHttpRequest = this.oXMLHttpRequest
+  }
+
+  injectSysAPI() {
+    this.triggerMap = new Map()
+    this.ofetch = fetch
+    this.oXMLHttpRequest = XMLHttpRequest
+
     const ofetch = this.ofetch
 
     const triggerMap = this.triggerMap
@@ -43,11 +55,11 @@ export default class InjectorFetch extends InjectorBase {
       return res
     }
 
-    window.fetch = _fetch
+    globalThis.fetch = _fetch
 
     const oXMLHttpRequest = this.oXMLHttpRequest
 
-    window.XMLHttpRequest = class extends oXMLHttpRequest {
+    globalThis.XMLHttpRequest = class extends oXMLHttpRequest {
       url: string
       method: string
       open(method: string, url: string | URL): void
@@ -76,8 +88,14 @@ export default class InjectorFetch extends InjectorBase {
       }
     }
   }
-  onUnmount(): void {
-    window.fetch = this.ofetch
-    window.XMLHttpRequest = this.oXMLHttpRequest
+  initMsgEvents() {
+    this.on('addListen', (reg) => {
+      this.triggerMap.set(reg, (url, args, res) => {
+        this.send('trigger', { url, args, res })
+      })
+    })
+    this.on('removeListen', (reg) => {
+      this.triggerMap.delete(reg)
+    })
   }
 }

@@ -12,3 +12,5 @@ lib
 .turbo
 /packages/setting-panel/react
 /packages/setting-panel/preact
+.plasmo
+/packages/injector_test-*/build

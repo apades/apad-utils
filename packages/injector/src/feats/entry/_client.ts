@@ -1,5 +1,5 @@
-import { noop } from '../../tsconfig/types/global'
-import { InitConfig } from './injector'
+import { noop } from '@pkgs/tsconfig/types/global'
+import { InitConfig } from '../../injector'
 
 const injector = {
   domEvents: {},

@@ -1,0 +1,12 @@
+{
+  "name": "injector_test-cs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "plasmo dev --build-path dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

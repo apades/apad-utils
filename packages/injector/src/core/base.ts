@@ -1,7 +1,8 @@
-import { Rec } from '../../../tsconfig/types/global'
+import type { Messager } from './Messager'
+
 export type InjectorBaseProps = {
-  sendType: string
-  listenType: string
+  messager: Messager
+  category?: string
 }
 
 type fn = (data: any) => any | Promise<any>
@@ -13,57 +14,41 @@ type fn = (data: any) => any | Promise<any>
  * 外部调用send
  */
 export default abstract class InjectorBase {
-  sendType: string
-  listenType: string
-  abstract category: string
-  eventCallback: Rec<fn> = {}
-
-  private async handleListen(e: any) {
-    const { category, type, data } = e.detail
-
-    if (category != this.category) return
-    const res = await this.eventCallback[type](data)
-    this.send(type, res)
-  }
+  category: string
+  protected messager: Messager
+  protected messagerListeningMap = new Map<fn, string>()
 
   constructor(props: InjectorBaseProps) {
-    this.sendType = props.sendType
-    this.listenType = props.listenType
-
-    this.initListen()
+    Object.assign(this, props)
+    // TODO 不该这里用
+    this.init()
   }
+  /**插件集合体载入实现类时调用 */
   abstract init(): void
+  /**实现类卸载时调用 */
   protected abstract onUnmount(): void
+  /**插件集合体卸载实现类时调用 */
   unmount() {
-    window.removeEventListener(this.listenType, this.handleListen)
-  }
-  initListen() {
-    window.addEventListener(this.listenType, this.handleListen)
-  }
-  send(type: string, data: any): Promise<any> {
-    window.dispatchEvent(
-      new CustomEvent(this.sendType, {
-        detail: { category: this.category, type, data },
-      })
-    )
-
-    return new Promise((res) => {
-      function handleSendResp(e: any) {
-        const { category, type: dType, data } = e.detail
-
-        if (category != this.category) return
-        if (dType == type) {
-          window.removeEventListener(this.sendType, handleSendResp)
-          res(data)
-        }
-      }
-      window.addEventListener(this.sendType, handleSendResp)
+    this.onUnmount()
+    ;[...this.messagerListeningMap.entries()].forEach(([fn, type]) => {
+      this.messager.offMessage(type, fn)
     })
   }
-  on(type: string, callback: fn) {
-    this.eventCallback[type] = callback
+  protected send(type: string, data?: any): Promise<any> {
+    return this.messager.sendMessage(this.getTypeName(type), data)
   }
-  off(type: string) {
-    delete this.eventCallback[type]
+  protected on(type: string, callback: fn) {
+    const name = this.getTypeName(type)
+    this.messagerListeningMap.set(callback, name)
+    return this.messager.onMessage(name, callback)
+  }
+  protected off(type: string, callback: fn) {
+    const name = this.getTypeName(type)
+    this.messagerListeningMap.delete(callback)
+    return this.messager.offMessage(name, callback)
+  }
+
+  protected getTypeName(type: string) {
+    return this.category + ':' + type
   }
 }
