@@ -1,3 +1,4 @@
+import AsyncLock from '@pkgs/utils/src/AsyncLock'
 import { TypeOfMapToInstanceTypeMap } from '../../../../tsconfig/types/global'
 import InjectorBase, { InjectorBaseProps } from '../../core/base'
 import DomEventsClient from '../domEvents/client'
@@ -18,6 +19,7 @@ export type ClientMap = TypeOfMapToInstanceTypeMap<typeof configToClientMap>
 
 export default class EntryClient extends InjectorBase {
   static _EntryClient: EntryClient
+  injectorLoadedLock: AsyncLock
   constructor(props: InjectorBaseProps & { featConfig: InitConfig }) {
     if (!EntryClient._EntryClient) {
       super({
@@ -30,18 +32,31 @@ export default class EntryClient extends InjectorBase {
   }
   init(): void {
     this.loadedFeatMap = new Map()
+    this.injectorLoadedLock = new AsyncLock()
     this.initFeats(this.featConfig)
+
+    this.waitInjectorLoad()
   }
   protected onUnmount(): void {
     this.loadedFeatMap = null
   }
 
+  waitInjectorLoad() {
+    this.messager.sendMessage('load')
+    const handleLoad = () => {
+      console.log('injector load', document.head, document.body)
+      this.injectorLoadedLock.ok()
+      this.messager.offMessage('load', handleLoad)
+    }
+    this.messager.onMessage('load', handleLoad)
+  }
   protected featConfig: InitConfig
   loadedFeatMap: Map<string, InjectorBase>
   initFeats(initConfig: InitConfig) {
     this.updateFeats(initConfig)
   }
   async updateFeats(newFeatConfig: InitConfig) {
+    await this.injectorLoadedLock.waiting()
     await this.send('updateFeats', { newFeatConfig })
     this.featConfig = newFeatConfig
 
