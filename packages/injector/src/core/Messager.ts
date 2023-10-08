@@ -1,4 +1,9 @@
-type Props = { sendType: string; listenType: string }
+import type { MessageRelayProps } from './messageRelay'
+
+type Props = {
+  sendType: string
+  listenType: string
+} & Partial<MessageRelayProps>
 export class Messager<
   TProtocolMap = Record<string, ProtocolWithReturn<any, any>>
 > {
