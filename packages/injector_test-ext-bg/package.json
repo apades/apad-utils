@@ -1,0 +1,29 @@
+{
+  "name": "injector_test-bg",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "plasmo dev --build-path dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "manifest": {
+    "name": "injector_test-ext-bg",
+    "description": "test",
+    "version": "0.0.1",
+    "host_permissions": [
+      "<all_urls>"
+    ],
+    "permissions":[
+      "tabs"
+    ]
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.246"
+  },
+  "dependencies": {
+    "webext-bridge": "^6.0.1"
+  }
+}
