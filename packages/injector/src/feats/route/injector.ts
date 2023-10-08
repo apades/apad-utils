@@ -35,6 +35,14 @@ export default class RouteInjector extends InjectorBase {
       return () => restores.forEach((re) => re())
     }
 
+    const restoreInject = onRouteChange([
+      // 'back',
+      'forward',
+      'pushState',
+      'replaceState',
+      // 'go',
+    ])
+
     const handlePopstate = () => {
       this.send('popstate')
       this.send('change')
@@ -42,13 +50,7 @@ export default class RouteInjector extends InjectorBase {
     window.addEventListener('popstate', handlePopstate)
 
     this.restore = () => {
-      onRouteChange([
-        // 'back',
-        'forward',
-        'pushState',
-        'replaceState',
-        // 'go',
-      ])
+      restoreInject()
       window.removeEventListener('popstate', handlePopstate)
     }
   }
