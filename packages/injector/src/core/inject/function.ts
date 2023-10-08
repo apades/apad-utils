@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-types */
 
-import { isArray } from 'lodash'
 import { KeyOfType } from '@pkgs/tsconfig/types/global'
+import { isArray } from '@pkgs/utils/src/utils'
 
 export function injectFunction<
   T extends object,

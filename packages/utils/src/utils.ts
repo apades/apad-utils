@@ -66,6 +66,12 @@ export const isUndefined = (v: any): v is undefined => typeof v === 'undefined'
 export const isString = (v: any): v is string => typeof v === 'string'
 export const isFunction = (v: any): v is (...args: any[]) => any =>
   typeof v === 'function'
+export const isNumber = (val: any): val is number => typeof val == 'number'
+export const isNull = (val: any): val is null => val == null
+export const isArray = (val: any): val is Array<any> => val instanceof Array
+export const isObject = (val: any): val is object => typeof val == 'object'
+export const isNone = (val: any): val is null | undefined =>
+  isNull(val) || isUndefined(val)
 
 export function debounce<T extends noop>(func: T, wait: number): T {
   let timeout: NodeJS.Timeout

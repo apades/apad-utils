@@ -23,8 +23,8 @@
   },
   "scripts": {
     "dev": "vite serve -c vite.config.js test",
-    "build:client": "tsup ./src/core/client.ts --out-dir lib --dts --format esm,cjs --global-name client",
-    "build:injector": "tsup ./src/core/injector.ts --out-dir lib --dts --format esm,cjs --global-name injector",
+    "build:client": "tsup ./src/core/client.ts --out-dir lib --dts --format esm,cjs,iife --global-name injectorClient --minify --shims --treeshake",
+    "build:injector": "tsup ./src/core/injector.ts --out-dir lib --dts --format esm,cjs,iife --global-name injectorService --minify --shims --treeshake",
     "build:messageRelay": "tsup ./src/core/messageRelay.ts --clean --out-dir lib --dts --format esm,cjs --global-name messageRelay",
     "build-script": "tsup $1 --out-dir lib --dts --format esm,cjs --global-name $2"
   },
