@@ -63,7 +63,6 @@ export default class EvalClient extends InjectorBase {
       args: newArgs,
       id,
     }).then(() => {
-      console.log('ok')
       lock.ok()
     })
 
