@@ -24,7 +24,10 @@ export default class TriggerEventsClient extends InjectorBase {
     this.initTriggerFunctions(MouseEvents)
     this.initTriggerFunctions(KeyboardEvents)
   }
-  protected onUnmount(): void {}
+  protected onUnmount(): void {
+    this.mouse = null
+    this.keyboard = null
+  }
 
   /**插件cs到world是传不了dom的 */
   mouse: MouseTrigger<string>

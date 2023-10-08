@@ -35,6 +35,10 @@ export default class TriggerEventsInjector extends InjectorBase {
       if (isString(interval)) return
       clearInterval(interval.interval)
     })
+
+    this.activeIntervals = null
+    this.mouse = null
+    this.keyboard = null
   }
 
   mouse: MouseTrigger

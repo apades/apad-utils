@@ -16,10 +16,23 @@ export default class DomEventsInjector extends InjectorBase {
   }
 
   init(): void {
+    this.onEventAddMap = {}
+    this.onEventRemoveMap = {}
+    this.disableMap = {}
+    this.originAddEventListener = HTMLElement.prototype.addEventListener
+    this.originRemoveEventListener = HTMLElement.prototype.removeEventListener
+
     this.initMsgEvents()
     this.injectSysAPI()
   }
   onUnmount(): void {
+    Object.entries(this.disableMap).map(([qs, events]) => {
+      events.forEach((event) => this.enableEvent(qs, event))
+    })
+    this.onEventAddMap = null
+    this.onEventRemoveMap = null
+    this.disableMap = null
+
     HTMLElement.prototype.addEventListener = this.originAddEventListener
     HTMLElement.prototype.removeEventListener = this.originRemoveEventListener
   }
@@ -33,16 +46,11 @@ export default class DomEventsInjector extends InjectorBase {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const base = this
 
-    this.onEventAddMap = {}
     const onEventAddMap = this.onEventAddMap
-    this.onEventRemoveMap = {}
     const onEventRemoveMap = this.onEventRemoveMap
-
-    this.disableMap = {}
     const disableMap = this.disableMap
 
     const originalAdd = HTMLElement.prototype.addEventListener
-    this.originAddEventListener = originalAdd
 
     HTMLElement.prototype.addEventListener = function (...val: any) {
       this.eventMap = this.eventMap || {}
@@ -79,7 +87,6 @@ export default class DomEventsInjector extends InjectorBase {
     }
 
     const originalRemove = HTMLElement.prototype.removeEventListener
-    this.originRemoveEventListener = originalRemove
 
     HTMLElement.prototype.removeEventListener = function (...val: any) {
       let eventList = this.eventMap?.[val[0]] ?? []

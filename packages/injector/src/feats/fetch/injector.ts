@@ -24,6 +24,8 @@ export default class FetchInjector extends InjectorBase {
   protected onUnmount(): void {
     window.fetch = this.ofetch
     window.XMLHttpRequest = this.oXMLHttpRequest
+
+    this.triggerMap = null
   }
 
   injectSysAPI() {

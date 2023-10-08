@@ -16,11 +16,13 @@ export default class IntersectionInjector extends InjectorBase {
     return IntersectionInjector._IntersectionInjector
   }
   init(): void {
+    this.observerMap = new Map()
     this.injectSysAPI()
     this.initMsgEvents()
   }
   protected onUnmount(): void {
     window.IntersectionObserver = this.oIntersectionObserver
+    this.observerMap = null
   }
 
   oIntersectionObserver: typeof IntersectionObserver

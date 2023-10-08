@@ -18,7 +18,9 @@ export default class FetchClient extends InjectorBase {
   init(): void {
     this.callbackMap = new Map()
   }
-  protected onUnmount(): void {}
+  protected onUnmount(): void {
+    this.callbackMap = null
+  }
 
   protected callbackMap: Map<string, noop>
   addListen(

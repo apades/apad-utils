@@ -26,6 +26,9 @@ export default class DomEventsClient extends InjectorBase {
     ;[...this.rmCallbackMap.values()].forEach((cb) => {
       this.off('eventRemove', cb)
     })
+
+    this.addCallbackMap = null
+    this.rmCallbackMap = null
   }
 
   /**禁用一个dom的event，可以通过enableEvent重新启用 */

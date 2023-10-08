@@ -35,7 +35,9 @@ export default class EntryInjector extends InjectorBase {
     this.initFeats(this.featConfig)
     this.initMsgEvents()
   }
-  protected onUnmount(): void {}
+  protected onUnmount(): void {
+    this.loadedFeatMap = null
+  }
 
   protected featConfig: InitConfig
   loadedFeatMap: Map<string, InjectorBase>

@@ -32,7 +32,9 @@ export default class EntryClient extends InjectorBase {
     this.loadedFeatMap = new Map()
     this.initFeats(this.featConfig)
   }
-  protected onUnmount(): void {}
+  protected onUnmount(): void {
+    this.loadedFeatMap = null
+  }
 
   protected featConfig: InitConfig
   loadedFeatMap: Map<string, InjectorBase>
