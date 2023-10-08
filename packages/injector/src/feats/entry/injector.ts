@@ -1,28 +1,13 @@
-import { Messager, createMessager } from '../../core/Messager'
+import { TypeOfMapToInstanceTypeMap } from '../../../../tsconfig/types/global'
 import InjectorBase, { InjectorBaseProps } from '../../core/base'
-import { InjectorEventType } from '../../core/enmu'
 import DomEventsInjector from '../domEvents/injector'
-import EvalClient from '../eval/client'
 import EvalInjector from '../eval/injector'
 import FetchInjector from '../fetch/injector'
 import RouteInjector from '../route/injector'
 import TriggerEventsInjector from '../triggerEvents/injector'
 import { ENTRY, InitConfig } from './types'
 
-export function initInjector(config?: InitConfig) {
-  const sendType = InjectorEventType.sendType,
-    listenType = InjectorEventType.listenType
-  const messager = new Messager({ listenType, sendType })
-
-  return {
-    eval: new EvalInjector({ messager }),
-    domEvents: new DomEventsInjector({ messager }),
-    fetch: new FetchInjector({ messager }),
-    triggerEvents: new TriggerEventsInjector({ messager }),
-  }
-}
-
-const configToInjectorMap = {
+export const configToInjectorMap = {
   domEvents: DomEventsInjector,
   fetch: FetchInjector,
   route: RouteInjector,
@@ -30,10 +15,12 @@ const configToInjectorMap = {
   triggerEvents: TriggerEventsInjector,
 }
 
+export type InjectorMap = TypeOfMapToInstanceTypeMap<typeof configToInjectorMap>
+
 export default class EntryInjector extends InjectorBase {
   static _EntryInjector: EntryInjector
   constructor(props: InjectorBaseProps & { featConfig?: InitConfig }) {
-    if (!EvalClient._EvalClient) {
+    if (!EntryInjector._EntryInjector) {
       super({
         category: ENTRY,
         ...props,
@@ -46,6 +33,7 @@ export default class EntryInjector extends InjectorBase {
   init(): void {
     this.loadedFeatMap = new Map()
     this.initFeats(this.featConfig)
+    this.initMsgEvents()
   }
   protected onUnmount(): void {}
 
@@ -74,5 +62,11 @@ export default class EntryInjector extends InjectorBase {
         }
       }
     )
+  }
+
+  protected initMsgEvents() {
+    this.on('updateFeats', (data) => {
+      return this.updateFeats(data.newFeatConfig)
+    })
   }
 }

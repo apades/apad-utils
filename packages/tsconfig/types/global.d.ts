@@ -73,3 +73,7 @@ export type KeyOfType<T, V> = keyof {
 export type OrPromise<T> = Promise<T> | T
 
 export type ValueOf<T> = T[keyof T]
+
+export type TypeOfMapToInstanceTypeMap<T extends Rec> = {
+  [K in keyof T]: InstanceType<T[K]>
+}

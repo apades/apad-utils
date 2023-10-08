@@ -21,7 +21,7 @@ export default abstract class InjectorBase {
   constructor(props: InjectorBaseProps) {
     Object.assign(this, props)
     // TODO 不该这里用
-    this.init()
+    // this.init()
   }
   /**插件集合体载入实现类时调用 */
   abstract init(): void
