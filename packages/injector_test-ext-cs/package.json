@@ -8,5 +8,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "manifest":{
+    "name": "injector_test-ext-cs",
+    "description": "test",
+    "version": "0.0.1",
+    "host_permissions": [
+      "<all_urls>"
+    ]
+  }
 }
