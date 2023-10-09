@@ -6,7 +6,7 @@ import EvalInjector from '../eval/injector'
 import FetchInjector from '../fetch/injector'
 import RouteInjector from '../route/injector'
 import TriggerEventsInjector from '../triggerEvents/injector'
-import { ENTRY, InitConfig } from './types'
+import { ENTRY, FeatEntryInitConfig } from './types'
 
 export const configToInjectorMap = {
   domEvents: DomEventsInjector,
@@ -20,7 +20,7 @@ export type InjectorMap = TypeOfMapToInstanceTypeMap<typeof configToInjectorMap>
 
 export default class EntryInjector extends InjectorBase {
   static _EntryInjector: EntryInjector
-  constructor(props: InjectorBaseProps & { featConfig?: InitConfig }) {
+  constructor(props: InjectorBaseProps & { featConfig?: FeatEntryInitConfig }) {
     if (!EntryInjector._EntryInjector) {
       super({
         category: ENTRY,
@@ -43,23 +43,23 @@ export default class EntryInjector extends InjectorBase {
   }
 
   waitClientLoad() {
-    this.messager.sendMessage('load')
-    const handleLoad = () => {
-      console.log('client load', document.head, document.body)
-      this.messager.offMessage('load', handleLoad)
-    }
-    this.messager.onMessage('load', handleLoad)
+    // this.messager.sendMessage('load')
+    // const handleLoad = () => {
+    //   console.log('client load', document.head, document.body)
+    //   this.messager.offMessage('load', handleLoad)
+    // }
+    // this.messager.onMessage('load', handleLoad)
   }
-  protected featConfig: InitConfig
+  protected featConfig: FeatEntryInitConfig
   loadedFeatMap: Map<string, InjectorBase>
-  initFeats(initConfig: InitConfig) {
+  initFeats(initConfig: FeatEntryInitConfig) {
     this.updateFeats(initConfig)
   }
-  updateFeats(newFeatConfig: InitConfig) {
+  updateFeats(newFeatConfig: FeatEntryInitConfig) {
     this.featConfig = newFeatConfig
 
     Object.entries(newFeatConfig).forEach(
-      ([key, val]: [keyof InitConfig, boolean]) => {
+      ([key, val]: [keyof FeatEntryInitConfig, boolean]) => {
         const existFeats = this.loadedFeatMap.get(key)
         if (!existFeats && val) {
           const feat = new configToInjectorMap[key]({ messager: this.messager })

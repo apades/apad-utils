@@ -1,13 +1,19 @@
+import { omit } from 'lodash'
 import EntryInjector, { InjectorMap } from '../feats/entry/injector'
-import { InitConfig } from '../feats/entry/types'
+import { InjectorInitConfig } from '../feats/entry/types'
 import { InjectorEventType } from './enmu'
 import { Messager } from './Messager'
 
-export function initInjector(config?: InitConfig) {
+export function initInjector(config?: InjectorInitConfig) {
   const sendType = InjectorEventType.sendType,
     listenType = InjectorEventType.listenType
-  const messager = new Messager({ listenType, sendType })
-  const entryInjector = new EntryInjector({ messager, featConfig: config })
+  const messager = config.Messager
+    ? new config.Messager({ listenType, sendType })
+    : new Messager({ listenType, sendType })
+  const entryInjector = new EntryInjector({
+    messager,
+    featConfig: omit(config, ['Messager']),
+  })
   entryInjector.init()
 
   const proxyTar = {

@@ -1,3 +1,3 @@
-import { allowWindowMessaging } from 'webext-bridge/content-script'
+import { allowWindowMessaging } from '../../../node_modules/webext-bridge/dist/content-script'
 
 allowWindowMessaging('ext-bg-messager')

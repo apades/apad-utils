@@ -2,9 +2,9 @@ import { onWindowLoad } from '@pkgs/utils/src/utils'
 import { initInjector } from '../src/core/injector'
 import { dq1 } from '@pkgs/utils/src/dom'
 import { initClient } from '../src/core/client'
-import { InitConfig } from '../src/feats/entry/types'
+import { FeatEntryInitConfig } from '../src/feats/entry/types'
 
-const config: InitConfig = {
+const config: FeatEntryInitConfig = {
   eval: true,
   domEvents: true,
   triggerEvents: true,

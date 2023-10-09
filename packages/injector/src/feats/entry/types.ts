@@ -2,7 +2,7 @@ import type { Messager } from '../../core/Messager'
 
 export const ENTRY = 'entry'
 
-export type InitConfig = Partial<{
+export type FeatEntryInitConfig = Partial<{
   /**dom的addEventListener事件 */
   domEvents: boolean
   /**fetch + XMLHttpRequest */
@@ -11,5 +11,7 @@ export type InitConfig = Partial<{
   route: boolean
   triggerEvents: boolean
   eval: boolean
-  messager?: Messager
 }>
+
+export type InjectorInitConfig = FeatEntryInitConfig &
+  Partial<{ Messager: typeof Messager }>

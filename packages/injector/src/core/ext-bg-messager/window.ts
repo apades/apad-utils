@@ -1,8 +1,13 @@
-import { Messager, MessagerProps } from '../Messager'
-import { MessageRelayProps } from '../messageRelay'
-import { sendMessage, setNamespace, onMessage } from 'webext-bridge/window'
+import {
+  onMessage,
+  sendMessage,
+  setNamespace,
+} from '../../../node_modules/webext-bridge/dist/window'
+import { Messager, MessagerProps, ProtocolWithReturn } from '../Messager'
 
-export default class WindowMessager extends Messager {
+export default class WindowMessager<
+  TProtocolMap = Record<string, ProtocolWithReturn<any, any>>
+> extends Messager<TProtocolMap> {
   eventTarget = new EventTarget()
   props: MessagerProps
   cbMap = new Map<Function, Function>()
@@ -10,6 +15,7 @@ export default class WindowMessager extends Messager {
   protected protocolListenMessager() {
     setNamespace('ext-bg-messager')
     onMessage(this.props.listenType, (res) => {
+      // console.log('messager', res)
       const data = res.data as any
       this.eventTarget.dispatchEvent(
         new CustomEvent(data.type, { detail: data.data })
@@ -17,6 +23,7 @@ export default class WindowMessager extends Messager {
     })
   }
   protected protocolSendMessager(type: any, data: any) {
+    // console.log('sendMessage', type, data)
     sendMessage(this.props.sendType, { type, data }, 'background')
   }
   // onMessage<TType extends string>(
