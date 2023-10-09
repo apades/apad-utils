@@ -1,6 +1,6 @@
 import { Messager, MessagerProps } from '../Messager'
 import { MessageRelayProps } from '../messageRelay'
-import { sendMessage, setNamespace, onMessage } from 'webext-bridge/window'
+import { sendMessage, onMessage } from 'webext-bridge/background'
 
 export default class WindowMessager extends Messager {
   eventTarget = new EventTarget()
@@ -8,7 +8,7 @@ export default class WindowMessager extends Messager {
   cbMap = new Map<Function, Function>()
 
   protected protocolListenMessager() {
-    setNamespace('ext-bg-messager')
+    // 这里回应window怎么办
     onMessage(this.props.listenType, (res) => {
       const data = res.data as any
       this.eventTarget.dispatchEvent(
@@ -16,13 +16,13 @@ export default class WindowMessager extends Messager {
       )
     })
   }
-  protected protocolSendMessager(type: any, data: any, protocolExtData: any) {
+  protected protocolSendMessager(type: any, data: any) {
     sendMessage(
       this.props.sendType,
       { type, data },
       {
         context: 'window',
-        tabId: protocolExtData.tabId,
+        tabId: this.tabId,
       }
     )
   }
