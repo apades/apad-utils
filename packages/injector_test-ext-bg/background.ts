@@ -6,8 +6,3 @@ const injector = initClient({
   Messager,
 })
 ;(globalThis as any).injector = injector
-
-chrome.tabs.query({ active: true }).then((tabs) => {
-  console.log('tabs', tabs)
-  ;(injector.domEvents as any).messager.tabId = tabs[0].id
-})

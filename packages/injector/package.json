@@ -35,6 +35,10 @@
   "author": "apades",
   "license": "MIT",
   "dependencies": {
-    "webext-bridge": "^6.0.1"
+    "webext-bridge": "^6.0.1",
+    "webextension-polyfill": "^0.10.0"
+  },
+  "devDependencies": {
+    "@types/webextension-polyfill": "^0.10.4"
   }
 }

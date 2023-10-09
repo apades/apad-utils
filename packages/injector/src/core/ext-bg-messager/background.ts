@@ -3,7 +3,12 @@ import {
   sendMessage,
 } from '../../../node_modules/webext-bridge/dist/background'
 import { Messager, MessagerProps, ProtocolWithReturn } from '../Messager'
+import Browser from 'webextension-polyfill'
 
+const getActiveTabId = async () => {
+  const [tab] = await Browser.tabs.query({ active: true })
+  return tab.id
+}
 export default class WindowMessager<
   TProtocolMap = Record<string, ProtocolWithReturn<any, any>>
 > extends Messager<TProtocolMap> {
@@ -23,9 +28,10 @@ export default class WindowMessager<
       )
     })
   }
-  protected protocolSendMessager(type: any, data: any) {
+  // FIXME 如果发送了不对的activeTabId（如chrome://页面），会导致卡住message回应，但传入正确的id会把之前的事件全部触发了
+  protected async protocolSendMessager(type: any, data: any) {
     let toSendData = data,
-      tabId = this.tabId
+      tabId = this.tabId || (await getActiveTabId())
     if (data.__tabId__) {
       toSendData = data.data
       tabId = data.__tabId__
