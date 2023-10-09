@@ -1,16 +1,13 @@
-import {
-  sendMessage,
-  onMessage,
-} from './node_modules/webext-bridge/dist/background'
+import { initClient } from '@pkgs/injector/src/core/client'
+import Messager from '@pkgs/injector/src/core/ext-bg-messager/background'
+import { injectorConfig } from './config'
+const injector = initClient({
+  ...injectorConfig,
+  Messager,
+})
+;(globalThis as any).injector = injector
 
-const getActiveTabId = async () => {
-  let [tab] = await chrome.tabs.query({ active: true })
-  console.log('tab', tab)
-  return tab.id
-}
-;(globalThis as any).sendMsg = async (type: string, data: any) =>
-  sendMessage(type, data, { context: 'window', tabId: await getActiveTabId() })
-
-onMessage('on-bg', (data) => {
-  console.log('on-bg', data)
+chrome.tabs.query({ active: true }).then((tabs) => {
+  console.log('tabs', tabs)
+  ;(injector.domEvents as any).messager.tabId = tabs[0].id
 })

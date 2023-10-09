@@ -1,6 +1,6 @@
-import { InitConfig } from '@pkgs/injector/src/feats/entry/types'
+import { FeatEntryInitConfig } from '@pkgs/injector/src/feats/entry/types'
 
-export const injectorConfig: InitConfig = {
+export const injectorConfig: FeatEntryInitConfig = {
   eval: true,
   domEvents: true,
   triggerEvents: true,

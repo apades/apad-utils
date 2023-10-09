@@ -1,22 +1,9 @@
 import { initInjector } from '@pkgs/injector/src/core/injector'
+import Messager from '@pkgs/injector/src/core/ext-bg-messager/window'
 import type { PlasmoCSConfig } from 'plasmo'
 import { injectorConfig } from '../config'
-import {
-  setNamespace,
-  sendMessage,
-  onMessage,
-} from '../node_modules/webext-bridge/dist/window'
 
-setNamespace('main')
-;(globalThis as any).sendMsg = async (type: string, data: any) =>
-  sendMessage(type, data, 'background')
-
-onMessage('on-window', (data) => {
-  console.log('on-window', data)
-})
-
-// window.injectorService = initInjector(injectorConfig)
-// console.log('window.injectorService', window.injectorService)
+window.injectorService = initInjector({ ...injectorConfig, Messager })
 
 export const config: PlasmoCSConfig = {
   matches: ['<all_urls>'],
