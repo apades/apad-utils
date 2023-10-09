@@ -1,26 +1,34 @@
-import type { MessageRelayProps } from './messageRelay'
-
-type Props = {
+export type MessagerProps = {
   sendType: string
   listenType: string
-} & Partial<MessageRelayProps>
+}
 export class Messager<
   TProtocolMap = Record<string, ProtocolWithReturn<any, any>>
 > {
   eventTarget = new EventTarget()
-  props: Props
+  props: MessagerProps
 
   cbMap = new Map<Function, Function>()
 
-  constructor(props: Props) {
+  constructor(props: MessagerProps) {
     this.props = props
-    window.addEventListener(props.listenType, (e: any) => {
+    this.protocolListenMessager()
+  }
+
+  protected protocolListenMessager() {
+    window.addEventListener(this.props.listenType, (e: any) => {
       const data = e.detail
 
       this.eventTarget.dispatchEvent(
-        new CustomEvent(data.type, { detail: data.data })
+        new CustomEvent(data.type, { detail: { protocolData: data.data } })
       )
     })
+  }
+  protected protocolSendMessager(type: any, data: any, protocolExtData: any) {
+    const event = new CustomEvent(this.props.sendType, {
+      detail: { protocolData: { type, data: data }, protocolExtData },
+    })
+    window.dispatchEvent(event)
   }
 
   onMessage<TType extends keyof TProtocolMap>(
@@ -31,13 +39,10 @@ export class Messager<
     noCallback = false
   ) {
     const reCb = async (e: any) => {
-      let res = await cb(e.detail)
+      let res = await cb(e.detail.protocolData)
 
       if (noCallback) return
-      const event = new CustomEvent(this.props.sendType, {
-        detail: { type, data: res },
-      })
-      window.dispatchEvent(event)
+      this.protocolSendMessager(type, res as any, e.detail.protocolExtData)
     }
     this.cbMap.set(cb, reCb)
     this.eventTarget.addEventListener(type as any, reCb)
@@ -74,92 +79,9 @@ export class Messager<
     type: TType,
     data?: GetDataType<TProtocolMap[TType]>
   ): Promise<GetReturnType<TProtocolMap[TType]>> {
-    const event = new CustomEvent(this.props.sendType, {
-      detail: { type, data },
-    })
-    window.dispatchEvent(event)
+    this.protocolSendMessager(type, data, null)
 
     return this.onMessageOnce(type, true)
-  }
-}
-
-export function createMessager<
-  TProtocolMap = Record<string, ProtocolWithReturn<any, any>>
->(props: { sendType: string; listenType: string }) {
-  window.addEventListener(props.listenType, (e: any) => {
-    const data = e.detail
-
-    // console.log('res', data)
-    eventTarget.dispatchEvent(new CustomEvent(data.type, { detail: data.data }))
-  })
-
-  const eventTarget = new EventTarget()
-
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  const cbMap = new Map<Function, Function>()
-
-  function onMessage<TType extends keyof TProtocolMap>(
-    type: TType,
-    cb: (
-      data: GetDataType<TProtocolMap[TType]>
-    ) => GetReturnType<TProtocolMap[TType]>,
-    noCallback = false
-  ) {
-    const reCb = async (e: any) => {
-      let res = await cb(e.detail)
-
-      if (noCallback) return
-      const event = new CustomEvent(props.sendType, {
-        detail: { type, data: res },
-      })
-      window.dispatchEvent(event)
-    }
-    cbMap.set(cb, reCb)
-    eventTarget.addEventListener(type as any, reCb)
-  }
-
-  function offMessage<TType extends keyof TProtocolMap>(
-    type: TType,
-    cb: (
-      data: GetDataType<TProtocolMap[TType]>
-    ) => GetReturnType<TProtocolMap[TType]>
-  ) {
-    const reCb = cbMap.get(cb)
-
-    eventTarget.removeEventListener(type as any, reCb as any)
-    cbMap.delete(cb)
-  }
-
-  function onMessageOnce<TType extends keyof TProtocolMap>(
-    type: TType,
-    noCallback = false
-  ): Promise<GetReturnType<TProtocolMap[TType]>> {
-    return new Promise((res, rej) => {
-      const cb = (data: any) => {
-        res(data)
-        offMessage(type, cb as any)
-      }
-      onMessage(type, cb as any, noCallback)
-
-      // TODO ? 要不要搞限时message然后reject
-    })
-  }
-
-  function sendMessage<TType extends keyof TProtocolMap>(
-    type: TType,
-    data?: GetDataType<TProtocolMap[TType]>
-  ): Promise<GetReturnType<TProtocolMap[TType]>> {
-    const event = new CustomEvent(props.sendType, { detail: { type, data } })
-    window.dispatchEvent(event)
-
-    return onMessageOnce(type, true)
-  }
-
-  return {
-    sendMessage,
-    onMessageOnce,
-    onMessage,
-    offMessage,
   }
 }
 

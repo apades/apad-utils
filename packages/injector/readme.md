@@ -8,61 +8,41 @@
 
 cs.js
 ```js
-import initClient from '@apad/injector/client'
+import { initClient } from '@apad/injector/client'
 
-const injectorClient = initClient()
+const injectorClient = initClient({ eval: true })
 injectorClient.eval.run((a)=>a+1,[2])
 ```
 
 world.js
+```js
+import { initInjector } from '@apad/injector/injector'
+
+const injector = initInjector({ eval: true })
+```
 
 ### 插件bg <-> world
 
-比较特殊，在上面的示例基础上，需要一个cs引入消息中转站messageRelay
-
 cs.js
 ```js
-import relay from '@apad/injector/messageRelay'
-
-relay({
-  onMessageFromClient: (msg) => {
-    return new Promise((res) => {
-      chrome.runtime.onMessage.addListener((msg) => {
-        if (msg.type != '@apad/injector') return
-        res(msg.data)
-      })
-    })
-  },
-  sendMessageToClient: (msg) => {
-    return chrome.runtime.sendMessage({ type: '@apad/injector', data: {
-        type:'@apad/injector',
-        data:msg
-    } })
-  },
-})
+import '@apad/injector/ext-bg-messager/content-script'
 ```
 
-bg(或者mv3的sw).js
+world.js
 ```js
-import initClient from '@apad/injector/client'
+import messager from '@apad/injector/ext-bg-messager/window'
+import { initInjector } from '@apad/injector/injector'
 
-const injectorClient = initClient({
-  onMessageFromInjector: (msg) => {
-    return new Promise((res) => {
-      chrome.runtime.onMessage.addListener((msg) => {
-        if (msg.type != '@apad/injector') return
-        res(msg.data)
-      })
-    })
-  },
-  sendMessageToInjector: (msg) => {
-    return chrome.runtime.sendMessage({ type: '@apad/injector', data: {
-        type:'@apad/injector',
-        data:msg
-    } })
-  },
-})
+const injector = initInjector({ eval: true, messager })
+```
 
-// 然后可以开始调用注入器了
-injectorClient.eval.run((a)=>a+1,[2])
+bg.js
+```js
+import messager from '@apad/injector/ext-bg-messager/background'
+import { initClient } from '@apad/injector/client'
+
+const injectorClient = initClient({ eval: true, messager })
+// bg比较特殊需要tabId
+const tabId = 0
+injectorClient.tab().eval.run((a)=>a+1,[2])
 ```

@@ -1,3 +1,5 @@
+import type { Messager } from '../../core/Messager'
+
 export const ENTRY = 'entry'
 
 export type InitConfig = Partial<{
@@ -9,4 +11,5 @@ export type InitConfig = Partial<{
   route: boolean
   triggerEvents: boolean
   eval: boolean
+  messager?: Messager
 }>
