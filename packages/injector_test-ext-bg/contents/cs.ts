@@ -1,4 +1,4 @@
-import '@pkgs/injector/src/core/ext-bg-messager/content-script'
+import '@apad/injector/ext-bg-messager/content-script'
 import type { PlasmoCSConfig } from 'plasmo'
 
 export const config: PlasmoCSConfig = {

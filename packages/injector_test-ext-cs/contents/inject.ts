@@ -1,4 +1,4 @@
-import { initInjector } from '@pkgs/injector/src/core/injector'
+import { initInjector } from '@apad/injector/injector'
 import type { PlasmoCSConfig } from 'plasmo'
 import { injectorConfig } from '../config'
 

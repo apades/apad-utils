@@ -1,4 +1,4 @@
-import { initClient } from '@pkgs/injector/src/core/client'
+import { initClient } from '@apad/injector/client'
 import type { PlasmoCSConfig } from 'plasmo'
 import { injectorConfig } from '../config'
 

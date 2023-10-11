@@ -1,5 +1,5 @@
-import { initInjector } from '@pkgs/injector/src/core/injector'
-import Messager from '@pkgs/injector/src/core/ext-bg-messager/window'
+import { initInjector } from '@apad/injector/injector'
+import Messager from '@apad/injector/ext-bg-messager/window'
 import type { PlasmoCSConfig } from 'plasmo'
 import { injectorConfig } from '../config'
 
