@@ -23,6 +23,9 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
+      '@apad/injector':
+        specifier: workspace:*
+        version: link:packages/injector
       '@types/fs-extra':
         specifier: ^11.0.1
         version: 11.0.1
@@ -81,8 +84,6 @@ importers:
       '@types/webextension-polyfill':
         specifier: ^0.10.4
         version: 0.10.4
-
-  packages/injector_test-cs: {}
 
   packages/injector_test-ext-bg:
     dependencies:

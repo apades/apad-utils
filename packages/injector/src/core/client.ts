@@ -1,4 +1,4 @@
-import { omit } from 'lodash'
+import { omit } from '@pkgs/utils/src/utils'
 import EntryClient, { ClientMap } from '../feats/entry/client'
 import { InjectorInitConfig } from '../feats/entry/types'
 import { InjectorEventType } from './enmu'

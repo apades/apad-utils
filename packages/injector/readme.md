@@ -30,19 +30,21 @@ import '@apad/injector/ext-bg-messager/content-script'
 
 world.js
 ```js
-import messager from '@apad/injector/ext-bg-messager/window'
+import Messager from '@apad/injector/ext-bg-messager/window'
 import { initInjector } from '@apad/injector/injector'
 
-const injector = initInjector({ eval: true, messager })
+const injector = initInjector({ eval: true, Messager })
 ```
 
 bg.js
 ```js
-import messager from '@apad/injector/ext-bg-messager/background'
+import Messager from '@apad/injector/ext-bg-messager/background'
 import { initClient } from '@apad/injector/client'
 
-const injectorClient = initClient({ eval: true, messager })
-// bg比较特殊需要tabId
-const tabId = 0
-injectorClient.tab().eval.run((a)=>a+1,[2])
+const injectorClient = initClient({ eval: true, Messager })
+// 默认的是发给当前的tab
+injectorClient.eval.run((a)=>a+1,[2])
+// 加tab()是发送给特定tab
+const tabId = 114514
+injectorClient.tab(tabId).eval.run((a)=>a+1,[2])
 ```

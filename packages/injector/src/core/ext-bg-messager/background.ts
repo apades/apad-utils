@@ -1,9 +1,6 @@
-import {
-  onMessage,
-  sendMessage,
-} from '../../../node_modules/webext-bridge/dist/background'
-import { Messager, MessagerProps, ProtocolWithReturn } from '../Messager'
+import { onMessage, sendMessage } from 'webext-bridge/background'
 import Browser from 'webextension-polyfill'
+import { Messager, ProtocolWithReturn } from '../Messager'
 
 const getActiveTabId = async () => {
   const [tab] = await Browser.tabs.query({ active: true })
@@ -12,10 +9,6 @@ const getActiveTabId = async () => {
 export default class WindowMessager<
   TProtocolMap = Record<string, ProtocolWithReturn<any, any>>
 > extends Messager<TProtocolMap> {
-  eventTarget = new EventTarget()
-  props: MessagerProps
-  cbMap = new Map<Function, Function>()
-
   protected protocolListenMessager() {
     // 这里回应window怎么办
     onMessage(this.props.listenType, (res) => {

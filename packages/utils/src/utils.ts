@@ -155,3 +155,9 @@ export function cloneDeep<T>(obj: T): T {
 export function classNames(...args: any[]) {
   return args.filter((a) => !!a).join(' ')
 }
+
+export function omit<T, K extends keyof T>(obj: T, key: K[]): Omit<T, K> {
+  let rs = { ...obj }
+  key.forEach((k) => delete rs[k])
+  return rs
+}
