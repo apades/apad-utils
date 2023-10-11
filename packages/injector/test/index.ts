@@ -19,4 +19,11 @@ onWindowLoad().then(() => {
   dq1('#aaa').addEventListener('click', () => {
     console.log('click aaa')
   })
+
+  window.addEventListener('click', () => {
+    console.log('window')
+  })
+  document.addEventListener('click', () => {
+    console.log('document')
+  })
 })
