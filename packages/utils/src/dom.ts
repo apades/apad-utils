@@ -9,10 +9,6 @@ export const dq: {
     selectors: K,
     tar?: Document | ValueOf<SVGElementTagNameMap> | Element
   ): SVGElementTagNameMap[K][]
-  <K extends keyof MathMLElementTagNameMap>(
-    selectors: K,
-    tar?: Document | ValueOf<MathMLElementTagNameMap> | Element
-  ): MathMLElementTagNameMap[K][]
   <E extends Element = HTMLDivElement>(
     selectors: string,
     tar?: Document | Element

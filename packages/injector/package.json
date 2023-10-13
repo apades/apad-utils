@@ -18,7 +18,16 @@
   "typesVersions": {
     "*": {
       "*": [
-        "lib/*.d.ts"
+        "lib/index.d.ts"
+      ],
+      "client": [
+        "lib/client.d.ts"
+      ],
+      "injector": [
+        "lib/injector.d.ts"
+      ],
+      "ext-bg-messager/*":[
+        "lib/ext-bg-messager/*.d.ts"
       ]
     }
   },
@@ -36,15 +45,7 @@
   },
   "scripts": {
     "dev": "vite serve -c vite.config.js test",
-    "build": "run-p build:*",
-    "build:client": "pnpm run build-script client.ts injectorClient",
-    "build:injector": "pnpm run build-script injector.ts injectorService",
-    "build:ext-bg-messager-bg": "pnpm run build-script-ext-bg background.ts extBg_background",
-    "build:ext-bg-messager-cs": "pnpm run build-script-ext-bg content-script.ts extBg_cs",
-    "build:ext-bg-messager-wd": "pnpm run build-script-ext-bg window.ts extBg_window",
-    "build----": "----------",
-    "build-script": "sh -c \"tsup ./src/core/${0} --out-dir lib --dts --format esm,cjs,iife --global-name $1 --treeshake --shims --minify --env.NODE_ENV production\"",
-    "build-script-ext-bg": "sh -c \"tsup ./src/core/ext-bg-messager/${0} --out-dir lib/ext-bg-messager --dts --format esm,cjs,iife --global-name $1 --treeshake --shims --minify --env.NODE_ENV production --target esnext\""
+    "build": "tsup ./src/core/index.ts ./src/core/client.ts ./src/core/injector.ts ./src/core/ext-bg-messager/background.ts ./src/core/ext-bg-messager/content-script.ts ./src/core/ext-bg-messager/window.ts --clean --out-dir lib --dts --format esm,cjs --treeshake --shims --minify --env.NODE_ENV production"
   },
   "keywords": [
     "injection",
