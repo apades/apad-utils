@@ -6,6 +6,7 @@ import EvalClient from '../eval/client'
 import FetchClient from '../fetch/client'
 import RouteClient from '../route/client'
 import TriggerEventsClient from '../triggerEvents/client'
+import VisibilityStateClient from '../visibilityState/client'
 import { ENTRY, FeatEntryInitConfig } from './types'
 
 export const configToClientMap = {
@@ -14,6 +15,7 @@ export const configToClientMap = {
   route: RouteClient,
   eval: EvalClient,
   triggerEvents: TriggerEventsClient,
+  visibilityState: VisibilityStateClient,
 }
 export type ClientMap = TypeOfMapToInstanceTypeMap<typeof configToClientMap>
 

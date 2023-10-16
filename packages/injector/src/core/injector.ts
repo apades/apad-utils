@@ -23,6 +23,7 @@ export function initInjector(config?: InjectorInitConfig) {
     route: null,
     triggerEvents: null,
     config: null,
+    visibilityState: null,
   } as InjectorMap & { config: EntryInjector }
   const proxy = new Proxy(proxyTar, {
     get(target, key: string, receiver) {

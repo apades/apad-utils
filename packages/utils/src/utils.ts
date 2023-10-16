@@ -161,3 +161,16 @@ export function omit<T, K extends keyof T>(obj: T, key: K[]): Omit<T, K> {
   key.forEach((k) => delete rs[k])
   return rs
 }
+
+export function getDeepGetter<T, K extends keyof T>(
+  tar: T,
+  key: K
+): (() => any) | null {
+  const getter = Object.getOwnPropertyDescriptor(tar, key)?.get
+  return (
+    getter ??
+    (isUndefined(Object.getPrototypeOf(tar))
+      ? null
+      : getDeepGetter(Object.getPrototypeOf(tar), key))
+  )
+}

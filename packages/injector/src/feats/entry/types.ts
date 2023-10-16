@@ -11,6 +11,7 @@ export type FeatEntryInitConfig = Partial<{
   route: boolean
   triggerEvents: boolean
   eval: boolean
+  visibilityState: boolean
 }>
 
 export type InjectorInitConfig = FeatEntryInitConfig &

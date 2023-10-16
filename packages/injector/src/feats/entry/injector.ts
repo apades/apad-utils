@@ -1,4 +1,3 @@
-import AsyncLock from '@pkgs/utils/src/AsyncLock'
 import { TypeOfMapToInstanceTypeMap } from '../../../../tsconfig/types/global'
 import InjectorBase, { InjectorBaseProps } from '../../core/base'
 import DomEventsInjector from '../domEvents/injector'
@@ -6,6 +5,7 @@ import EvalInjector from '../eval/injector'
 import FetchInjector from '../fetch/injector'
 import RouteInjector from '../route/injector'
 import TriggerEventsInjector from '../triggerEvents/injector'
+import VisibilityStateInjector from '../visibilityState/injector'
 import { ENTRY, FeatEntryInitConfig } from './types'
 
 export const configToInjectorMap = {
@@ -14,6 +14,7 @@ export const configToInjectorMap = {
   route: RouteInjector,
   eval: EvalInjector,
   triggerEvents: TriggerEventsInjector,
+  visibilityState: VisibilityStateInjector,
 }
 
 export type InjectorMap = TypeOfMapToInstanceTypeMap<typeof configToInjectorMap>

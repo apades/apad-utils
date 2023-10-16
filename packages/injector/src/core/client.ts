@@ -24,6 +24,7 @@ export function initClient(config?: InjectorInitConfig) {
     route: null,
     triggerEvents: null,
     config: null,
+    visibilityState: null,
     tab: (tabId: number) => {
       messager.tabId = tabId
       const messagerSendMsgMethod = messager.sendMessage.bind(messager)

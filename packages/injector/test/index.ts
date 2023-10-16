@@ -10,6 +10,7 @@ const config: FeatEntryInitConfig = {
   triggerEvents: true,
   fetch: true,
   route: true,
+  visibilityState: true,
 }
 window.injectorServer = initInjector(config)
 
@@ -25,5 +26,9 @@ onWindowLoad().then(() => {
   })
   document.addEventListener('click', () => {
     console.log('document')
+  })
+
+  document.addEventListener('visibilitychange', () => {
+    console.log('visibilitychange', document.visibilityState)
   })
 })
