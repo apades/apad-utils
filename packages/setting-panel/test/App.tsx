@@ -3,6 +3,7 @@ import { FC, useState } from 'react'
 import UIComponent from '../src/UI'
 import { wait } from '@pkgs/utils/src/utils'
 import { observer } from '../src/react'
+import en from '../src/i18n/en.json'
 
 const settings = {
   a1: { defaultValue: 1, category: 'a系列', desc: 'asdfadf' },
@@ -23,6 +24,16 @@ const settings = {
     // group: [2, 1, 11, '33'],
   },
   un: { defaultValue: '111' },
+  noRec: config({ defaultValue: 'no rec', notRecommended: true }),
+  noRel1: config({ defaultValue: false, notRecommended: true }),
+  noRel2: config({
+    defaultValue: '22',
+    relateBy: 'noRel1',
+    relateByValue: true,
+    notRecommended: true,
+  }),
+  rel1: config({ defaultValue: false }),
+  rel2: config({ defaultValue: '22', relateBy: 'rel1', relateByValue: true }),
 }
 window.settings = settings
 const configStore = createConfigStore(settings)
@@ -43,6 +54,8 @@ const App: FC = () => {
       }}
     >
       <UIComponent
+        isLoading={false}
+        i18n={en}
         settings={settings}
         configStore={configStore}
         changeConfigStoreWithSettingPanelChange

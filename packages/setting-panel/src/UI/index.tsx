@@ -6,12 +6,13 @@ import {
   isUndefined,
 } from '@pkgs/utils/src/utils'
 import type { FC } from 'preact/compat'
-import { useCallback, useEffect, useState } from 'preact/hooks'
-import { ConfigField, InitOptions } from '..'
+import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
+import { ConfigField, I18n, InitOptions } from '..'
 import LoadingContainer from '../components/LoadingContainer'
 import { useMemoizedFn, useOnce } from '../hooks'
+import { Rec } from '../../../tsconfig/types/global'
 
-type ConfigEntries = [string, ConfigField<any>][]
+type ConfigEntries = Rec<ConfigField<any>>
 type BaseConfig = UISettings
 
 export type UISettings = {
@@ -24,6 +25,7 @@ export type Props = {
   tempConfigKeys?: string[]
   rootEl?: HTMLElement | ShadowRoot
   isLoading: boolean
+  i18n: I18n
 } & InitOptions<Record<string, any>>
 
 const SettingPanel: FC<Props> = (props) => {
@@ -32,7 +34,6 @@ const SettingPanel: FC<Props> = (props) => {
     if (props.savedConfig) _setNewConfig(props.savedConfig)
   }, [props.savedConfig])
   // window.newConfig = newConfig
-  let configEntries = Object.entries(props.settings)
   // const toast = useToast()
 
   const setNewConfig = useMemoizedFn((key: string, val: any) => {
@@ -83,26 +84,127 @@ const SettingPanel: FC<Props> = (props) => {
     []
   )
 
-  const baseConfigEntries: ConfigEntries = [],
-    advConfigEntries: ConfigEntries = []
+  const {
+    baseConfig,
+    advConfig,
+    cateBaseConfig,
+    cateAdvConfig,
+    advConfigEntries,
+    baseConfigEntries,
+    cateAdvConfigEntries,
+    cateBaseConfigEntries,
+  } = useMemo(() => {
+    const baseConfig: ConfigEntries = {},
+      advConfig: ConfigEntries = {},
+      cateBaseConfig: Record<string, ConfigEntries> = {},
+      cateAdvConfig: Record<string, ConfigEntries> = {}
 
-  configEntries.forEach(([key, _val]) => {
-    const val = {
-      ..._val,
-      defaultValue: props.settings[key].defaultValue ?? props.settings[key],
+    const configEntries = Object.entries(props.settings)
+
+    configEntries.forEach(([key, _val]) => {
+      const val = {
+        ..._val,
+        defaultValue: props.settings[key].defaultValue ?? props.settings[key],
+      }
+      const category = val.category
+      if (category) {
+        if (val.notRecommended) {
+          cateAdvConfig[category] ??= {}
+          cateAdvConfig[category][key] = val
+        } else {
+          cateBaseConfig[category] ??= {}
+          cateBaseConfig[category][key] = val
+        }
+      } else {
+        if (val.notRecommended) {
+          advConfig[key] = val
+          // advConfigEntries.push([key, val])
+        } else {
+          baseConfig[key] = val
+          // baseConfigEntries.push([key, val])
+        }
+      }
+    })
+    return {
+      baseConfig,
+      advConfig,
+      cateBaseConfig,
+      cateAdvConfig,
+      baseConfigEntries: Object.entries(baseConfig),
+      advConfigEntries: Object.entries(advConfig),
+      cateBaseConfigEntries: Object.entries(cateBaseConfig),
+      cateAdvConfigEntries: Object.entries(cateAdvConfig),
     }
-    if (val.notRecommended) advConfigEntries.push([key, val])
-    else baseConfigEntries.push([key, val])
-  })
+  }, [props.settings])
+
+  const showAdv = advConfigEntries.length || cateAdvConfigEntries.length
 
   return (
-    <ConfigEntriesBox
-      tempConfigKeys={props.tempConfigKeys}
-      config={baseConfigEntries}
-      newConfig={newConfig}
-      setNewConfig={setNewConfig}
-      resetConfig={resetConfig}
-    />
+    <>
+      {cateBaseConfigEntries.map(([key, val]) => {
+        return (
+          <Summary key={key} title={key}>
+            <ConfigEntriesBox
+              i18n={props.i18n}
+              tempConfigKeys={props.tempConfigKeys}
+              config={val}
+              newConfig={newConfig}
+              setNewConfig={setNewConfig}
+              resetConfig={resetConfig}
+            />
+          </Summary>
+        )
+      })}
+      <ConfigEntriesBox
+        i18n={props.i18n}
+        tempConfigKeys={props.tempConfigKeys}
+        config={baseConfig}
+        newConfig={newConfig}
+        setNewConfig={setNewConfig}
+        resetConfig={resetConfig}
+      />
+      {showAdv && (
+        <Summary title={props.i18n.noRecommended} open={false}>
+          {cateAdvConfigEntries.map(([key, val]) => {
+            return (
+              <Summary key={key} title={key}>
+                <ConfigEntriesBox
+                  i18n={props.i18n}
+                  tempConfigKeys={props.tempConfigKeys}
+                  config={val}
+                  newConfig={newConfig}
+                  setNewConfig={setNewConfig}
+                  resetConfig={resetConfig}
+                />
+              </Summary>
+            )
+          })}
+          <ConfigEntriesBox
+            i18n={props.i18n}
+            tempConfigKeys={props.tempConfigKeys}
+            config={advConfig}
+            newConfig={newConfig}
+            setNewConfig={setNewConfig}
+            resetConfig={resetConfig}
+          />
+        </Summary>
+      )}
+    </>
+  )
+}
+const Summary: FC<{
+  children: (JSX.Element | JSX.Element[])[] | JSX.Element
+  title: string
+  open?: boolean
+}> = (props) => {
+  return (
+    <details
+      className="mb-4 border-solid border border-black"
+      open={props.open ?? true}
+    >
+      <summary className="select-none cursor-pointer">{props.title}</summary>
+      {props.children}
+    </details>
   )
 }
 
@@ -112,10 +214,12 @@ const ConfigEntriesBox: FC<{
   newConfig: Partial<UISettings>
   setNewConfig: (key: string, val: any) => void
   resetConfig: (key: string) => void
+  i18n: I18n
 }> = (props) => {
+  const configEntries = Object.entries(props.config)
   return (
     <div>
-      {props.config.map(([key, val]: [string, ConfigField<any>], i) => {
+      {configEntries.map(([key, val]: [string, ConfigField<any>], i) => {
         const defaultValue = val.defaultValue ?? val
         const isNumber = typeof defaultValue == 'number'
         const hasChange =
@@ -125,17 +229,25 @@ const ConfigEntriesBox: FC<{
             isNumber ? defaultValue + '' : defaultValue
           )
         const isTemp = props.tempConfigKeys.includes(key)
-        const tempTips = isTemp
-          ? '这是针对当前 页面/状态 的特殊更改，不建议修改该配置'
-          : undefined
+        let tempTips = isTemp ? [props.i18n.tempSetTips] : []
+
+        const isRelChild = !!val.relateBy
+        if (isRelChild) {
+          const tar = props.config[val.relateBy]
+          const tarDefaultValue = tar.defaultValue ?? tar
+          const tarVal = props.newConfig[val.relateBy] ?? tarDefaultValue
+          if (tarVal != val.relateByValue) return null
+        }
 
         return (
           <div
-            className={`group py-[6px] px-[6px] ${
-              i % 2 == 0 ? 'bg-gray-200' : 'bg-white'
-            }`}
+            className={classNames(
+              `group py-[6px] px-[6px] relative`,
+              i % 2 == 0 ? 'bg-gray-200' : 'bg-white',
+              isRelChild && 'rel-child'
+            )}
             key={i}
-            title={tempTips}
+            title={tempTips.length ? tempTips.join('\n') : undefined}
           >
             <div className="gap-[12px] flex">
               <div
@@ -172,7 +284,7 @@ const ConfigEntriesBox: FC<{
                         props.resetConfig(key)
                       }}
                     >
-                      重置
+                      {props.i18n.reset}
                     </button>
                   </div>
                 </div>

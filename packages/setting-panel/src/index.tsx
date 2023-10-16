@@ -12,6 +12,7 @@ import {
 import './tailwind.css'
 import './index.less'
 import AsyncLock from '@pkgs/utils/src/AsyncLock'
+import en from './i18n/en.json'
 
 type ConfigFieldBase<T> = {
   defaultValue?: T
@@ -51,6 +52,8 @@ export function config<T>(config: ConfigField<T>) {
   return config
 }
 
+export type I18n = typeof en
+
 export type InitOptions<Map extends Record<string, any>> = {
   settings: {
     [K in keyof Map]: ConfigField<Map[K]>
@@ -80,6 +83,7 @@ export type InitOptions<Map extends Record<string, any>> = {
   styleHref?: string
   /**默认为true */
   isModal?: boolean
+  i18n?: I18n
 }
 
 type Observe<Map extends Record<string, any>> = {
@@ -196,6 +200,7 @@ export function initSetting<Map extends Record<string, any>>(
 
       render(
         <UIComponent
+          i18n={options.i18n ?? en}
           settings={options.settings}
           configStore={configStore}
           rootEl={renderEl}

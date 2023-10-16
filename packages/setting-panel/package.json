@@ -12,7 +12,8 @@
   "files": [
     "lib",
     "react",
-    "preact"
+    "preact",
+    "i18n"
   ],
   "bugs": {
     "url": "https://github.com/apades/apad-utils/issues"
