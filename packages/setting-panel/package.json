@@ -1,6 +1,6 @@
 {
   "name": "@apad/setting-panel",
-  "version": "0.0.14",
+  "version": "0.0.16",
   "description": "开发配套设置工具",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
