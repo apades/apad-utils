@@ -163,7 +163,7 @@ const SettingPanel: FC<Props> = (props) => {
         setNewConfig={setNewConfig}
         resetConfig={resetConfig}
       />
-      {showAdv && (
+      {!!showAdv && (
         <Summary title={props.i18n.noRecommended} open={false}>
           {cateAdvConfigEntries.map(([key, val]) => {
             return (

@@ -24,6 +24,8 @@ const settings = {
   b3: true,
   un: { defaultValue: '111' },
   s1: 99999,
+  rel1: config({ defaultValue: false }),
+  rel2: config({ defaultValue: '22', relateBy: 'rel1', relateByValue: true }),
 }
 window.settings = settings
 // 打包的

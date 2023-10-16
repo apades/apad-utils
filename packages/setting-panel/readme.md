@@ -2,6 +2,8 @@
 
 开箱即用设置面板，以mobx object为基础的状态管理，专门用来开发设置管理 + 前端页面控制设置
 
+![exm](./assets/exm.gif)
+
 例如 env.ts
 ```tsx
 import { initSetting } from '@apad/setting-panel'
