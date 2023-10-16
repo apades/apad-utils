@@ -242,8 +242,7 @@ const ConfigEntriesBox: FC<{
         return (
           <div
             className={classNames(
-              `group py-[6px] px-[6px] relative`,
-              i % 2 == 0 ? 'bg-gray-200' : 'bg-white',
+              `group py-[6px] px-[6px] relative bg-white odd:bg-gray-200 `,
               isRelChild && 'rel-child'
             )}
             key={i}

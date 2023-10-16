@@ -32,8 +32,9 @@ const settings = {
     relateByValue: true,
     notRecommended: true,
   }),
-  rel1: config({ defaultValue: false }),
+  rel1: false,
   rel2: config({ defaultValue: '22', relateBy: 'rel1', relateByValue: true }),
+  c1: true,
 }
 window.settings = settings
 const configStore = createConfigStore(settings)
