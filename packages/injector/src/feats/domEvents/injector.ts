@@ -124,6 +124,11 @@ export default class DomEventsInjector extends InjectorBase {
         return rs
       }
 
+      if ((tar as any) == window || (tar as any) == document) {
+        addEventListener = addEventListener.bind(tar)
+        removeEventListener = removeEventListener.bind(tar)
+      }
+
       tar.addEventListener = addEventListener
       tar.removeEventListener = removeEventListener
 
