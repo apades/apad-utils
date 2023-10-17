@@ -1,6 +1,6 @@
 {
   "name": "@apad/injector",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "注入/替换 系统API，方便调试所有底层API，且支持在web插件中使用甚至可以支持bg",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
