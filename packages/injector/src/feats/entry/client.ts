@@ -59,7 +59,7 @@ export default class EntryClient extends InjectorBase {
   }
   async updateFeats(newFeatConfig: FeatEntryInitConfig) {
     // await this.injectorLoadedLock.waiting()
-    // await this.send('updateFeats', { newFeatConfig })
+    await this.send('updateFeats', { newFeatConfig })
     this.featConfig = newFeatConfig
 
     Object.entries(newFeatConfig).forEach(

@@ -69,20 +69,22 @@ export default class DomEventsInjector extends InjectorBase {
 
     function injectEventListener<T extends objEv>(tar: T) {
       let originalAdd = tar.addEventListener
+      let originalRemove = tar.removeEventListener
 
       const isDocOrWin = (key: string) =>
         ((tar as any) == window && key == 'window') ||
         ((tar as any) == document && key == 'document')
-
-      tar.addEventListener = function (...val: any) {
-        this.eventMap = this.eventMap || {}
-        this.eventMap[val[0]] = this.eventMap[val[0]] || []
-        let eventList = this.eventMap[val[0]]
+      let addEventListener = function (...val: any) {
+        let _this = this ?? tar
+        this.eventMap = _this.eventMap || {}
+        this.eventMap[val[0]] = _this.eventMap[val[0]] || []
+        let eventList = _this.eventMap[val[0]]
         let event = val[0]
+
         try {
           // 判断监听触发事件
           let onEventMatch = Object.entries(onEventAddMap).find(
-            ([key, val]) => isDocOrWin(key) || this.matches?.(key)
+            ([key, val]) => isDocOrWin(key) || _this.matches?.(key)
           )
           if (onEventMatch && onEventMatch[1].includes(event)) {
             base.send('eventAdd', {
@@ -92,12 +94,12 @@ export default class DomEventsInjector extends InjectorBase {
           }
 
           let disableMatch = Object.entries(disableMap).find(
-            ([key, val]) => isDocOrWin(key) || this.matches?.(key)
+            ([key, val]) => isDocOrWin(key) || _this.matches?.(key)
           )
           // 判断是否禁用
           if (disableMatch && disableMatch[1].includes(event)) {
-            console.log('匹配到禁用query', disableMap, this)
-          } else var rs = originalAdd.call(this, ...val)
+            console.log('匹配到禁用query', disableMap, _this)
+          } else var rs = originalAdd.call(_this, ...val)
           eventList.push({
             fn: val[1],
             state: val[2],
@@ -107,13 +109,11 @@ export default class DomEventsInjector extends InjectorBase {
         }
         return rs
       }
-
-      let originalRemove = tar.removeEventListener
-
-      tar.removeEventListener = function (...val: any) {
-        let eventList = this.eventMap?.[val[0]] ?? []
+      let removeEventListener = function (...val: any) {
+        let _this = this ?? tar
+        let eventList = _this.eventMap?.[val[0]] ?? []
         try {
-          var rs = originalRemove.call(this, ...val)
+          var rs = originalRemove.call(_this, ...val)
           let index = eventList.findIndex(
             (ev: any) => ev.fn === val[1] && ev.state == val[2]
           )
@@ -123,6 +123,9 @@ export default class DomEventsInjector extends InjectorBase {
         }
         return rs
       }
+
+      tar.addEventListener = addEventListener
+      tar.removeEventListener = removeEventListener
 
       return {
         originalRemove,
