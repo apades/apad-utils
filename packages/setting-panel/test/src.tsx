@@ -4,30 +4,8 @@ import { observer } from 'mobx-react'
 import { FC } from 'react'
 import ReactDOM from 'react-dom/client'
 import { config, initSetting } from '../src'
+import settings from './settings'
 
-const settings = {
-  a1: { defaultValue: 1, category: 'a系列', desc: 'asdfadf' },
-  a2: config<'a' | 'b'>({
-    defaultValue: 'a',
-    category: 'a系列',
-    type: 'group',
-    // TODO 支持复杂数据传入
-    // group: { a: { value: 'a' }, b: 'b' },
-    group: ['a', 'b'],
-  }),
-  a3: { defaultValue: 'a' as 'a' | 'b', category: 'a系列' },
-  b1: { defaultValue: false, category: 'b系列' },
-  b2: {
-    defaultValue: 11,
-    category: 'b系列',
-  },
-  b3: true,
-  un: { defaultValue: '111' },
-  s1: 99999,
-  rel1: config({ defaultValue: false }),
-  rel2: config({ defaultValue: '22', relateBy: 'rel1', relateByValue: true }),
-}
-window.settings = settings
 // 打包的
 const { configStore, openSettingPanel, temporarySetConfigStore } = initSetting({
   settings,

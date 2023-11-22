@@ -4,39 +4,8 @@ import UIComponent from '../src/UI'
 import { wait } from '@pkgs/utils/src/utils'
 import { observer } from '../src/react'
 import en from '../src/i18n/en.json'
+import settings from './settings'
 
-const settings = {
-  a1: { defaultValue: 1, category: 'a系列', desc: 'asdfadf' },
-  a2: config<'a' | 'b'>({
-    defaultValue: 'b',
-    category: 'a系列',
-    type: 'group',
-    // TODO 支持复杂数据传入
-    // group: { a: { value: 'a' }, b: 'b' },
-    group: ['a', 'b'],
-  }),
-  a3: { defaultValue: 'a' as 'a' | 'b', category: 'a系列' },
-  b1: { defaultValue: false, category: 'b系列' },
-  b2: {
-    defaultValue: 11,
-    category: 'b系列',
-    // type: 'group',
-    // group: [2, 1, 11, '33'],
-  },
-  un: { defaultValue: '111' },
-  noRec: config({ defaultValue: 'no rec', notRecommended: true }),
-  noRel1: config({ defaultValue: false, notRecommended: true }),
-  noRel2: config({
-    defaultValue: '22',
-    relateBy: 'noRel1',
-    relateByValue: true,
-    notRecommended: true,
-  }),
-  rel1: false,
-  rel2: config({ defaultValue: '22', relateBy: 'rel1', relateByValue: true }),
-  c1: true,
-}
-window.settings = settings
 const configStore = createConfigStore(settings)
 window.configStore = configStore
 // observe(configStore, (change) => {

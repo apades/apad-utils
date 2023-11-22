@@ -1,5 +1,6 @@
 {
     "reset": "重置",
+    "main": "主要设置",
     "tempSetTips": "这是针对当前 页面/状态 的特殊更改，不建议修改该配置",
     "noRecommended": "不推荐设置"
 }

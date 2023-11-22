@@ -11,26 +11,35 @@
   color-scheme: initial;
   color: #333;
   &.is-modal{
+    --top: clamp(0px, 20vh, 200px);
     .setting-panel{
       position:fixed;
-      top: 50%;
+      top: var(--top);
       left: 50%;
       z-index:9999999;
       width: 100%;
-      max-width: 800px;
-      max-height: 80vh;
-      overflow: auto;
-      background: #fff;
-      transform: translate(-50%,-50%);
+      max-width: 600px;
+     
+      transform: translateX(-50%);
+      &.cate-type{
+        .left,.right{
+          max-height: calc(100vh - var(--top) * 2);
+          overflow: auto;
+        }
+      }
+      &.one-type{
+        max-height: calc(100vh - var(--top) * 2);
+        overflow: auto;
+      }
 
-      &::-webkit-scrollbar{
+      *::-webkit-scrollbar{
         width: 10px;
         height: 10px;
       }
-      &::-webkit-scrollbar-corner{
+      *::-webkit-scrollbar-corner{
         background: transparent;
       }
-      &::-webkit-scrollbar-thumb{
+      *::-webkit-scrollbar-thumb{
         background: rgba(0, 0, 0, 0.12);
         background-clip: content-box;
         border: 2px solid transparent;
@@ -49,6 +58,7 @@
 }
 
 .setting-panel{
+  font-size: 14px;
   .rel-child{
     &::before{
       position: absolute;

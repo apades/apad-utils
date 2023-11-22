@@ -1,0 +1,73 @@
+@import '../../../utils/src/mixin.less';
+
+.setting-panel{
+    --box-shadow: rgb(0 0 0 / 47%) 0px 2px 4px;
+    --blue: rgb(59, 130, 246);
+    .category-panel{
+        display: flex;
+        gap: 8px;
+        &>div{
+            overflow: hidden;
+            background-color: #fff;
+            box-shadow: var(--box-shadow);
+            border-radius: 4px;
+            height: fit-content;
+        }
+        &>.left{
+            min-width: 80px;
+            max-width: 160px;
+            div{
+                .button-hover-darken(#fff);
+                border-radius: 4px;
+                cursor: pointer;
+                padding: 6px 12px;
+                &.active{
+                    color: var(--blue);
+                }
+            }
+        }
+        &>.right{
+            flex: 1;
+        }
+    }
+
+    details{
+        box-sizing: border-box;
+    }
+    summary{
+        .button-hover(#aaa);
+        padding: 4px 8px;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    .input{
+        height: 24px;
+        font-size: 14px;
+        padding: 0 8px;
+        border: 1px solid rgb(118, 118, 118);
+        &:focus{
+            outline: none;
+        }
+    }
+    select{
+        border: 1px solid rgb(118, 118, 118);
+        height: 24px;
+        min-width: 120px;
+        &:focus{
+            outline: none;
+        }
+    }
+    .reset{
+        .button-hover-darken(rgb(239,68,68),false,10%);
+        cursor: pointer;
+        border: 1px solid darken(rgb(239,68,68),10%);
+        height: 24px;
+        border-radius: 4px;
+        padding: 0 8px;
+        &.is-temp{
+            .button-hover-darken(rgb(234,179,8));
+            border: 1px solid darken(rgb(234,179,8),10%);
+        }
+    }
+}
