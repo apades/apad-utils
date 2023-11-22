@@ -3,6 +3,7 @@ import {
   isBoolean,
   isEqual,
   isUndefined,
+  isObject,
 } from '@pkgs/utils/src/utils'
 import { FC } from 'preact/compat'
 import { ConfigEntries, UISettings } from '.'
@@ -107,20 +108,26 @@ const ConfigRowAction = (props: {
     isNumber = typeof props.config.defaultValue == 'number'
 
   const value = props.newVal ?? defaultValue
-  if (props.config?.type == 'group')
+  if (props.config?.type == 'group') {
     return (
       <select
         value={value}
         onChange={(e) => props.onChange((e.target as HTMLSelectElement).value)}
       >
-        {props.config.group.map((val: any, i: number) => (
-          <option key={i} value={val}>
-            {val}
-          </option>
-        ))}
+        {props.config.group.map((val: any, i: number) => {
+          const isAdvVal = !isObject(val)
+          const value = val?.value ?? val,
+            label = val.label ?? val
+          return (
+            <option key={i} value={value} title={val?.desc}>
+              {label} {!!val?.desc && '*'}
+            </option>
+          )
+        })}
       </select>
     )
-  if (isBoolean(defaultValue))
+  }
+  if (isBoolean(defaultValue)) {
     return (
       <input
         className="mr-auto"
@@ -131,6 +138,8 @@ const ConfigRowAction = (props: {
         }}
       />
     )
+  }
+
   return (
     <input
       className="input"

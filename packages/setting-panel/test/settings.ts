@@ -3,13 +3,15 @@ import { config } from '../src'
 const aCate = 'a系列'
 const aSet = {
   a1: { defaultValue: 1, category: aCate, desc: 'asdfadf' },
-  a2: config<'a' | 'b'>({
+  a2: config<'a' | 'b' | 'c'>({
     defaultValue: 'b',
     category: aCate,
     type: 'group',
-    // TODO 支持复杂数据传入
-    // group: { a: { value: 'a' }, b: 'b' },
-    group: ['a', 'b'],
+    group: [
+      { value: 'a', label: 'a属性', desc: 'adfadf' },
+      'b',
+      { value: 'c', label: 'c属性' },
+    ],
   }),
   a3: { defaultValue: 'a' as 'a' | 'b', category: aCate },
 }
