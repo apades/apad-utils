@@ -1,18 +1,12 @@
-import {
-  classNames,
-  debounce,
-  isBoolean,
-  isEqual,
-  isUndefined,
-} from '@pkgs/utils/src/utils'
+import { Rec } from '@pkgs/tsconfig/types/global'
+import { classNames, debounce } from '@pkgs/utils/src/utils'
 import type { FC } from 'preact/compat'
 import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
-import { ConfigField, I18n, InitOptions } from '..'
 import LoadingContainer from '../components/LoadingContainer'
 import { useMemoizedFn, useOnce } from '../hooks'
-import { Rec } from '../../../tsconfig/types/global'
-import './index.less'
+import { ConfigField, I18n, InitOptions } from '../types'
 import { ConfigEntriesBox } from './ConfigEntriesBox'
+import './index.less'
 
 export type ConfigEntries = Rec<ConfigField<any>>
 export type BaseConfig = UISettings

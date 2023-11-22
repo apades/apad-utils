@@ -1,7 +1,7 @@
 import AsyncLock from '@pkgs/utils/src/AsyncLock'
 import { isFunction, isPromiseFunction } from '@pkgs/utils/src/utils'
 import { useEffect, useMemo, useRef } from 'preact/hooks'
-import { noop } from '../../tsconfig/types/global'
+import { noop } from '@pkgs/tsconfig/types/global'
 
 type ueRe = void | (() => void)
 export function useOnce(cb: (() => ueRe) | (() => Promise<ueRe>)): void {

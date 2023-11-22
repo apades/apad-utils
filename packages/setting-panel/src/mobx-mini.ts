@@ -1,7 +1,7 @@
 import { cloneDeep, isString } from '@pkgs/utils/src/utils'
 import { EventEmitter } from 'events'
 import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
-import { Rec } from '../../tsconfig/types/global'
+import { Rec } from '@pkgs/tsconfig/types/global'
 
 const obverseMap = new Map<any, { eventEmitter: EventEmitter }>()
 ;(globalThis as any).__obverseMap = obverseMap

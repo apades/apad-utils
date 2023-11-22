@@ -1,8 +1,12 @@
-import { classNames } from '@pkgs/utils/src/utils'
-import { isUndefined, isEqual, isBoolean } from '@pkgs/utils/src/utils'
+import {
+  classNames,
+  isBoolean,
+  isEqual,
+  isUndefined,
+} from '@pkgs/utils/src/utils'
 import { FC } from 'preact/compat'
 import { ConfigEntries, UISettings } from '.'
-import { I18n, ConfigField } from '..'
+import { ConfigField, I18n } from '../types'
 
 export const ConfigEntriesBox: FC<{
   config: ConfigEntries
