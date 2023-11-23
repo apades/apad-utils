@@ -61,7 +61,7 @@ export const ConfigEntriesBox: FC<{
               </div>
               <div className="flex-1">
                 <div className="flex gap-[12px]">
-                  <div className="flex-1 items-center justify-center">
+                  <div className="flex flex-1 items-center justify-center">
                     <ConfigRowAction
                       config={val}
                       onChange={(v) => {
@@ -71,7 +71,7 @@ export const ConfigEntriesBox: FC<{
                     />
                   </div>
                   <div
-                    className={`items-center justify-center opacity-0 ${
+                    className={`flex items-center justify-center opacity-0 ${
                       hasChange && 'group-hover:opacity-100'
                     } transition-all`}
                   >
