@@ -1,9 +1,9 @@
 # @apad/setting-panel
-out-of-the-box feature and ts hint support. design with signal pattern(like mobx), provide user interface and easy manage settings.
+开箱即用，且支持ts提示和type检查的设置面板。以signal概念设计(像mobx这种)，且自带管理面板UI，在页面上非常容易的设置管理
 
-[中文](./readme-zh.md)
+[en](./readme.md)
 
-## easy to use
+## 易于使用
 [playground](https://playcode.io/1680353)
 
 config.ts
@@ -16,25 +16,25 @@ export const { configStore, openSettingPanel } = initSetting({
   settings: {
     bg: '#6cf',
     isDark: false,
-    // support ts type check
+    // 支持ts type检查
     type: 'style-a' as 'style-a' | 'style-b',
-    // complex config. add description, label
+    // 复杂配置，可以配置描述，key说明
     lineHeight: {
-      label: 'line height',
-      desc: 'set text line height',
+      label: '行高',
+      desc: '设置字体行高',
       defaultValue: 1,
     },
-    // group select support
+    // 支持选择器
     fontSize: config<FontSizeType>({
       type: 'group',
       group: [
         'middle',
         'small',
-        // complex config
+        // 复杂配置
         {
           value: 'big',
-          label: 'BIG FONT!',
-          desc: 'BIG BIG BIG',
+          label: '大!`',
+          desc: '大大大',
         },
       ],
       defaultValue: 'middle',
@@ -45,7 +45,7 @@ export const { configStore, openSettingPanel } = initSetting({
 App.tsx
 ```tsx
 import { configStore, openSettingPanel } from './config'
-// make component auto update when configStore change
+// 在configStore更新时，组件自动更新
 import { observer } from '@apad/setting-panel/react'
 
 export default observer(() => {
@@ -60,9 +60,9 @@ export default observer(() => {
 })
 ```
 
-## and more
-### if you are using mobx
-very good! You can replace my incomplete version mini-mobx to real mobx🤣
+## 更多
+### 如果你在用mobx
+好！你可以把我的残缺版mini-mobx给换掉了🤣
 
 config.ts
 ```ts
@@ -76,7 +76,7 @@ initSetting({
 ```
 App.tsx
 ```tsx
-// use mobx-react
+// 用mobx-react
 // import { observer } from '@apad/setting-panel/react'
 import { observer } from 'mobx-react'
 
@@ -84,8 +84,8 @@ export default observer(() => {
   // ...
 })
 ```
-### you are not using react framework
-I recommend to use preact version, It is smaller than the full react version
+### 如果你没在用react
+推荐换preact版本，比起完整的react版本会节省更多空间
 ```ts
 // import { initSetting, config } from '@apad/setting-panel'
 import { initSetting, config } from '@apad/setting-panel/preact'
