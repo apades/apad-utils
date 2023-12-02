@@ -18,6 +18,8 @@ export const { configStore, openSettingPanel } = initSetting({
     isDark: false,
     // 支持ts type检查
     type: 'style-a' as 'style-a' | 'style-b',
+    // 数组
+    arr: ['a', 'b', 'c'],
     // 复杂配置，可以配置描述，key说明
     lineHeight: {
       label: '行高',

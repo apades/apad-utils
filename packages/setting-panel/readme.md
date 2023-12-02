@@ -18,6 +18,8 @@ export const { configStore, openSettingPanel } = initSetting({
     isDark: false,
     // support ts type check
     type: 'style-a' as 'style-a' | 'style-b',
+    // arr type
+    arr: ['a', 'b', 'c'],
     // complex config. add description, label
     lineHeight: {
       label: 'line height',
