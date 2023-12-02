@@ -28,6 +28,9 @@ export type ConfigField<T> =
       type: 'group'
       group: (T | ConfigGroupField<T>)[]
     })
+  | (ConfigFieldBase<T> & {
+      type: 'color'
+    })
 
 export type InitOptions<Map extends Record<string, any>> = {
   settings: {

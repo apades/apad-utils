@@ -54,7 +54,7 @@ const SettingPanel: FC<Props> = (props) => {
   // 保存相关
   const _saveConfig = useMemoizedFn(async () => {
     if (!props.autoSave) return
-    console.log('saveConfig')
+    console.log('saveConfig', newConfig)
     if (props.saveInLocal) {
       switch (props.savePosition) {
         case 'localStorage': {

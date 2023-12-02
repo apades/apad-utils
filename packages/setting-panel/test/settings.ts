@@ -70,6 +70,7 @@ const settings = {
   ...cSet,
   ...dSet,
   un: { defaultValue: '111' },
+  unNumber: 111,
   noRec: config({ defaultValue: 'no rec', notRecommended: true }),
   noRel1: config({ defaultValue: false, notRecommended: true }),
   noRel2: config({
@@ -80,6 +81,8 @@ const settings = {
   }),
   rel1: false,
   rel2: config({ defaultValue: '22', relateBy: 'rel1', relateByValue: true }),
+  color: config({ type: 'color', defaultValue: '#66ccff' }),
+  arr: [1, 2, 3],
 }
 
 window.settings = settings

@@ -174,3 +174,11 @@ export function getDeepGetter<T, K extends keyof T>(
       : getDeepGetter(Object.getPrototypeOf(tar), key))
   )
 }
+
+export function arrayInsert<T>(tarr: T[], index: number, arr: T[]): T[] {
+  let _tarr = [...tarr]
+  let left = _tarr.splice(0, index),
+    right = _tarr
+
+  return [...left, ...arr, ...right]
+}
