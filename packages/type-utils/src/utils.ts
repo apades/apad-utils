@@ -19,3 +19,7 @@ export type Omit<T, Keys extends keyof T> = {
  * with key hint support Exclude
  */
 export type Exclude<T, Keys extends T> = T extends Keys ? never : T
+
+export type OmitNever<T> = {
+  [K in keyof T as T[K] extends never ? never : K]: T[K]
+}

@@ -1,26 +1,24 @@
 import { wait } from '@pkgs/utils/src/utils'
 import * as mobx from 'mobx'
-import { observer } from 'mobx-react'
+// import { observer } from 'mobx-react'
+import { observer } from '../react'
 import { FC } from 'react'
 import ReactDOM from 'react-dom/client'
-import { config, initSetting } from '../src'
+import { initSetting } from '../src'
 import settings from './settings'
 
 // 打包的
-const { configStore, openSettingPanel, temporarySetConfigStore } = initSetting({
+const { configStore, openSettingPanel } = initSetting({
   settings,
-  useShadowDom: false,
-  autoSave: true,
-  changeConfigStoreWithSettingPanelChange: true,
-  autoSaveTriggerMs: 500,
+  // useShadowDom: false,
   onInitLoadConfig: async (config) => {
     await wait(2000)
     return { ...config, un: 'change 111' }
   },
-  mobx,
+  // mobx,
+  // mobxObserver: observer,
 })
 
-temporarySetConfigStore('b1', true)
 // setTimeout(() => {
 //   temporarySetConfigStore('b1', true)
 // }, 300)
@@ -53,4 +51,4 @@ const ObservePanel: FC = observer(() => {
   )
 })
 
-ReactDOM.createRoot(document.getElementById('app')).render(<App />)
+ReactDOM.createRoot(document.getElementById('app')).render((<App />) as any)

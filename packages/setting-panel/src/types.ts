@@ -1,6 +1,8 @@
 import type mobx from 'mobx'
+import type { observer } from 'mobx-react'
 import { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import type en from './i18n/en.json'
+import { IfEquals, OmitNever } from '@pkgs/type-utils/src/utils'
 
 export type ConfigFieldBase<T> = {
   defaultValue?: T
@@ -14,6 +16,7 @@ export type ConfigFieldBase<T> = {
   relateBy?: string
   /**等于relateBy的值时，才显示该设置，默认defaultValue是boolean时为true */
   relateByValue?: any
+  render?: (value: T, saveChange: (value: T) => void) => React.ReactNode
 }
 type ConfigGroupField<T> = {
   value: T
@@ -32,7 +35,7 @@ export type ConfigField<T> =
       type: 'color'
     })
 
-export type InitOptions<Map extends Record<string, any>> = {
+export interface InitOptions<Map extends Record<string, any>> {
   settings: {
     [K in keyof Map]: ConfigField<Map[K]>
   }
@@ -40,23 +43,17 @@ export type InitOptions<Map extends Record<string, any>> = {
   onInitLoadConfig?: (config?: Map) => Promise<Map> | Map
   /**保存时的数据，如果不关闭saveInLocal默认也会保存一份本地，可以返回新数据进行保存，注意不能delete */
   onSave?: (config: Map) => Promise<void | Map> | void | Map
-  /**保存的位置，默认用localStorage
-   *
-   * TODO indexedDB
-   *  */
-  savePosition?: 'localStorage' /* | 'indexedDB' */
   /**保存到本地，默认为true */
   saveInLocal?: boolean
   /**是否使用shadow dom，避免css污染，默认关闭 */
   useShadowDom?: boolean
-  /**默认为true，如果不想设置面板设置改动设置时修改configStore可以关闭 */
-  changeConfigStoreWithSettingPanelChange?: boolean
   /**默认为true，输入停止{autoSaveTriggerMs}(默认500ms)后自动触发onSave */
   autoSave?: boolean
   /**默认500，自动保存用的 */
   autoSaveTriggerMs?: number
-  /**默认的mobx是自己魔改的残缺版本，需要完整功能请传入mobx的module */
+  /**默认的mobx是自己魔改的残缺版本，需要完整功能请传入mobx的module，也需要传入mobx-react的observer */
   mobx?: typeof mobx
+  mobxObserver?: typeof observer
   /**针对 非打包工具 + useShadowDom:true 的用户 */
   styleHref?: string
   /**默认为true */
@@ -66,7 +63,13 @@ export type InitOptions<Map extends Record<string, any>> = {
 
 export type InitSettingReturn<Map extends Record<string, any>> = {
   /**从options.settings转化成的mobx结构数据 */
-  configStore: Map
+  configStore: OmitNever<{
+    [K in keyof Map]: Map[K] extends {
+      render: Function
+    }
+      ? never
+      : Map[K]
+  }>
   /**打开设置面板的UI */
   openSettingPanel: (
     /**渲染的位置，不传默认是开全局modal */
@@ -79,10 +82,9 @@ export type InitSettingReturn<Map extends Record<string, any>> = {
    * listener的return返回函数的话可以像react useEffect那样在重新触发listener时运行该函数，可以用来清除上一次函数里相关的挂载操作然后重新挂载相关数据
    *  */
   observe: Observe<Map>
-  temporarySetConfigStore<k extends keyof Map>(
-    key: k,
-    val: Map[k]
-  ): Promise<void>
+  /**保存非UI面板修改configStore的数据 */
+  saveConfig: (resolve?: (config: Map) => Map) => void
+  updateConfig: () => void
 }
 
 export type I18n = typeof en

@@ -1,12 +1,12 @@
 import { Rec } from '@pkgs/tsconfig/types/global'
-import { classNames, debounce } from '@pkgs/utils/src/utils'
+import { classNames } from '@pkgs/utils/src/utils'
 import type { FC } from 'preact/compat'
-import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
+import { useMemo, useState } from 'preact/hooks'
 import LoadingContainer from '../components/LoadingContainer'
-import { useMemoizedFn, useOnce } from '../hooks'
 import { ConfigField, I18n, InitOptions } from '../types'
 import { ConfigEntriesBox } from './ConfigEntriesBox'
 import './index.less'
+import { MOBX_LOADING } from '../keys'
 
 export type ConfigEntries = Rec<ConfigField<any>>
 export type BaseConfig = UISettings
@@ -17,68 +17,12 @@ export type UISettings = {
 export type Props = {
   settings: UISettings
   configStore: Record<string, any>
-  savedConfig?: UISettings
-  tempConfigKeys?: string[]
-  rootEl?: HTMLElement | ShadowRoot
-  isLoading: boolean
   i18n: I18n
+  observer: any
 } & InitOptions<Record<string, any>>
 
 const SettingPanel: FC<Props> = (props) => {
-  let [newConfig, _setNewConfig] = useState<Partial<BaseConfig>>({})
-  useEffect(() => {
-    if (props.savedConfig) _setNewConfig(props.savedConfig)
-  }, [props.savedConfig])
-  // window.newConfig = newConfig
-  // const toast = useToast()
-
-  const setNewConfig = useMemoizedFn((key: string, val: any) => {
-    if (props.changeConfigStoreWithSettingPanelChange)
-      // runInAction(() => {
-      props.configStore[key] = val
-    // })
-
-    _setNewConfig({ ...newConfig, [key]: val })
-
-    saveConfig()
-  })
-  const resetConfig = useMemoizedFn((key: string) => {
-    delete newConfig[key]
-    _setNewConfig({ ...newConfig })
-    if (props.changeConfigStoreWithSettingPanelChange)
-      props.configStore[key] =
-        props.settings[key].defaultValue ?? props.settings[key]
-    saveConfig()
-  })
-
-  // 保存相关
-  const _saveConfig = useMemoizedFn(async () => {
-    if (!props.autoSave) return
-    console.log('saveConfig', newConfig)
-    if (props.saveInLocal) {
-      switch (props.savePosition) {
-        case 'localStorage': {
-          localStorage[saveKey] = JSON.stringify(newConfig)
-          break
-        }
-      }
-    }
-    if (props.onSave) {
-      const newSaveData = await props.onSave({ ...newConfig })
-      if (!newSaveData) return
-      // 会不会出现对象地址问题
-      const changes = Object.entries(newSaveData).filter(
-        ([key, val]) => val != newConfig[key]
-      )
-      if (!changes.length) return
-      changes.forEach((key, val) => setNewConfig(key as any, val))
-    }
-    // toast({ title: '保存成功', status: 'success' })
-  })
-  const saveConfig = useCallback(
-    debounce(_saveConfig, props.autoSaveTriggerMs),
-    []
-  )
+  const { configStore } = props
 
   const {
     baseConfig,
@@ -98,6 +42,7 @@ const SettingPanel: FC<Props> = (props) => {
     const configEntries = Object.entries(props.settings)
 
     configEntries.forEach(([key, _val]) => {
+      if (key == MOBX_LOADING) return
       const val = {
         ..._val,
         defaultValue: props.settings[key].defaultValue ?? props.settings[key],
@@ -162,22 +107,18 @@ const SettingPanel: FC<Props> = (props) => {
           </div>
           <div className="right">
             <ConfigEntriesBox
+              configStore={configStore}
               i18n={props.i18n}
-              tempConfigKeys={props.tempConfigKeys}
-              config={nowConfig}
-              newConfig={newConfig}
-              setNewConfig={setNewConfig}
-              resetConfig={resetConfig}
+              settings={nowConfig}
+              observer={props.observer}
             />
             {showAdv && (
               <Summary title={props.i18n.noRecommended} open={false}>
                 <ConfigEntriesBox
+                  configStore={configStore}
                   i18n={props.i18n}
-                  tempConfigKeys={props.tempConfigKeys}
-                  config={nowAdvConfig}
-                  newConfig={newConfig}
-                  setNewConfig={setNewConfig}
-                  resetConfig={resetConfig}
+                  settings={nowAdvConfig}
+                  observer={props.observer}
                 />
               </Summary>
             )}
@@ -191,21 +132,17 @@ const SettingPanel: FC<Props> = (props) => {
     <div className="setting-panel one-type">
       <ConfigEntriesBox
         i18n={props.i18n}
-        tempConfigKeys={props.tempConfigKeys}
-        config={baseConfig}
-        newConfig={newConfig}
-        setNewConfig={setNewConfig}
-        resetConfig={resetConfig}
+        configStore={configStore}
+        settings={baseConfig}
+        observer={props.observer}
       />
       {!!showAdv && (
         <Summary title={props.i18n.noRecommended} open={false}>
           <ConfigEntriesBox
             i18n={props.i18n}
-            tempConfigKeys={props.tempConfigKeys}
-            config={advConfig}
-            newConfig={newConfig}
-            setNewConfig={setNewConfig}
-            resetConfig={resetConfig}
+            configStore={configStore}
+            settings={advConfig}
+            observer={props.observer}
           />
         </Summary>
       )}
@@ -227,29 +164,9 @@ const Summary: FC<{
 
 export const saveKey = '__settingPanel_config_save'
 const UIComponent: FC<Props> = (props) => {
-  let [isLoading, setLoading] = useState(props.isLoading)
-  let [savedConfig, setSavedConfig] = useState<Partial<BaseConfig>>(
-    props.savedConfig
-  )
-  let [tempConfigKeys, setTempConfigKeys] = useState<string[]>([])
-  useOnce(async () => {
-    ;(globalThis as any).__spSetLoading = setLoading
-    ;(globalThis as any).__spSetSavedConfig = setSavedConfig
-    ;(globalThis as any).__spSetTempConfigKeys = setTempConfigKeys
-    return () => {
-      delete (globalThis as any).__spSetLoading
-      delete (globalThis as any).__spSetSavedConfig
-      delete (globalThis as any).__spSetTempConfigKeys
-    }
-  })
-
   return (
-    <LoadingContainer isLoading={isLoading}>
-      <SettingPanel
-        {...props}
-        savedConfig={savedConfig}
-        tempConfigKeys={tempConfigKeys}
-      />
+    <LoadingContainer isLoading={props.configStore[MOBX_LOADING]}>
+      <SettingPanel {...props} />
     </LoadingContainer>
   )
 }

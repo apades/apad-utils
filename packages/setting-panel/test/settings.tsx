@@ -83,6 +83,28 @@ const settings = {
   rel2: config({ defaultValue: '22', relateBy: 'rel1', relateByValue: true }),
   color: config({ type: 'color', defaultValue: '#66ccff' }),
   arr: [1, 2, 3],
+  cusRender: config({
+    render: () => {
+      return <div>cusRender div</div>
+    },
+  }),
+  cusRenderWithVal: config({
+    defaultValue: 'val',
+    render: (val, saveChange) => {
+      return (
+        <div>
+          <input
+            value={val}
+            onChange={(e) => {
+              const value = (e.target as any).value
+              console.log('save cus value', value)
+              saveChange(value)
+            }}
+          />
+        </div>
+      )
+    },
+  }),
 }
 
 window.settings = settings

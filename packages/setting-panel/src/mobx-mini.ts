@@ -74,7 +74,7 @@ export const observe: Observe<Rec> = (...args: any) => {
         observableKind: 'object',
         type: 'update',
       }
-      args[2](update)
+      args[1](update)
     }
   }
   eventEmitter.addListener('set', listener)

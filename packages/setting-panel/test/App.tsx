@@ -24,20 +24,18 @@ const App: FC = () => {
       }}
     >
       <UIComponent
-        isLoading={false}
         i18n={en}
         settings={settings}
         configStore={configStore}
-        changeConfigStoreWithSettingPanelChange
         autoSave
         autoSaveTriggerMs={500}
-        savePosition="localStorage"
         saveInLocal
         onInitLoadConfig={async (config) => {
           console.log('config', config)
           await wait(2000)
           return { ...config, un: 'change 111' }
         }}
+        observer={observer}
       />
       <ObservePanel />
     </div>
