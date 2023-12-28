@@ -65,6 +65,7 @@ export function initSetting<Map extends Record<string, any>>(
   }
 
   const saveConfig = async () => {
+    if (configStore[MOBX_LOADING]) return
     let tarConfig: Record<string, any> = configStore
     if (options.onSave) {
       tarConfig = (await options.onSave(tarConfig as any)) as any

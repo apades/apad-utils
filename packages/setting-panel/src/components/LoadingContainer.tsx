@@ -1,7 +1,7 @@
-import { isFunction } from '@pkgs/utils/src/utils'
+import { classNames, isFunction } from '@pkgs/utils/src/utils'
 import type { VNode } from 'preact'
 import type { FC } from 'preact/compat'
-import './index.less'
+import './LoadingContainer.less'
 
 type Props = {
   isLoading: boolean
@@ -21,7 +21,12 @@ type Props = {
 let LoadingContainer: FC<Props> = (props) => {
   let { isLoading, children } = props
   return (
-    <div className={'loading-container setting-panel cate-type'}>
+    <div
+      className={classNames(
+        'setting-panel cate-type',
+        isLoading && 'loading-container'
+      )}
+    >
       {isLoading && <div className="loading-icon"></div>}
       {isFunction(children) ? !isLoading && children() : children}
     </div>
