@@ -85,7 +85,7 @@ export function initSetting<Map extends Record<string, any>>(
   let hasInit = false
   function openSettingPanel(
     /**渲染的位置，不传默认是开全局modal */
-    renderTarget?: HTMLElement
+    renderTarget = document.body
   ) {
     if (!hasInit) {
       const App = observer(UIComponent)
@@ -106,9 +106,7 @@ export function initSetting<Map extends Record<string, any>>(
           href:
             options.styleHref || new URL('./index.css', import.meta.url).href,
         })
-        options.useShadowDom
-          ? rootEl.shadowRoot.appendChild(style)
-          : document.head.appendChild(style)
+        rootEl.appendChild(style)
       }
       if (options.isModal) {
         renderEl.classList.add('is-modal')
@@ -122,10 +120,10 @@ export function initSetting<Map extends Record<string, any>>(
       }
       hasInit = true
     }
-    document.body.appendChild(rootEl)
+    renderTarget.appendChild(rootEl)
   }
   function closeSettingPanel() {
-    document.body.removeChild(rootEl)
+    rootEl.parentElement.removeChild(rootEl)
   }
 
   return {

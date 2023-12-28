@@ -1,4 +1,4 @@
-import { wait } from '@pkgs/utils/src/utils'
+import { createElement, wait } from '@pkgs/utils/src/utils'
 import * as mobx from 'mobx'
 // import { observer } from 'mobx-react'
 import { observer } from '../react'
@@ -24,6 +24,7 @@ const { configStore, openSettingPanel } = initSetting({
 // }, 300)
 window.configStore = configStore
 
+let iframe: HTMLIFrameElement
 // configStore.b1 = true
 const App: FC = () => {
   return (
@@ -37,6 +38,28 @@ const App: FC = () => {
       }}
     >
       <button onClick={() => openSettingPanel()}>open</button>
+      <button
+        onClick={async () => {
+          if (!iframe) {
+            iframe = createElement<HTMLIFrameElement>('iframe', {
+              width: '100%',
+              height: '500px',
+              src: '',
+            })
+            document.body.appendChild(iframe)
+            const styles = document.head.querySelectorAll('style')
+            styles.forEach((style) => {
+              iframe.contentWindow.document.head.appendChild(
+                style.cloneNode(true)
+              )
+            })
+          }
+
+          openSettingPanel(iframe.contentDocument.body)
+        }}
+      >
+        open in iframe
+      </button>
       <div style={{ marginTop: 24 }}></div>
       <ObservePanel />
     </div>
