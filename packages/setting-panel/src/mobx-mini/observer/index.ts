@@ -27,11 +27,5 @@ export function observer<P extends object, TRef = Rec>(
     configurable: true,
   })
 
-  if ((baseComponent as any).contextTypes) {
-    ;(observerComponent as React.FunctionComponent).contextTypes = (
-      baseComponent as any
-    ).contextTypes
-  }
-
   return observerComponent
 }

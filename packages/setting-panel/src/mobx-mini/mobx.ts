@@ -77,9 +77,9 @@ export const observe: Observe<Rec> = (...args: any) => {
       args[1](update)
     }
   }
-  eventEmitter.addListener('set', listener)
+  eventEmitter.on('set', listener)
   return () => {
-    eventEmitter.removeListener('set', listener)
+    eventEmitter.off('set', listener)
   }
 }
 

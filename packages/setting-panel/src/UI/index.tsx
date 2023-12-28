@@ -92,7 +92,7 @@ const SettingPanel: FC<Props> = (props) => {
       setNowCategory(key)
     }
     return (
-      <div className="setting-panel cate-type">
+      <div>
         <div className="category-panel">
           <div className="left">
             {[[props.i18n.main], ...cateBaseConfigEntries].map(([key, val]) => (
