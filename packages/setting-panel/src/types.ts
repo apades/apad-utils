@@ -1,8 +1,8 @@
+import type { OmitNever } from '@pkgs/type-utils/src/utils'
 import type mobx from 'mobx'
+import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import type { observer } from 'mobx-react'
-import { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import type en from './i18n/en.json'
-import { IfEquals, OmitNever } from '@pkgs/type-utils/src/utils'
 
 export type ConfigFieldBase<T> = {
   defaultValue?: T

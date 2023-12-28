@@ -1,14 +1,14 @@
-import { cloneDeep, isString } from '@pkgs/utils/src/utils'
+import type { Rec } from '@pkgs/tsconfig/types/global'
+import { isString, serialization } from '@pkgs/utils/src/utils'
 import { EventEmitter } from 'events'
 import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
-import { Rec } from '@pkgs/tsconfig/types/global'
 
 const obverseMap = new Map<any, { eventEmitter: EventEmitter }>()
 ;(globalThis as any).__obverseMap = obverseMap
 
 type EventProps = { oldValue: any; newValue: any; key: any }
 export function makeAutoObservable<T extends Rec>(target: T): T {
-  const _target = cloneDeep(target)
+  const _target = serialization(target)
 
   const proxy = new Proxy(_target, {
     get(target, key: string, receiver) {

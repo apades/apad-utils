@@ -2,7 +2,7 @@
  * 相比起/src/react/index.ts的少了forwardRef, memo功能，且都用preact
  */
 import { useObserver } from './useObserver'
-import { Rec } from '@pkgs/tsconfig/types/global'
+import type { Rec } from '@pkgs/tsconfig/types/global'
 import type React from 'react'
 
 export function observer<P extends object, TRef = Rec>(

@@ -1,7 +1,7 @@
-import React, { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 export function useObserver<T>(render: () => T): T {
-  const [, forceUpdate] = React.useState<symbol>()
+  const [, forceUpdate] = useState<symbol>()
   const updateRef = useRef<(e: any) => void>(() => 1)
 
   const values = [...(globalThis as any).__obverseMap.values()]

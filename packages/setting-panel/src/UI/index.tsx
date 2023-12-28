@@ -1,12 +1,12 @@
-import { Rec } from '@pkgs/tsconfig/types/global'
+import type { Rec } from '@pkgs/tsconfig/types/global'
 import { classNames } from '@pkgs/utils/src/utils'
 import type { FC } from 'preact/compat'
 import { useMemo, useState } from 'preact/hooks'
 import LoadingContainer from '../components/LoadingContainer'
-import { ConfigField, I18n, InitOptions } from '../types'
+import { MOBX_LOADING } from '../keys'
+import type { ConfigField, I18n, InitOptions } from '../types'
 import { ConfigEntriesBox } from './ConfigEntriesBox'
 import './index.less'
-import { MOBX_LOADING } from '../keys'
 
 export type ConfigEntries = Rec<ConfigField<any>>
 export type BaseConfig = UISettings

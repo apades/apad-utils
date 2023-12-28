@@ -1,6 +1,7 @@
-import React, { forwardRef, memo } from 'react'
+import type { Rec } from '@pkgs/tsconfig/types/global'
+import type React from 'react'
+import { forwardRef, memo } from 'react'
 import { useObserver } from './useObserver'
-import { Rec } from '@pkgs/tsconfig/types/global'
 
 const hasSymbol = typeof Symbol === 'function' && Symbol.for
 // Using react-is had some issues (and operates on elements, not on types), see #608 / #609

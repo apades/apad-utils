@@ -85,24 +85,7 @@ export function debounce<T extends noop>(func: T, wait: number): T {
 
 export function isEqual(obj1: any, obj2: any): boolean {
   // 如果两个对象的引用相同，则它们是相等的
-  if (obj1 === obj2) {
-    return true
-  }
-
-  // 如果两个对象的类型不同，则它们不相等
-  if (typeof obj1 !== typeof obj2) {
-    return false
-  }
-
-  // 如果两个对象都是 null，则它们是相等的
-  if (obj1 === null && obj2 === null) {
-    return true
-  }
-
-  // 如果两个对象都是基本类型，则比较它们的值
-  if (typeof obj1 !== 'object' && typeof obj2 !== 'object') {
-    return obj1 === obj2
-  }
+  if (obj1 === obj2) return true
 
   // 如果两个对象都是数组，则比较它们的每个元素
   if (Array.isArray(obj1) && Array.isArray(obj2)) {
@@ -150,6 +133,15 @@ export function cloneDeep<T>(obj: T): T {
   }
 
   return result
+}
+
+export function cloneDeepByJson<T extends object>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj))
+}
+
+export function serialization<T>(val: T): T {
+  if (typeof val == 'object') return JSON.parse(JSON.stringify(val))
+  return val
 }
 
 export function classNames(...args: any[]) {

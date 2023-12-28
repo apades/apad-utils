@@ -1,18 +1,18 @@
 import {
+  arrayInsert,
   classNames,
+  isArray,
   isBoolean,
   isEqual,
-  isUndefined,
   isObject,
-  isArray,
-  arrayInsert,
+  serialization,
   wait,
 } from '@pkgs/utils/src/utils'
-import { FC } from 'preact/compat'
-import { ConfigEntries, UISettings } from '.'
-import { ConfigField, I18n } from '../types'
-import { JSXInternal } from 'preact/src/jsx'
-import { useMemo, useRef, useState } from 'preact/hooks'
+import type { FC } from 'preact/compat'
+import { useMemo, useRef } from 'preact/hooks'
+import type { JSXInternal } from 'preact/src/jsx'
+import type { ConfigEntries } from '.'
+import type { ConfigField, I18n } from '../types'
 
 export const ConfigEntriesBox: FC<{
   settings: ConfigEntries
@@ -227,9 +227,4 @@ export const ConfigEntriesBox: FC<{
       ))}
     </div>
   )
-}
-
-const serialization = (val: any) => {
-  if (typeof val == 'object') return JSON.parse(JSON.stringify(val))
-  return val
 }
