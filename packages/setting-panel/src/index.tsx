@@ -1,15 +1,14 @@
-import AsyncLock from '@pkgs/utils/src/AsyncLock'
 import { createElement, debounce, wait } from '@pkgs/utils/src/utils'
 import { render } from 'entry'
 import type mobx from 'mobx'
 import UIComponent, { saveKey } from './UI'
 import en from './i18n/en.json'
 import './index.less'
-import { makeAutoObservable, observe as mObserve } from './mobx-mini'
-import { observer as mObserver } from './react'
+import { MOBX_LOADING } from './keys'
+import { observe as mObserve, makeAutoObservable } from './mobx-mini/mobx'
+import { observer as mObserver } from './mobx-mini/observer'
 import './tailwind.css'
 import { ConfigField, InitOptions, InitSettingReturn } from './types'
-import { MOBX_LOADING } from './keys'
 
 export function config<T>(config: ConfigField<T>) {
   return config

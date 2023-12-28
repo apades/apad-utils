@@ -1,6 +1,6 @@
 import React, { forwardRef, memo } from 'react'
 import { useObserver } from './useObserver'
-import { Rec } from '../../../tsconfig/types/global'
+import { Rec } from '@pkgs/tsconfig/types/global'
 
 const hasSymbol = typeof Symbol === 'function' && Symbol.for
 // Using react-is had some issues (and operates on elements, not on types), see #608 / #609
@@ -8,10 +8,6 @@ const ReactForwardRefSymbol = hasSymbol
   ? Symbol.for('react.forward_ref')
   : typeof forwardRef === 'function' &&
     forwardRef((props: any) => null)['$$typeof']
-
-const ReactMemoSymbol = hasSymbol
-  ? Symbol.for('react.memo')
-  : typeof memo === 'function' && memo((props: any) => null)['$$typeof']
 
 export function observer<P extends object, TRef = Rec>(
   baseComponent:
@@ -22,8 +18,6 @@ export function observer<P extends object, TRef = Rec>(
       >
 ) {
   let render = baseComponent
-
-  const baseComponentName = baseComponent.displayName || baseComponent.name
 
   // If already wrapped with forwardRef, unwrap,
   // so we can patch render and apply memo
