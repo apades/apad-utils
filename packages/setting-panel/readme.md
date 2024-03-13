@@ -9,6 +9,11 @@ out-of-the-box feature and ts hint support. design with signal pattern(like mobx
 config.ts
 ```ts
 import { initSetting, config } from '@apad/setting-panel'
+// Some framework process css files in the development environment, and there may be problems with loading the internal css.
+// Please add this code according to the situation, or simply `import '@apad/setting-panel/lib/index.css'`
+if(process.env.NODE_ENV == 'development'){
+  import('@apad/setting-panel/lib/index.css');
+}
 
 type FontSizeType = 'small' | 'middle' | 'big'
 

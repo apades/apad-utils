@@ -9,6 +9,11 @@
 config.ts
 ```ts
 import { initSetting, config } from '@apad/setting-panel'
+// 一些脚手架在开发环境会处理css文件，内部的css加载会出问题
+// 请根据情况加这段代码，或者单纯的`import '@apad/setting-panel/lib/index.css'`
+if(process.env.NODE_ENV == 'development'){
+  import('@apad/setting-panel/lib/index.css');
+}
 
 type FontSizeType = 'small' | 'middle' | 'big'
 
