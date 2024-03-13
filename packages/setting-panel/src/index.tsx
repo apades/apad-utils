@@ -7,7 +7,7 @@ import './index.less'
 import { MOBX_LOADING } from './keys'
 import { observe as mObserve, makeAutoObservable } from './mobx-mini/mobx'
 import { observer as mObserver } from './mobx-mini/observer'
-import './tailwind.css'
+// import './tailwind.css'
 import type { ConfigField, InitOptions, InitSettingReturn } from './types'
 
 export function config<T>(config: ConfigField<T>) {
