@@ -1,6 +1,6 @@
 {
   "name": "@apad/setting-panel",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "out-of-the-box feature and ts hint support. design with signal pattern(like mobx), provide user interface and easy manage settings",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
