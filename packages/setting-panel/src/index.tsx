@@ -64,20 +64,26 @@ export function initSetting<Map extends Record<string, any>>(
     configStore[MOBX_LOADING] = false
   }
 
-  const saveConfig = async () => {
+  const savedConfig: Partial<typeof configStore> = {}
+  const saveConfig = async (...props: any) => {
     if (configStore[MOBX_LOADING]) return
-    let tarConfig: Record<string, any> = configStore
+    let tarConfig: Record<string, any> = savedConfig
     if (options.onSave) {
       tarConfig = (await options.onSave(tarConfig as any)) as any
     }
     if (options.saveInLocal) {
       localStorage[saveKey] = JSON.stringify(tarConfig)
     }
+    // console.log('saveConfig', tarConfig)
   }
 
   if (options.autoSave) {
     const save = debounce(saveConfig, options.autoSaveTriggerMs)
-    observe(save)
+    observe((data: any) => {
+      if (data.name == MOBX_LOADING) return
+      savedConfig[data.name] = data.newValue
+      save()
+    })
   }
 
   updateConfig()

@@ -75,9 +75,11 @@ config.ts
 ```ts
 // ...
 import * as mobx from 'mobx'
+import { observer } from 'mobx-react'
 
 initSetting({
     mobx,
+    mobxObserver: observer,
     // ...
 })
 ```
