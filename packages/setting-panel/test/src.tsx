@@ -15,6 +15,7 @@ const { configStore, openSettingPanel } = initSetting({
     await wait(2000)
     return { ...config, un: 'change 111' }
   },
+  useShadowDom: true,
   // mobx,
   // mobxObserver: observer,
 })
