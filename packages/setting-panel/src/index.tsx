@@ -112,7 +112,7 @@ export function initSetting<Map extends Record<string, any>>(
           href:
             options.styleHref || new URL('./index.css', import.meta.url).href,
         })
-        rootEl.appendChild(style)
+        renderEl.appendChild(style)
       }
       if (options.isModal) {
         renderEl.classList.add('is-modal')
