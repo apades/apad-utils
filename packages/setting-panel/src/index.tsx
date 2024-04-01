@@ -19,7 +19,6 @@ export function initSetting<Map extends Record<string, any>>(
 ): InitSettingReturn<Map> {
   const baseOption: Partial<InitOptions<Map>> = {
     saveInLocal: true,
-    useShadowDom: false,
     autoSave: true,
     autoSaveTriggerMs: 500,
     isModal: true,
@@ -30,7 +29,6 @@ export function initSetting<Map extends Record<string, any>>(
     options.mobx
       ? options.mobx.observe(configStore, ...args)
       : mObserve(configStore, ...args)
-  const observer = (options.mobxObserver ?? mObserver) as any
 
   const rootEl = createElement('div')
   const renderEl = createElement('div', {
@@ -94,13 +92,12 @@ export function initSetting<Map extends Record<string, any>>(
     renderTarget = document.body
   ) {
     if (!hasInit) {
-      const App = observer(UIComponent)
+      const App = UIComponent
       render(
         <App
           i18n={options.i18n ?? en}
-          settings={options.settings}
           configStore={configStore}
-          observer={observer}
+          observe={observe}
           {...options}
         />,
         renderEl

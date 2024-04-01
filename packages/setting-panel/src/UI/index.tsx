@@ -2,11 +2,11 @@ import type { Rec } from '@pkgs/tsconfig/types/global'
 import { classNames } from '@pkgs/utils/src/utils'
 import type { FC } from 'preact/compat'
 import { useMemo, useState } from 'preact/hooks'
-import LoadingContainer from '../components/LoadingContainer'
 import { MOBX_LOADING } from '../keys'
 import type { ConfigField, I18n, InitOptions } from '../types'
 import { ConfigEntriesBox } from './ConfigEntriesBox'
 import './index.less'
+import { useEffect } from 'react'
 
 export type ConfigEntries = Rec<ConfigField<any>>
 export type BaseConfig = UISettings
@@ -18,11 +18,17 @@ export type Props = {
   settings: UISettings
   configStore: Record<string, any>
   i18n: I18n
-  observer: any
+  observe: Function
 } & InitOptions<Record<string, any>>
 
 const SettingPanel: FC<Props> = (props) => {
   const { configStore } = props
+
+  useEffect(() => {
+    props.observe((v: any) => {
+      console.log('update', v)
+    })
+  }, [])
 
   const {
     baseConfig,
@@ -59,10 +65,8 @@ const SettingPanel: FC<Props> = (props) => {
       } else {
         if (val.notRecommended) {
           advConfig[key] = val
-          // advConfigEntries.push([key, val])
         } else {
           baseConfig[key] = val
-          // baseConfigEntries.push([key, val])
         }
       }
     })
@@ -110,7 +114,6 @@ const SettingPanel: FC<Props> = (props) => {
               configStore={configStore}
               i18n={props.i18n}
               settings={nowConfig}
-              observer={props.observer}
             />
             {showAdv && (
               <Summary title={props.i18n.noRecommended} open={false}>
@@ -118,7 +121,6 @@ const SettingPanel: FC<Props> = (props) => {
                   configStore={configStore}
                   i18n={props.i18n}
                   settings={nowAdvConfig}
-                  observer={props.observer}
                 />
               </Summary>
             )}
@@ -134,7 +136,6 @@ const SettingPanel: FC<Props> = (props) => {
         i18n={props.i18n}
         configStore={configStore}
         settings={baseConfig}
-        observer={props.observer}
       />
       {!!showAdv && (
         <Summary title={props.i18n.noRecommended} open={false}>
@@ -142,7 +143,6 @@ const SettingPanel: FC<Props> = (props) => {
             i18n={props.i18n}
             configStore={configStore}
             settings={advConfig}
-            observer={props.observer}
           />
         </Summary>
       )}
@@ -165,9 +165,9 @@ const Summary: FC<{
 export const saveKey = '__settingPanel_config_save'
 const UIComponent: FC<Props> = (props) => {
   return (
-    <LoadingContainer isLoading={props.configStore[MOBX_LOADING]}>
+    <div className="setting-panel cate-type">
       <SettingPanel {...props} />
-    </LoadingContainer>
+    </div>
   )
 }
 export default UIComponent

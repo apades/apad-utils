@@ -5,8 +5,10 @@ import { wait } from '@pkgs/utils/src/utils'
 import { observer } from '../src/react'
 import en from '../src/i18n/en.json'
 import settings from './settings'
+import { observe as mObserve } from '../src/mobx-mini/mobx'
 
 const configStore = createConfigStore(settings)
+const observe = (...args: [any, any]) => mObserve(configStore, ...args)
 window.configStore = configStore
 // observe(configStore, (change) => {
 //   console.log('change', change)
@@ -35,7 +37,7 @@ const App: FC = () => {
           await wait(2000)
           return { ...config, un: 'change 111' }
         }}
-        observer={observer}
+        observe={observe}
       />
       <ObservePanel />
     </div>

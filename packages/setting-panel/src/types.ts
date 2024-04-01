@@ -51,9 +51,12 @@ export interface InitOptions<Map extends Record<string, any>> {
   autoSave?: boolean
   /**默认500，自动保存用的 */
   autoSaveTriggerMs?: number
-  /**默认的mobx是自己魔改的残缺版本，需要完整功能请传入mobx的module，也需要传入mobx-react的observer */
+  /**
+   * 默认的mobx是自己魔改的残缺版本，需要完整功能请传入mobx的module
+   *
+   * `import * as mobx from 'mobx'`
+   */
   mobx?: typeof mobx
-  mobxObserver?: typeof observer
   /**针对 非打包工具 + useShadowDom:true 的用户 */
   styleHref?: string
   /**默认为true */
