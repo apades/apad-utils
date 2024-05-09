@@ -157,7 +157,7 @@ export const ConfigEntriesBox: FC<{
 
         return (
           <div
-            key={i}
+            key={key}
             className={classNames(
               `config-row`,
               isRelChild && 'rel-child',
