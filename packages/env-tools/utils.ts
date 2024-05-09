@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import { resolve } from 'path'
 
-export function getFileInParents(fileName: string, deep = 5) {
+export function getFileInParents(fileName: string, deep = 10) {
   let index = 0
   function getFileInParent(path: string): string {
     if (index++ > deep) return null
