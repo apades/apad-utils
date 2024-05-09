@@ -88,7 +88,9 @@ export function showEnvConfigureModal(width = 300) {
       onclick: () => (modalEl.style.visibility = 'hidden'),
     })
 
-    ;(panel as any).style = `display: flex; flex-direction: column; gap: 4px;width: ${width}px;`
+    ;(
+      panel as any
+    ).style = `display: flex; flex-direction: column; gap: 4px;width: ${width}px;`
     modalEl.appendChild(panel)
     modalEl.appendChild(closeBtn)
     document.body.appendChild(modalEl)
