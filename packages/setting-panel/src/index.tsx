@@ -30,17 +30,6 @@ export function initSetting<Map extends Record<string, any>>(
       ? options.mobx.observe(configStore, ...args)
       : mObserve(configStore, ...args)
 
-  const rootEl = createElement('div')
-  const renderEl = createElement('div', {
-    className: 'render-root',
-  })
-  if (options.useShadowDom) {
-    rootEl.attachShadow({ mode: 'open' })
-    rootEl.shadowRoot.appendChild(renderEl)
-  } else {
-    rootEl.appendChild(renderEl)
-  }
-
   const configStore = createConfigStore(
     { ...options.settings, [MOBX_LOADING]: false },
     options.mobx
@@ -86,12 +75,23 @@ export function initSetting<Map extends Record<string, any>>(
 
   updateConfig()
 
-  let hasInit = false
+  let hasInit = false,
+    rootEl: HTMLElement = null
   function openSettingPanel(
     /**渲染的位置，不传默认是开全局modal */
     renderTarget = document.body
   ) {
     if (!hasInit) {
+      rootEl = createElement('div')
+      const renderEl = createElement('div', {
+        className: 'render-root',
+      })
+      if (options.useShadowDom) {
+        rootEl.attachShadow({ mode: 'open' })
+        rootEl.shadowRoot.appendChild(renderEl)
+      } else {
+        rootEl.appendChild(renderEl)
+      }
       const App = UIComponent
       render(
         <App
