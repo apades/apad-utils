@@ -27,17 +27,6 @@ export function initSetting<Map extends Record<string, any>>(
   }
   options = Object.assign(baseOption, options)
 
-  const rootEl = createElement('div')
-  const renderEl = createElement('div', {
-    className: 'render-root',
-  })
-  if (options.useShadowDom) {
-    rootEl.attachShadow({ mode: 'open' })
-    rootEl.shadowRoot.appendChild(renderEl)
-  } else {
-    rootEl.appendChild(renderEl)
-  }
-
   let isLoading = true
   let savedConfig = {}
   let asyncInitLock = new AsyncLock()
@@ -75,12 +64,24 @@ export function initSetting<Map extends Record<string, any>>(
     isLoading = false
   }
 
-  let hasInit = false
+  let hasInit = false,
+    rootEl: HTMLElement = null
   function openSettingPanel(
     /**渲染的位置，不传默认是开全局modal */
     renderTarget?: HTMLElement
   ) {
     if (!hasInit) {
+      rootEl = createElement('div')
+      const renderEl = createElement('div', {
+        className: 'render-root',
+      })
+      if (options.useShadowDom) {
+        rootEl.attachShadow({ mode: 'open' })
+        rootEl.shadowRoot.appendChild(renderEl)
+      } else {
+        rootEl.appendChild(renderEl)
+      }
+
       if (options.styleHref || import.meta.url) {
         let style = createElement('link', {
           rel: 'stylesheet',
