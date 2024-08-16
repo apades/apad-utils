@@ -1,9 +1,9 @@
 import { cloneDeep, isString } from '@pkgs/utils/src/utils'
-import { EventEmitter } from 'events'
+import mitt from 'mitt'
 import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import { Rec } from '@pkgs/tsconfig/types/global'
 
-const obverseMap = new Map<any, { eventEmitter: EventEmitter }>()
+const obverseMap = new Map<any, { eventEmitter: ReturnType<typeof mitt> }>()
 ;(globalThis as any).__obverseMap = obverseMap
 
 type EventProps = { oldValue: any; newValue: any; key: any }
@@ -29,7 +29,7 @@ export function makeAutoObservable<T extends Rec>(target: T): T {
     },
   })
   obverseMap.set(proxy, {
-    eventEmitter: new EventEmitter(),
+    eventEmitter: mitt(),
   })
   return proxy
 }
@@ -77,9 +77,9 @@ export const observe: Observe<Rec> = (...args: any) => {
       args[2](update)
     }
   }
-  eventEmitter.addListener('set', listener)
+  eventEmitter.on('set', listener)
   return () => {
-    eventEmitter.removeListener('set', listener)
+    eventEmitter.off('set', listener)
   }
 }
 

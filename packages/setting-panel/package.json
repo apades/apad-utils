@@ -36,7 +36,10 @@
     "build:react-utils": "tsup src/react/index.ts --dts --format esm,cjs --minify --metafile --env.NODE_ENV production -d react --shims --treeshake"
   },
   "keywords": [
-    "settings","ui","config","mobx"
+    "settings",
+    "ui",
+    "config",
+    "mobx"
   ],
   "author": "apades",
   "license": "MIT",
@@ -49,6 +52,7 @@
     "@types/react-dom": "^18.2.5",
     "autoprefixer": "^10.4.14",
     "esbuild-plugin-replace": "^1.4.0",
+    "mitt": "^3.0.1",
     "mobx": "^6.10.0",
     "mobx-react": "^9.0.0",
     "postcss": "^8.4.27",

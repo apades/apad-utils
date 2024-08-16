@@ -10,19 +10,19 @@ export function useObserver<T>(render: () => T): T {
     listenKeys.push(e.key)
   }
   values.forEach(({ eventEmitter }) => {
-    eventEmitter.addListener('get', getListen)
-    eventEmitter.removeListener('set', updateRef.current)
+    eventEmitter.on('get', getListen)
+    eventEmitter.off('set', updateRef.current)
   })
   let renderResult: T = render()
   values.forEach(({ eventEmitter }) => {
-    eventEmitter.removeListener('get', getListen)
+    eventEmitter.off('get', getListen)
 
     const update = (e: any) => {
       if (!listenKeys.includes(e.key)) return
       forceUpdate(Symbol())
     }
     updateRef.current = update
-    eventEmitter.addListener('set', updateRef.current)
+    eventEmitter.on('set', updateRef.current)
   })
 
   return renderResult

@@ -83,6 +83,7 @@ const settings = {
   rel2: config({ defaultValue: '22', relateBy: 'rel1', relateByValue: true }),
   color: config({ type: 'color', defaultValue: '#66ccff' }),
   arr: [1, 2, 3],
+  emptyArr: [] as any[],
 }
 
 window.settings = settings
