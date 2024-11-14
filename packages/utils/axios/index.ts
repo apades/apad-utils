@@ -10,7 +10,7 @@ import Axios from 'axios'
 
 type Key = 'get' | 'post' | 'delete' | 'put' | 'head'
 
-interface Data {
+export interface Data {
   [k: string]: string | number | boolean
 }
 

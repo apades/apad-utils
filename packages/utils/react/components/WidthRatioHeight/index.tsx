@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import React from 'react'
 import './index.less'
 
-type Props = {
+export type Props = {
   children: ReactNode
   width?: number | string
   /** 例如(height)9 / (width)16 */

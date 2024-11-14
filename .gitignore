@@ -14,3 +14,4 @@ lib
 /packages/setting-panel/preact
 .plasmo
 /packages/injector_test-*/build
+packages/utils/doc

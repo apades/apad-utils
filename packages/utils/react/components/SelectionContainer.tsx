@@ -44,7 +44,7 @@ import { createPortal } from 'react-dom'
 /** 距离出边界的差值 */
 const OUTSIDE_OFFSET = 10
 // TODO 限制只在一个区域内选择，外头双击到里面的不算
-interface Props {
+export interface Props {
   children: ReactNode
   onSelected?: (data: { selection: Selection }) => void
   menu: (data: { string: string }) => ReactNode

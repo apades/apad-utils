@@ -15,7 +15,7 @@ import React, {
 import { createPortal } from 'react-dom'
 import './index.less'
 
-interface Props {
+export interface Props {
   children: ReactNode
   /** dragoverRender和drop事件挂载在body上 */
   global?: boolean

@@ -2,7 +2,7 @@ import type { FC, ReactNode } from 'react'
 import { isArray, isUndefined } from 'lodash-es'
 import React, { Children, cloneElement, useEffect, useRef } from 'react'
 
-interface Props {
+export interface Props {
   children: ReactNode
   /** 用来控制设置width的时机的 */
   init?: boolean

@@ -115,4 +115,5 @@ export function createElement<
   return el
 }
 
+export * from './lite'
 export * from './selector'

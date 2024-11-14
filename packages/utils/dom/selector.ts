@@ -64,7 +64,7 @@ export const dqParents: {
   return rs
 }
 
-type DqTarType =
+export type DqTarType =
   | Document
   | ValueOf<HTMLElementTagNameMap>
   | Element

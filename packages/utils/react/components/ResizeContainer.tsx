@@ -3,8 +3,8 @@ import type { FC, ReactNode } from 'react'
 import { Resizable } from 're-resizable'
 import React, { useMemo, useRef } from 'react'
 
-type Enable = ResizableProps['enable']
-type Props = {
+export type Enable = ResizableProps['enable']
+export type Props = {
   children: ReactNode
   /** enable的反向设置，只开启指定反向 */
   enableDirection?: (keyof Enable)[]

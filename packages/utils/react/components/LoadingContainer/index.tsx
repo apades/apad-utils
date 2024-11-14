@@ -4,7 +4,7 @@ import { isFunction } from 'lodash-es'
 import React, { ReactElement } from 'react'
 import './index.less'
 
-type Props = {
+export type Props = {
   isLoading: boolean
   /** 默认30px */
   loadingSize?: number

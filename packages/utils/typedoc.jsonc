@@ -1,0 +1,30 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": [
+        "./main/index.ts",
+        "./react/hooks/*",
+        "./react/components/*",
+        "./type/index.ts",
+        "./dom/index.ts",
+        "./axios/index.ts",
+    ],
+    "categorizeByGroup": true,
+    "exclude": [
+        "./**/*.less"
+    ],
+    "out": "doc",
+    "highlightLanguages": [
+        "js",
+        "ts",
+        "tsx",
+        "jsx",
+        "css",
+    ],
+    "lightHighlightTheme": "github-light",
+    "markdownItOptions": {
+        "html": true
+    },
+    "lang": "zh",
+    "cleanOutputDir": true,
+    "excludeReferences": false,
+}

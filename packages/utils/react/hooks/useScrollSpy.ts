@@ -2,8 +2,13 @@ import { useMap } from 'ahooks'
 import { isArray, isString } from 'radash'
 import { useEffect, useMemo, useRef } from 'react'
 
+/**
+ * 用来监听滚到到的元素列表
+ */
 function useScrollSpy(
+  /** 可以传入string query，也可以传入HTMLElement */
   qs: string | HTMLElement[] | HTMLElement,
+  /** useEffect的监听变化参数 */
   effect: any[] = [],
 ) {
   const [enterMap, enterMapSetter] = useMap<

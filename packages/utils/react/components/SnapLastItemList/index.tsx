@@ -13,7 +13,7 @@ import React, {
 } from 'react'
 import './index.less'
 
-type Props = { children: ReactNode } & DetailedHTMLProps<
+export type Props = { children: ReactNode } & DetailedHTMLProps<
   HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
 >
