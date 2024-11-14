@@ -1,11 +1,12 @@
 import type { CSSProperties } from 'react'
-import { noop } from '../../tsconfig/types/global'
+import type { noop } from '../../tsconfig/types/global'
 
 export function getClientRect<T extends HTMLElement>(dom: T): DOMRect {
   let rect: DOMRect
   try {
     rect = dom?.getClientRects()[0]
-  } catch (error) {
+  }
+  catch (error) {
     console.error(error)
   }
   return rect
@@ -21,14 +22,15 @@ export function onWindowLoad() {
   })
 }
 
-export let wait = (time = 0): Promise<void> =>
-  new Promise((res) =>
+export function wait(time = 0): Promise<void> {
+  return new Promise(res =>
     setTimeout(() => {
       res()
-    }, time)
+    }, time),
   )
+}
 
-export let getUrlQuery = (key: string): string => {
+export function getUrlQuery(key: string): string {
   return new URLSearchParams(location.search).get(key) || ''
 }
 
@@ -46,17 +48,16 @@ export function copyText(text: string): void {
 export function createElement<T extends HTMLElement>(
   tag: keyof HTMLElementTagNameMap,
   op?: // | Partial<T>
-  Partial<Omit<T, 'style'>> & {
-    style?: CSSStyleDeclaration | string
-    [k: string]: any
-  }
+    Partial<Omit<T, 'style'>> & {
+      style?: CSSStyleDeclaration | string
+      [k: string]: any
+    },
 ): T {
-  let el = document.createElement(tag)
+  const el = document.createElement(tag)
   Object.assign(el, op)
   return el as T
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 export function isPromiseFunction(fn: Function): fn is () => Promise<any> {
   return (fn as any).__proto__.constructor.toString().includes('AsyncFunction')
 }
@@ -64,14 +65,16 @@ export function isPromiseFunction(fn: Function): fn is () => Promise<any> {
 export const isBoolean = (v: any): v is boolean => typeof v === 'boolean'
 export const isUndefined = (v: any): v is undefined => typeof v === 'undefined'
 export const isString = (v: any): v is string => typeof v === 'string'
-export const isFunction = (v: any): v is (...args: any[]) => any =>
-  typeof v === 'function'
+export function isFunction(v: any): v is (...args: any[]) => any {
+  return typeof v === 'function'
+}
 export const isNumber = (val: any): val is number => typeof val == 'number'
 export const isNull = (val: any): val is null => val == null
-export const isArray = (val: any): val is Array<any> => val instanceof Array
+export const isArray = (val: any): val is Array<any> => Array.isArray(val)
 export const isObject = (val: any): val is object => typeof val == 'object'
-export const isNone = (val: any): val is null | undefined =>
-  isNull(val) || isUndefined(val)
+export function isNone(val: any): val is null | undefined {
+  return isNull(val) || isUndefined(val)
+}
 
 export function debounce<T extends noop>(func: T, wait: number): T {
   let timeout: NodeJS.Timeout
@@ -124,7 +127,7 @@ export function isEqual(obj1: any, obj2: any): boolean {
     if (keys1.length !== keys2.length) {
       return false
     }
-    for (let key of keys1) {
+    for (const key of keys1) {
       if (!isEqual(obj1[key], obj2[key])) {
         return false
       }
@@ -141,9 +144,9 @@ export function cloneDeep<T>(obj: T): T {
     return obj
   }
 
-  let result: any = Array.isArray(obj) ? [] : {}
+  const result: any = Array.isArray(obj) ? [] : {}
 
-  for (let key in obj) {
+  for (const key in obj) {
     if (obj.hasOwnProperty(key)) {
       result[key] = cloneDeep(obj[key])
     }
@@ -153,32 +156,32 @@ export function cloneDeep<T>(obj: T): T {
 }
 
 export function classNames(...args: any[]) {
-  return args.filter((a) => !!a).join(' ')
+  return args.filter(a => !!a).join(' ')
 }
 
 export function omit<T, K extends keyof T>(obj: T, key: K[]): Omit<T, K> {
-  let rs = { ...obj }
-  key.forEach((k) => delete rs[k])
+  const rs = { ...obj }
+  key.forEach(k => delete rs[k])
   return rs
 }
 
 export function getDeepGetter<T, K extends keyof T>(
   tar: T,
-  key: K
+  key: K,
 ): (() => any) | null {
   const getter = Object.getOwnPropertyDescriptor(tar, key)?.get
   return (
-    getter ??
-    (isUndefined(Object.getPrototypeOf(tar))
+    getter
+    ?? (isUndefined(Object.getPrototypeOf(tar))
       ? null
       : getDeepGetter(Object.getPrototypeOf(tar), key))
   )
 }
 
 export function arrayInsert<T>(tarr: T[], index: number, arr: T[]): T[] {
-  let _tarr = [...tarr]
-  let left = _tarr.splice(0, index),
-    right = _tarr
+  const _tarr = [...tarr]
+  const left = _tarr.splice(0, index)
+  const right = _tarr
 
   return [...left, ...arr, ...right]
 }

@@ -8,6 +8,8 @@ export default antfu(
       'ts/no-require-imports': 'off',
       'react/prefer-destructuring-assignment': 'off',
       'react-hooks/exhaustive-deps': 'off',
+      'no-async-promise-executor': 'off',
+      'no-useless-return': 'off',
     },
   },
 )

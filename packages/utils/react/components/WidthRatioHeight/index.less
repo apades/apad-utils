@@ -1,0 +1,16 @@
+.width-ratio{
+  &-padding{
+    position: relative;
+    padding-bottom: var(--padding-bottom);
+  }
+  &-children-container{
+    .wh(100%);
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    &>*{
+      height: 100%;
+    }
+  }
+}

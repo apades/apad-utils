@@ -1,6 +1,6 @@
-import { isNumber, isNull, isObject } from 'lodash-es'
+import { isNull, isNumber, isObject } from 'lodash-es'
 
-type WaitLoop = {
+interface WaitLoop {
   (cb: () => boolean /* | Promise<boolean> */, limitTime?: number): Promise<
     boolean
   >
@@ -14,12 +14,12 @@ type WaitLoop = {
     }>
   ): Promise<boolean>
 }
-export let loopCallbackUntilTrue: WaitLoop = (cb, option) => {
+export const loopCallbackUntilTrue: WaitLoop = (cb, option) => {
   return new Promise(async (res, rej) => {
-    let intervalTime = 500,
-      limitTime = option ?? 5000,
-      // TODO intervalCount
-      intervalCount = 10
+    let intervalTime = 500
+    let limitTime = option ?? 5000
+    // TODO intervalCount
+    const intervalCount = 10
     if (isObject(option)) {
       intervalTime = option.intervalTime ?? intervalTime
       limitTime = option.limitTime ?? limitTime
@@ -35,7 +35,10 @@ export let loopCallbackUntilTrue: WaitLoop = (cb, option) => {
         return (timer = setTimeout(() => {
           loop()
         }, intervalTime))
-      } else return res(true)
+      }
+      else {
+        return res(true)
+      }
     }
     loop()
   })

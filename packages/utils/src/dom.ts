@@ -1,4 +1,4 @@
-import { ValueOf } from '../../tsconfig/types/global'
+import type { ValueOf } from '../../tsconfig/types/global'
 
 export const dq: {
   <K extends keyof HTMLElementTagNameMap>(
@@ -16,7 +16,7 @@ export const dq: {
 } = (selector: string, tar = window.document) => {
   return Array.from(tar.querySelectorAll(selector))
 }
-export let dq1: {
+export const dq1: {
   <K extends keyof HTMLElementTagNameMap>(
     selectors: K,
     tar?: Document | ValueOf<HTMLElementTagNameMap> | Element
@@ -30,14 +30,15 @@ export let dq1: {
     tar?: Document | Element
   ): E | null
 } = (selector: string, tar = window.document) => {
-  let dom = tar.querySelector(selector)
+  const dom = tar.querySelector(selector)
   return dom
 }
 
 export function getTopParent(el: HTMLElement) {
   let p = el
   while (true) {
-    if (p.parentElement) p = p.parentElement
+    if (p.parentElement)
+      p = p.parentElement
     else break
   }
   return p
@@ -55,13 +56,18 @@ export const dq1Parent: {
     selectors: string
   ): E | null
 } = (el: HTMLElement, selectors: string) => {
-  if (!el) return null
+  if (!el)
+    return null
   let p = el
   while (true) {
     const v = p.matches(selectors)
-    if (v) break
+    if (v) {
+      break
+    }
     else {
-      if (p.parentElement) p = p.parentElement
+      if (p.parentElement) {
+        p = p.parentElement
+      }
       else {
         p = null
         break
@@ -79,13 +85,16 @@ export const dqParents: {
     | SVGElementTagNameMap[K][]
   <E extends Element = HTMLDivElement>(el: HTMLElement, selectors: string): E[]
 } = (el: HTMLElement, selectors: string) => {
-  if (!el) return []
+  if (!el)
+    return []
   const rs: HTMLElement[] = []
   let p = el.parentElement
   while (true) {
     const v = p.matches(selectors)
-    if (v) rs.push(p)
-    if (p.parentElement) p = p.parentElement
+    if (v)
+      rs.push(p)
+    if (p.parentElement)
+      p = p.parentElement
     else break
   }
 
@@ -95,10 +104,10 @@ export const dqParents: {
 // TODO 测试，修改到了核心的选择功能
 export function getTopParentsWithSameRect(
   el: HTMLElement,
-  /**例如video,img标签会出现自身高度略小于容器高度 */
+  /** 例如video,img标签会出现自身高度略小于容器高度 */
   offset = 3,
-  /**如果有一个absolute+h-full挂在relative下，可能会使relative的height为0 */
-  skipHeight0 = true
+  /** 如果有一个absolute+h-full挂在relative下，可能会使relative的height为0 */
+  skipHeight0 = true,
 ) {
   const rs: HTMLElement[] = []
   let p = el
@@ -106,21 +115,28 @@ export function getTopParentsWithSameRect(
     const pel = p.parentElement
     if (pel) {
       const isAbHeightFull = skipHeight0
-        ? !pel.clientHeight &&
-          (p.computedStyleMap().get('position') as any).value == 'absolute'
+        ? !pel.clientHeight
+        && (p.computedStyleMap().get('position') as any).value == 'absolute'
         : false
       if (isAbHeightFull) {
         rs.push(p)
         rs.push(p.parentElement)
         p = p.parentElement.parentElement
-      } else if (
-        Math.abs(pel.clientHeight - p.clientHeight) <= offset &&
-        pel.clientWidth == p.clientWidth
+      }
+      else if (
+        Math.abs(pel.clientHeight - p.clientHeight) <= offset
+        && pel.clientWidth == p.clientWidth
       ) {
         rs.push(pel)
         p = p.parentElement
-      } else break
-    } else break
+      }
+      else {
+        break
+      }
+    }
+    else {
+      break
+    }
   }
   return rs
 }
@@ -132,13 +148,13 @@ enum BackType {
 }
 export function getTopParentWithCallback(
   el: HTMLElement,
-  fn: (parent: HTMLElement, el: HTMLElement) => BackType
+  fn: (parent: HTMLElement, el: HTMLElement) => BackType,
 ) {
   let p = el
   while (true) {
     const pel = p.parentElement
     if (pel) {
-      let rs = fn(pel, p)
+      const rs = fn(pel, p)
       switch (rs) {
         case BackType.null: {
           p = null
@@ -150,7 +166,10 @@ export function getTopParentWithCallback(
         }
       }
       p = pel
-    } else break
+    }
+    else {
+      break
+    }
   }
   return p
 }
