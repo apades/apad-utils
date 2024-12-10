@@ -9,6 +9,7 @@ out-of-the-box feature and ts hint support. design with signal pattern(like mobx
 config.ts
 ```ts
 import { config, initSetting } from '@apad/setting-panel'
+import { mobx } from '@apad/setting-panel/react'
 
 type FontSizeType = 'small' | 'middle' | 'big'
 
@@ -42,6 +43,7 @@ export const { configStore, openSettingPanel } = initSetting({
       defaultValue: 'middle',
     }),
   },
+  mobx,
 })
 ```
 App.tsx
@@ -71,10 +73,15 @@ very good! You can replace my incomplete version mini-mobx to real mobx🤣
 config.ts
 ```ts
 // ...
-import * as mobx from 'mobx'
+import { makeAutoObservable, observe } from 'mobx'
+import { observer } from 'mobx-react'
 
 initSetting({
-  mobx,
+  mobx: {
+    makeAutoObservable,
+    observer,
+    observe,
+  },
   // ...
 })
 ```
@@ -89,10 +96,17 @@ export default observer(() => {
 })
 ```
 ### you are not using react framework
+> [!WARNING]
+> Unsupport now, only support in ^0.2 version
+
 I recommend to use preact version, It is smaller than the full react version
 ```ts
 // import { initSetting, config } from '@apad/setting-panel'
 import { config, initSetting } from '@apad/setting-panel/preact'
+// import { mobx } from '@apad/setting-panel/react'
+// Only can use origin mobx
+import { makeAutoObservable, observe } from 'mobx'
+import { observer } from 'mobx-react'
 
 // ...
 ```

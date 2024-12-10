@@ -1,6 +1,6 @@
 {
   "name": "@apad/setting-panel",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "out-of-the-box feature and ts hint support. design with signal pattern(like mobx), provide user interface and easy manage settings",
   "author": "apades",
   "license": "MIT",
@@ -11,7 +11,7 @@
     "directory": "packages/setting-panel"
   },
   "bugs": {
-    "url": "https://github.com/apades/apad-utils/issues"
+    "url": "https://github com/apades/apad-utils/issues"
   },
   "keywords": [
     "settings",
@@ -40,9 +40,9 @@
     "build:local": "pnpm run build:react --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clearLib": "rm -rf ./lib && rm -rf ./dist",
-    "build:preact": "tsup src/index.tsx --dts --format esm,cjs,iife --global-name settingPanel --config ./build/tsup.preact.ts --minify --metafile --env.NODE_ENV production -d preact",
-    "build:react": "tsup src/index.tsx --dts --format esm,cjs --config ./build/tsup.react.ts --minify --metafile --env.NODE_ENV production -d lib",
-    "build:react-utils": "tsup src/react/index.ts --dts --format esm,cjs --minify --metafile --env.NODE_ENV production -d react --shims --treeshake"
+    "build:preact": "tsup src/index.tsx --global-name settingPanel --config ./build/tsup.preact.ts -d preact",
+    "build:react": "tsup src/index.tsx --config ./build/tsup.react.ts -d lib",
+    "build:react-utils": "tsup src/react/index.ts --config ./build/tsup.react.ts -d react"
   },
   "peerDependencies": {
     "react": "^18.0.0",

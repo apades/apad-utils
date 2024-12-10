@@ -9,6 +9,7 @@
 config.ts
 ```ts
 import { config, initSetting } from '@apad/setting-panel'
+import { mobx } from '@apad/setting-panel/react'
 
 type FontSizeType = 'small' | 'middle' | 'big'
 
@@ -42,6 +43,7 @@ export const { configStore, openSettingPanel } = initSetting({
       defaultValue: 'middle',
     }),
   },
+  mobx,
 })
 ```
 App.tsx
@@ -89,6 +91,9 @@ export default observer(() => {
 })
 ```
 ### 如果你没在用react
+> [!WARNING]
+> 还不支持，请用^0.2版本
+
 推荐换preact版本，比起完整的react版本会节省更多空间
 ```ts
 // import { initSetting, config } from '@apad/setting-panel'

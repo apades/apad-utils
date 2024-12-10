@@ -1,7 +1,7 @@
-import { defineConfig } from 'tsup'
+import path from 'node:path'
 import { lessLoader } from 'esbuild-plugin-less'
 import { replace } from 'esbuild-plugin-replace'
-import path from 'path'
+import { defineConfig } from 'tsup'
 
 const pr = (...p: any) => path.resolve(__dirname, ...p)
 
@@ -11,10 +11,10 @@ export default defineConfig({
     replace({
       'preact/hooks': 'react',
       'preact/compat': 'react',
-      preact: 'react',
+      'preact': 'react',
     }),
   ],
-  esbuildOptions(option, ctx) {
+  esbuildOptions(option) {
     option.alias = option.alias || {}
     Object.assign(option.alias, {
       entry: pr('../src/entry-react'),
@@ -24,4 +24,10 @@ export default defineConfig({
   shims: true,
   target: 'esnext',
   tsconfig: pr('../tsconfig.m.json'),
+  format: ['esm', 'cjs'],
+  dts: true,
+  minify: true,
+  env: {
+    NODE_ENV: 'production',
+  },
 })
