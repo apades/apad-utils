@@ -2,23 +2,31 @@
   "name": "@apad/setting-panel",
   "version": "0.2.2",
   "description": "out-of-the-box feature and ts hint support. design with signal pattern(like mobx), provide user interface and easy manage settings",
-  "main": "./lib/index.js",
-  "module": "./lib/index.mjs",
+  "author": "apades",
+  "license": "MIT",
   "homepage": "https://github.com/apades/apad-utils/tree/master/packages/setting-panel",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apades/apad-utils.git",
     "directory": "packages/setting-panel"
   },
-  "files": [
-    "lib",
-    "react",
-    "preact",
-    "i18n"
-  ],
   "bugs": {
     "url": "https://github.com/apades/apad-utils/issues"
   },
+  "keywords": [
+    "settings",
+    "ui",
+    "config",
+    "mobx"
+  ],
+  "main": "./lib/index.js",
+  "module": "./lib/index.mjs",
+  "files": [
+    "i18n",
+    "lib",
+    "preact",
+    "react"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -29,20 +37,17 @@
     "dev": "vite serve -c vite.config.js test",
     "build:testWeb": "vite build -c vite.config.js test",
     "build": "pnpm run clearLib && pnpm run build:preact && pnpm run build:react && pnpm run build:react-utils && cp -r src/i18n/* i18n",
+    "build:local": "pnpm run build:react --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
     "clearLib": "rm -rf ./lib && rm -rf ./dist",
     "build:preact": "tsup src/index.tsx --dts --format esm,cjs,iife --global-name settingPanel --config ./build/tsup.preact.ts --minify --metafile --env.NODE_ENV production -d preact",
     "build:react": "tsup src/index.tsx --dts --format esm,cjs --config ./build/tsup.react.ts --minify --metafile --env.NODE_ENV production -d lib",
     "build:react-utils": "tsup src/react/index.ts --dts --format esm,cjs --minify --metafile --env.NODE_ENV production -d react --shims --treeshake"
   },
-  "keywords": [
-    "settings",
-    "ui",
-    "config",
-    "mobx"
-  ],
-  "author": "apades",
-  "license": "MIT",
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -59,9 +64,5 @@
     "preact": "^10.16.0",
     "preact-compat": "^3.19.0",
     "tailwindcss": "^3.3.3"
-  },
-  "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
   }
 }

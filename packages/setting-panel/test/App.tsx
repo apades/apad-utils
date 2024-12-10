@@ -1,9 +1,10 @@
-import { config, createConfigStore } from '../src'
-import { FC, useState } from 'react'
-import UIComponent from '../src/UI'
+import type { FC } from 'react'
 import { wait } from '@pkgs/utils/src/utils'
-import { observer } from '../src/react'
+import { useState } from 'react'
+import { config, createConfigStore } from '../src'
 import en from '../src/i18n/en.json'
+import { observer } from '../src/react'
+import UIComponent from '../src/UI'
 import settings from './settings'
 
 const configStore = createConfigStore(settings)
@@ -11,6 +12,36 @@ window.configStore = configStore
 // observe(configStore, (change) => {
 //   console.log('change', change)
 // })
+
+const ObservePanel: FC = observer(() => {
+  const [isA2, setA2] = useState(false)
+  return (
+    <div>
+      <div>
+        切换A2
+        <input
+          type="checkbox"
+          onChange={e => setA2((e.target as HTMLInputElement).checked)}
+        />
+      </div>
+      <div>
+        {isA2
+          ? (
+              <div>
+                a2:
+                {configStore.a2}
+              </div>
+            )
+          : (
+              <div>
+                a1:
+                {configStore.a1}
+              </div>
+            )}
+      </div>
+    </div>
+  )
+})
 
 const App: FC = () => {
   return (
@@ -43,27 +74,5 @@ const App: FC = () => {
     </div>
   )
 }
-
-const ObservePanel: FC = observer(() => {
-  let [isA2, setA2] = useState(false)
-  return (
-    <div>
-      <div>
-        切换A2
-        <input
-          type="checkbox"
-          onChange={(e) => setA2((e.target as HTMLInputElement).checked)}
-        />
-      </div>
-      <div>
-        {isA2 ? (
-          <div>a2: {configStore.a2}</div>
-        ) : (
-          <div>a1: {configStore.a1}</div>
-        )}
-      </div>
-    </div>
-  )
-})
 
 export default App

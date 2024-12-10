@@ -1,7 +1,7 @@
+import type { FC } from 'react'
 import { wait } from '@pkgs/utils/src/utils'
 import * as mobx from 'mobx'
 import { observer } from 'mobx-react'
-import { FC } from 'react'
 import ReactDOM from 'react-dom/client'
 import { config, initSetting } from '../src'
 import settings from './settings'
@@ -26,6 +26,17 @@ temporarySetConfigStore('b1', true)
 // }, 300)
 window.configStore = configStore
 
+const ObservePanel: FC = observer(() => {
+  return (
+    <div>
+      <div>
+        a1:
+        {configStore.a1}
+      </div>
+    </div>
+  )
+})
+
 // configStore.b1 = true
 const App: FC = () => {
   return (
@@ -45,12 +56,4 @@ const App: FC = () => {
   )
 }
 
-const ObservePanel: FC = observer(() => {
-  return (
-    <div>
-      <div>a1: {configStore.a1}</div>
-    </div>
-  )
-})
-
-ReactDOM.createRoot(document.getElementById('app')).render(<App />)
+ReactDOM.createRoot(document.getElementById('app')).render(<App /> as any)

@@ -1,13 +1,15 @@
-import AsyncLock from '@pkgs/utils/src/AsyncLock'
-import { TypeOfMapToInstanceTypeMap } from '../../../../tsconfig/types/global'
-import InjectorBase, { InjectorBaseProps } from '../../core/base'
+import type { TypeOfMapToInstanceTypeMap } from '../../../../tsconfig/types/global'
+import type { InjectorBaseProps } from '../../core/base'
+import type { FeatEntryInitConfig } from './types'
+import { AsyncLock } from '@pkgs/utils/main'
+import InjectorBase from '../../core/base'
 import DomEventsClient from '../domEvents/client'
 import EvalClient from '../eval/client'
 import FetchClient from '../fetch/client'
 import RouteClient from '../route/client'
 import TriggerEventsClient from '../triggerEvents/client'
 import VisibilityStateClient from '../visibilityState/client'
-import { ENTRY, FeatEntryInitConfig } from './types'
+import { ENTRY } from './types'
 
 export const configToClientMap = {
   domEvents: DomEventsClient,
@@ -32,6 +34,7 @@ export default class EntryClient extends InjectorBase {
     }
     return EntryClient._EntryClient
   }
+
   init(): void {
     this.loadedFeatMap = new Map()
     this.injectorLoadedLock = new AsyncLock()
@@ -39,6 +42,7 @@ export default class EntryClient extends InjectorBase {
 
     this.waitInjectorLoad()
   }
+
   protected onUnmount(): void {
     this.loadedFeatMap = null
   }
@@ -52,11 +56,13 @@ export default class EntryClient extends InjectorBase {
     // }
     // this.messager.onMessage('load', handleLoad)
   }
+
   protected featConfig: FeatEntryInitConfig
   loadedFeatMap: Map<string, InjectorBase>
   initFeats(initConfig: FeatEntryInitConfig) {
     this.updateFeats(initConfig)
   }
+
   async updateFeats(newFeatConfig: FeatEntryInitConfig) {
     // await this.injectorLoadedLock.waiting()
     await this.send('updateFeats', { newFeatConfig })
@@ -77,7 +83,7 @@ export default class EntryClient extends InjectorBase {
           this.loadedFeatMap.delete(key)
           return
         }
-      }
+      },
     )
   }
 }

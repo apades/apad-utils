@@ -10,6 +10,7 @@ export default antfu(
       'react-hooks/exhaustive-deps': 'off',
       'no-async-promise-executor': 'off',
       'no-useless-return': 'off',
+      'no-console': 'off',
     },
   },
 )

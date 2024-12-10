@@ -1,6 +1,7 @@
-import AsyncLock from '@pkgs/utils/src/AsyncLock'
-import { noop } from '../../../../tsconfig/types/global'
-import InjectorBase, { InjectorBaseProps } from '../../core/base'
+import type { noop } from '@pkgs/tsconfig/types/global'
+import type { InjectorBaseProps } from '../../core/base'
+import { AsyncLock } from '@pkgs/utils/main'
+import InjectorBase from '../../core/base'
 import { EVAL } from './types'
 
 export default class EvalClient extends InjectorBase {
@@ -15,6 +16,7 @@ export default class EvalClient extends InjectorBase {
     }
     return EvalClient._EvalClient
   }
+
   init(): void {}
   protected onUnmount(): void {}
 
@@ -25,16 +27,15 @@ export default class EvalClient extends InjectorBase {
   }
 
   /**
-   * 
+   *
    * @argument fn 传入的cb顺序需要跟args的顺序一样，然后里面return需要返回一个清除函数。
-   * @returns {function} 会调用fn的return清除函数的函数
-   * 
+   * @returns {Function} 会调用fn的return清除函数的函数
+   *
    * 例子
    * ```js
    * runWithCallback(
    * function (cb) {
       inTopWindowEventTarget.addEventListener('customEvent', cb)
-
       return () => {
         inTopWindowEventTarget.removeEventListener('customEvent', cb)
       }
@@ -49,13 +50,14 @@ export default class EvalClient extends InjectorBase {
    */
   runWithCallback(
     fn: (...args: any[]) => () => void,
-    args?: any[]
+    args?: any[],
   ): () => void {
     const lock = new AsyncLock()
     const id = new Date().getTime()
 
     const newArgs = args.map((arg, i) => {
-      if (typeof arg == 'function') return { type: 'function', arg: '' }
+      if (typeof arg == 'function')
+        return { type: 'function', arg: '' }
       return { type: 'normal', arg }
     })
     this.send('runWithCallback', {
@@ -68,7 +70,8 @@ export default class EvalClient extends InjectorBase {
 
     const handleOnCallbackRun = (res: any) => {
       const { index, data } = res
-      if (res.id != id) return
+      if (res.id != id)
+        return
       args[index](...data)
     }
     this.on('runWithCallback-callbackRun', handleOnCallbackRun)

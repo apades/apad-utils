@@ -1,12 +1,15 @@
-import InjectorBase, { InjectorBaseProps } from '../../core/base'
+import type { InjectorBaseProps } from '../../core/base'
+import type {
+  KeyboardTrigger,
+  MouseTrigger,
+} from './types'
+import { AsyncLock } from '@pkgs/utils/main'
+import InjectorBase from '../../core/base'
 import {
   KeyboardEvents,
-  KeyboardTrigger,
   MouseEvents,
-  MouseTrigger,
   TRIGGER_EVENTS,
 } from './types'
-import AsyncLock from '@pkgs/utils/src/AsyncLock'
 
 export default class TriggerEventsClient extends InjectorBase {
   static _TriggerEventsClient: TriggerEventsClient
@@ -20,23 +23,26 @@ export default class TriggerEventsClient extends InjectorBase {
     }
     return TriggerEventsClient._TriggerEventsClient
   }
+
   init(): void {
     this.initTriggerFunctions(MouseEvents)
     this.initTriggerFunctions(KeyboardEvents)
   }
+
   protected onUnmount(): void {
     this.mouse = null
     this.keyboard = null
   }
 
-  /**插件cs到world是传不了dom的 */
+  /** 插件cs到world是传不了dom的 */
   mouse: MouseTrigger<string>
   keyboard: KeyboardTrigger<string>
 
   protected initTriggerFunctions<
-    E extends typeof MouseEvents | typeof KeyboardEvents
-  >(events: E) {
-    let rs: any = {}
+    E extends typeof MouseEvents | typeof KeyboardEvents,
+  >(events: E,
+  ) {
+    const rs: any = {}
     for (const event in events) {
       rs[event] = (el: string, ext?: any) => {
         this.send(event, { el, ext })

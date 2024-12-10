@@ -1,7 +1,8 @@
+import type { FC } from 'react'
 import { wait } from '@pkgs/utils/src/utils'
 import * as mobx from 'mobx'
 import { observer } from 'mobx-react'
-import { FC, useState } from 'react'
+import { useState } from 'react'
 import ReactDOM from 'react-dom/client'
 import { initSetting } from '../lib/index'
 import { config } from '../src'
@@ -38,6 +39,36 @@ window.configStore = configStore
 //   console.log('change', change)
 // })
 
+const ObservePanel: FC = observer(() => {
+  const [isA2, setA2] = useState(false)
+  return (
+    <div>
+      <p>
+        切换A2
+        <input
+          type="checkbox"
+          onChange={e => setA2((e.target as HTMLInputElement).checked)}
+        />
+      </p>
+      <p>
+        {isA2
+          ? (
+              <div>
+                a2:
+                {configStore.a2}
+              </div>
+            )
+          : (
+              <div>
+                a1:
+                {configStore.a1}
+              </div>
+            )}
+      </p>
+    </div>
+  )
+})
+
 const App: FC = () => {
   return (
     <div
@@ -56,26 +87,4 @@ const App: FC = () => {
   )
 }
 
-const ObservePanel: FC = observer(() => {
-  let [isA2, setA2] = useState(false)
-  return (
-    <div>
-      <p>
-        切换A2
-        <input
-          type="checkbox"
-          onChange={(e) => setA2((e.target as HTMLInputElement).checked)}
-        />
-      </p>
-      <p>
-        {isA2 ? (
-          <div>a2: {configStore.a2}</div>
-        ) : (
-          <div>a1: {configStore.a1}</div>
-        )}
-      </p>
-    </div>
-  )
-})
-
-ReactDOM.createRoot(document.getElementById('app')).render(<App />)
+ReactDOM.createRoot(document.getElementById('app')).render(<App /> as any)

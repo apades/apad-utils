@@ -1,20 +1,20 @@
-import AsyncLock from '@pkgs/utils/src/AsyncLock'
+import type mobx from 'mobx'
+import type { ConfigField, InitOptions, InitSettingReturn } from './types'
+import { AsyncLock } from '@pkgs/utils/main'
 import { createElement, wait } from '@pkgs/utils/src/utils'
 import { render } from 'entry'
-import type mobx from 'mobx'
-import UIComponent, { saveKey } from './UI'
 import en from './i18n/en.json'
-import './index.less'
 import { makeAutoObservable, observe } from './mobx-mini'
+import UIComponent, { saveKey } from './UI'
+import './index.less'
 import './tailwind.css'
-import { ConfigField, InitOptions, InitSettingReturn } from './types'
 
 export function config<T>(config: ConfigField<T>) {
   return config
 }
 
 export function initSetting<Map extends Record<string, any>>(
-  options: InitOptions<Map>
+  options: InitOptions<Map>,
 ): InitSettingReturn<Map> {
   const baseOption: Partial<InitOptions<Map>> = {
     savePosition: 'localStorage',
@@ -29,7 +29,7 @@ export function initSetting<Map extends Record<string, any>>(
 
   let isLoading = true
   let savedConfig = {}
-  let asyncInitLock = new AsyncLock()
+  const asyncInitLock = new AsyncLock()
   const configStore = createConfigStore(options.settings, options.mobx)
 
   const updateSavedConfig = () => {
@@ -59,16 +59,17 @@ export function initSetting<Map extends Record<string, any>>(
       ;(globalThis as any)?.__spSetLoading?.(false)
       ;(globalThis as any)?.__spSetSavedConfig?.(savedConfig)
     })
-  } else {
+  }
+  else {
     asyncInitLock.ok()
     isLoading = false
   }
 
-  let hasInit = false,
-    rootEl: HTMLElement = null
+  let hasInit = false
+  let rootEl: HTMLElement = null
   function openSettingPanel(
-    /**渲染的位置，不传默认是开全局modal */
-    renderTarget?: HTMLElement
+    /** 渲染的位置，不传默认是开全局modal */
+    renderTarget?: HTMLElement,
   ) {
     if (!hasInit) {
       rootEl = createElement('div')
@@ -78,12 +79,13 @@ export function initSetting<Map extends Record<string, any>>(
       if (options.useShadowDom) {
         rootEl.attachShadow({ mode: 'open' })
         rootEl.shadowRoot.appendChild(renderEl)
-      } else {
+      }
+      else {
         rootEl.appendChild(renderEl)
       }
 
       if (options.styleHref || import.meta.url) {
-        let style = createElement('link', {
+        const style = createElement('link', {
           rel: 'stylesheet',
           type: 'text/css',
           href:
@@ -106,7 +108,7 @@ export function initSetting<Map extends Record<string, any>>(
           savedConfig={savedConfig}
           {...options}
         />,
-        renderTo
+        renderTo,
       )
 
       if (!renderTarget) {
@@ -145,7 +147,10 @@ export function initSetting<Map extends Record<string, any>>(
         options.mobx.runInAction(() => {
           configStore[key] = val
         })
-      } else configStore[key] = val
+      }
+      else {
+        configStore[key] = val
+      }
 
       savedConfig = { ...savedConfig, [key]: val }
       tempConfigKeys = [...tempConfigKeys, key as string]
@@ -159,7 +164,7 @@ export function createConfigStore<Map extends Record<string, any>>(
   settings: {
     [K in keyof Map]: ConfigField<Map[K]>
   },
-  _mobx?: typeof mobx
+  _mobx?: typeof mobx,
 ): Map {
   const _makeAutoObservable: any = _mobx
     ? _mobx.makeAutoObservable
@@ -170,7 +175,7 @@ export function createConfigStore<Map extends Record<string, any>>(
         configMap[key] = config.defaultValue ?? config
         return configMap
       },
-      {} as Record<any, any>
-    )
+      {} as Record<any, any>,
+    ),
   )
 }
