@@ -80,7 +80,7 @@ const App: FC = () => {
         marginTop: 24,
       }}
     >
-      <button onClick={openSettingPanel}>open</button>
+      <button onClick={() => openSettingPanel()}>open</button>
       <div style={{ marginTop: 24 }}></div>
       <ObservePanel />
     </div>

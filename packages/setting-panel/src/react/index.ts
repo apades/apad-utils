@@ -1,17 +1,15 @@
-import React, { forwardRef, memo } from 'react'
+import type React from 'react'
+import type { Rec } from '../../../tsconfig/types/global'
+import { forwardRef, memo } from 'react'
 import { useObserver } from './useObserver'
-import { Rec } from '../../../tsconfig/types/global'
 
 const hasSymbol = typeof Symbol === 'function' && Symbol.for
 // Using react-is had some issues (and operates on elements, not on types), see #608 / #609
 const ReactForwardRefSymbol = hasSymbol
   ? Symbol.for('react.forward_ref')
-  : typeof forwardRef === 'function' &&
-    forwardRef((props: any) => null)['$$typeof']
-
-const ReactMemoSymbol = hasSymbol
-  ? Symbol.for('react.memo')
-  : typeof memo === 'function' && memo((props: any) => null)['$$typeof']
+  : typeof forwardRef === 'function'
+    // eslint-disable-next-line react/ensure-forward-ref-using-ref
+    && forwardRef(() => null).$$typeof
 
 export function observer<P extends object, TRef = Rec>(
   baseComponent:
@@ -19,33 +17,31 @@ export function observer<P extends object, TRef = Rec>(
     | React.FunctionComponent<P>
     | React.ForwardRefExoticComponent<
         React.PropsWithoutRef<P> & React.RefAttributes<TRef>
-      >
+    >,
 ) {
   let render = baseComponent
 
-  const baseComponentName = baseComponent.displayName || baseComponent.name
-
-  // If already wrapped with forwardRef, unwrap,
   // so we can patch render and apply memo
   if (
-    ReactForwardRefSymbol &&
-    (baseComponent as any)['$$typeof'] === ReactForwardRefSymbol
+    ReactForwardRefSymbol
+    && (baseComponent as any).$$typeof === ReactForwardRefSymbol
   ) {
-    render = (baseComponent as any)['render']
+    render = (baseComponent as any).render
     if (typeof render !== 'function') {
-      throw new Error(
-        `[mobx-react-lite] \`render\` property of ForwardRef was not a function`
+      throw new TypeError(
+        `[mobx-react-lite] \`render\` property of ForwardRef was not a function`,
       )
     }
   }
 
   let observerComponent = (props: any, ref: React.Ref<TRef>) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     return useObserver(() => render(props, ref))
   }
 
   // Inherit original name and displayName, see #3438
-  ;(observerComponent as React.FunctionComponent).displayName =
-    baseComponent.displayName
+  ;(observerComponent as React.FunctionComponent).displayName
+    = baseComponent.displayName
   Object.defineProperty(observerComponent, 'name', {
     value: baseComponent.name,
     writable: true,

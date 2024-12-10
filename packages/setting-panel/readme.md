@@ -8,7 +8,7 @@ out-of-the-box feature and ts hint support. design with signal pattern(like mobx
 
 config.ts
 ```ts
-import { initSetting, config } from '@apad/setting-panel'
+import { config, initSetting } from '@apad/setting-panel'
 
 type FontSizeType = 'small' | 'middle' | 'big'
 
@@ -56,7 +56,9 @@ export default observer(() => {
       style={{ background: configStore.bg }}
       onClick={() => openSettingPanel()}
     >
-      type: {configStore.type}
+      type:
+      {' '}
+      {configStore.type}
     </div>
   )
 })
@@ -72,8 +74,8 @@ config.ts
 import * as mobx from 'mobx'
 
 initSetting({
-    mobx,
-    // ...
+  mobx,
+  // ...
 })
 ```
 App.tsx
@@ -90,7 +92,7 @@ export default observer(() => {
 I recommend to use preact version, It is smaller than the full react version
 ```ts
 // import { initSetting, config } from '@apad/setting-panel'
-import { initSetting, config } from '@apad/setting-panel/preact'
+import { config, initSetting } from '@apad/setting-panel/preact'
 
 // ...
 ```

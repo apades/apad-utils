@@ -1,24 +1,24 @@
+import type { Rec } from '@pkgs/tsconfig/types/global'
+import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import { cloneDeep, isString } from '@pkgs/utils/src/utils'
 import mitt from 'mitt'
-import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
-import { Rec } from '@pkgs/tsconfig/types/global'
 
 const obverseMap = new Map<any, { eventEmitter: ReturnType<typeof mitt> }>()
 ;(globalThis as any).__obverseMap = obverseMap
 
-type EventProps = { oldValue: any; newValue: any; key: any }
+interface EventProps { oldValue: any, newValue: any, key: any }
 export function makeAutoObservable<T extends Rec>(target: T): T {
   const _target = cloneDeep(target)
 
   const proxy = new Proxy(_target, {
-    get(target, key: string, receiver) {
+    get(target, key: string) {
       obverseMap.get(proxy).eventEmitter.emit(`get`, {
         value: _target[key],
         key,
       })
       return _target[key]
     },
-    set(target, key: string, newValue, receiver) {
+    set(target, key: string, newValue) {
       obverseMap.get(proxy).eventEmitter.emit(`set`, {
         oldValue: _target[key],
         newValue,
@@ -34,7 +34,7 @@ export function makeAutoObservable<T extends Rec>(target: T): T {
   return proxy
 }
 
-type Observe<Map extends Rec> = {
+interface Observe<Map extends Rec> {
   <Key extends keyof Map>(
     observableMap: Rec,
     property: Key,
@@ -52,7 +52,8 @@ export const observe: Observe<Rec> = (...args: any) => {
   let listener: (props: EventProps) => void
   if (isString(args[1])) {
     listener = (props) => {
-      if (props.key !== args[1]) return
+      if (props.key !== args[1])
+        return
       const update: IValueDidChange = {
         debugObjectName: '---',
         newValue: props.newValue,
@@ -63,7 +64,8 @@ export const observe: Observe<Rec> = (...args: any) => {
       }
       args[2](update)
     }
-  } else {
+  }
+  else {
     listener = (props) => {
       const update: IObjectDidChange = {
         debugObjectName: '---',

@@ -10,11 +10,12 @@ export const REGISTRY_FINALIZE_AFTER = 10_000
 export const REGISTRY_SWEEP_INTERVAL = 10_000
 
 export class TimerBasedFinalizationRegistry<T>
-  implements FinalizationRegistryType<T> {
+implements FinalizationRegistryType<T> {
   private registrations: Map<
     unknown,
-    { value: T; registeredAt: number }
+    { value: T, registeredAt: number }
   > = new Map()
+
   private sweepTimeout: ReturnType<typeof setTimeout> | undefined
 
   constructor(private readonly finalize: (value: T) => void) {}
@@ -63,7 +64,7 @@ export class TimerBasedFinalizationRegistry<T>
   }
 }
 
-export const UniversalFinalizationRegistry =
-  typeof FinalizationRegistry !== 'undefined'
+export const UniversalFinalizationRegistry
+  = typeof FinalizationRegistry !== 'undefined'
     ? FinalizationRegistry
     : TimerBasedFinalizationRegistry

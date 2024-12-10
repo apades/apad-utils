@@ -11,6 +11,8 @@ export default antfu(
       'no-async-promise-executor': 'off',
       'no-useless-return': 'off',
       'no-console': 'off',
+      'ts/no-use-before-define': 'off',
+      'react-dom/no-missing-button-type': 'off',
     },
   },
 )

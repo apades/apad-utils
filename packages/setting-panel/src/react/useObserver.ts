@@ -5,21 +5,22 @@ export function useObserver<T>(render: () => T): T {
   const updateRef = useRef<(e: any) => void>(() => 1)
 
   const values = [...(globalThis as any).__obverseMap.values()]
-  let listenKeys: string[] = []
-  let getListen = (e: any) => {
+  const listenKeys: string[] = []
+  const getListen = (e: any) => {
     listenKeys.push(e.key)
   }
   values.forEach(({ eventEmitter }) => {
     eventEmitter.on('get', getListen)
     eventEmitter.off('set', updateRef.current)
   })
-  let renderResult: T = render()
+  const renderResult: T = render()
   values.forEach(({ eventEmitter }) => {
     eventEmitter.off('get', getListen)
 
     const update = (e: any) => {
-      if (!listenKeys.includes(e.key)) return
-      forceUpdate(Symbol())
+      if (!listenKeys.includes(e.key))
+        return
+      forceUpdate(Symbol(''))
     }
     updateRef.current = update
     eventEmitter.on('set', updateRef.current)
