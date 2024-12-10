@@ -1,15 +1,16 @@
 import { createElement } from '@pkgs/utils/src/utils'
-import { isBoolean, isNumber, isString } from 'lodash'
+import { isBoolean, isNumber, isString } from 'lodash-es'
 import { getEnv } from './env'
 
 export * from './env'
 
 export function getEnvConfigurePanel() {
-  let handleOnChange = (key: string, val: any, isClear?: boolean) => {
-    let cover_env = JSON.parse(localStorage['cover_env'] || `{}`)
-    if (isClear) delete cover_env[key]
+  const handleOnChange = (key: string, val: any, isClear?: boolean) => {
+    const cover_env = JSON.parse(localStorage.cover_env || `{}`)
+    if (isClear)
+      delete cover_env[key]
     else cover_env[key] = val
-    localStorage['cover_env'] = JSON.stringify(cover_env)
+    localStorage.cover_env = JSON.stringify(cover_env)
   }
 
   const rootEl = createElement('div', {
@@ -17,8 +18,8 @@ export function getEnvConfigurePanel() {
   })
 
   Object.entries(getEnv()).map(([key, val]) => {
-    let renderInput = (): HTMLElement => {
-      if (isBoolean(val))
+    const renderInput = (): HTMLElement => {
+      if (isBoolean(val)) {
         return createElement<HTMLInputElement>('input', {
           type: 'checkbox',
           onchange(e: any) {
@@ -26,6 +27,7 @@ export function getEnvConfigurePanel() {
           },
           defaultChecked: val,
         })
+      }
       if (isString(val) || isNumber(val)) {
         // const isnumber = isNumber(val)
         return createElement<HTMLInputElement>('input', {
@@ -33,7 +35,7 @@ export function getEnvConfigurePanel() {
             const val = e.target.value
             handleOnChange(key, val)
           },
-          defaultValue: val + '',
+          defaultValue: `${val}`,
           style: 'width: 100%',
         })
       }
@@ -41,19 +43,19 @@ export function getEnvConfigurePanel() {
     }
 
     const leftEl = createElement('div', {
-        style: 'flex: 0 0 16%',
-        innerText: `${key}:`,
-      }),
-      centerEl = createElement('div', {
-        style: 'flex:1',
-      }),
-      resetEl = createElement('button', {
-        innerText: 'reset',
-        onclick() {
-          handleOnChange(key, null, true)
-          location.reload()
-        },
-      })
+      style: 'flex: 0 0 16%',
+      innerText: `${key}:`,
+    })
+    const centerEl = createElement('div', {
+      style: 'flex:1',
+    })
+    const resetEl = createElement('button', {
+      innerText: 'reset',
+      onclick() {
+        handleOnChange(key, null, true)
+        location.reload()
+      },
+    })
 
     centerEl.appendChild(renderInput())
 
@@ -94,7 +96,8 @@ export function showEnvConfigureModal(width = 300) {
     modalEl.appendChild(panel)
     modalEl.appendChild(closeBtn)
     document.body.appendChild(modalEl)
-  } else {
+  }
+  else {
     modalEl.style.visibility = 'visible'
   }
 }

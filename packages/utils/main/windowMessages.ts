@@ -1,4 +1,4 @@
-import { isArray, isUndefined } from 'lodash'
+import { isArray, isUndefined } from 'lodash-es'
 import { tryit } from 'radash'
 import { dq } from '../dom'
 import Events2 from './Events2'

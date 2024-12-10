@@ -6,7 +6,6 @@
   },
   "dependencies": {
     "fs-extra": "^11.1.0",
-    "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "plasmo": "^0.83.0",
     "react": "^18.2.0",

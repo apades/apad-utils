@@ -19,11 +19,11 @@ export type Props = {
   settings: UISettings
   configStore: Record<string, any>
   savedConfig?: UISettings
-  tempConfigKeys?: string[]
-  rootEl?: HTMLElement
-  isLoading: boolean
   i18n: I18n
   onClose: () => void
+  isModal?: boolean
+  styleHref?: string
+  config: { isLoading: boolean }
 } & InitOptions<Record<string, any>>
 
 const SettingPanel: FC<Props> = (props) => {
@@ -32,14 +32,10 @@ const SettingPanel: FC<Props> = (props) => {
     if (props.savedConfig)
       _setNewConfig(props.savedConfig)
   }, [props.savedConfig])
-  // window.newConfig = newConfig
-  // const toast = useToast()
 
   const setNewConfig = useMemoizedFn((key: string, val: any) => {
     if (props.changeConfigStoreWithSettingPanelChange)
-      // runInAction(() => {
       props.configStore[key] = val
-    // })
 
     _setNewConfig({ ...newConfig, [key]: val })
 
@@ -93,7 +89,7 @@ const SettingPanel: FC<Props> = (props) => {
     cateBaseConfig,
     cateAdvConfig,
     advConfigEntries,
-    baseConfigEntries,
+    // baseConfigEntries,
     cateAdvConfigEntries,
     cateBaseConfigEntries,
   } = useMemo(() => {
@@ -158,41 +154,42 @@ const SettingPanel: FC<Props> = (props) => {
     }
     return (
       <div className="setting-panel cate-type">
-        <div className="category-panel">
-          <div className="left">
-            {[[props.i18n.main], ...cateBaseConfigEntries].map(([key]) => (
-              <div
-                key={key}
-                className={classNames(nowCategory === key && 'active')}
-                onClick={handleLeftClick(key)}
-              >
-                {key}
-              </div>
-            ))}
+        <LoadingContainer isLoading={props.config.isLoading}>
+          <div className="category-panel">
+            <div className="left">
+              {[[props.i18n.main], ...cateBaseConfigEntries].map(([key]) => (
+                <div
+                  key={key}
+                  className={classNames(nowCategory === key && 'active')}
+                  onClick={handleLeftClick(key)}
+                >
+                  {key}
+                </div>
+              ))}
+            </div>
+            <div className="right">
+              <ConfigEntriesBox
+                i18n={props.i18n}
+                config={nowConfig}
+                newConfig={newConfig}
+                setNewConfig={setNewConfig}
+                resetConfig={resetConfig}
+              />
+              {showAdv && (
+                <Summary title={props.i18n.noRecommended} open={false}>
+                  <ConfigEntriesBox
+                    i18n={props.i18n}
+                    config={nowAdvConfig}
+                    newConfig={newConfig}
+                    setNewConfig={setNewConfig}
+                    resetConfig={resetConfig}
+                  />
+                </Summary>
+              )}
+            </div>
           </div>
-          <div className="right">
-            <ConfigEntriesBox
-              i18n={props.i18n}
-              tempConfigKeys={props.tempConfigKeys}
-              config={nowConfig}
-              newConfig={newConfig}
-              setNewConfig={setNewConfig}
-              resetConfig={resetConfig}
-            />
-            {showAdv && (
-              <Summary title={props.i18n.noRecommended} open={false}>
-                <ConfigEntriesBox
-                  i18n={props.i18n}
-                  tempConfigKeys={props.tempConfigKeys}
-                  config={nowAdvConfig}
-                  newConfig={newConfig}
-                  setNewConfig={setNewConfig}
-                  resetConfig={resetConfig}
-                />
-              </Summary>
-            )}
-          </div>
-        </div>
+        </LoadingContainer>
+
       </div>
     )
   }
@@ -201,7 +198,6 @@ const SettingPanel: FC<Props> = (props) => {
     <div className="setting-panel one-type">
       <ConfigEntriesBox
         i18n={props.i18n}
-        tempConfigKeys={props.tempConfigKeys}
         config={baseConfig}
         newConfig={newConfig}
         setNewConfig={setNewConfig}
@@ -211,7 +207,6 @@ const SettingPanel: FC<Props> = (props) => {
         <Summary title={props.i18n.noRecommended} open={false}>
           <ConfigEntriesBox
             i18n={props.i18n}
-            tempConfigKeys={props.tempConfigKeys}
             config={advConfig}
             newConfig={newConfig}
             setNewConfig={setNewConfig}
@@ -236,34 +231,30 @@ const Summary: FC<{
 }
 
 export const saveKey = '__settingPanel_config_save'
+
+const ShouldShadowRootContainer: FC<Props> = (props) => {
+  const children = props.children
+  if (props.useShadowDom)
+    return <ShadowRootContainer>{children}</ShadowRootContainer>
+  return children as any
+}
+
 const UIComponent: FC<Props> = (props) => {
-  const [isLoading, setLoading] = useState(props.isLoading)
-  const [savedConfig, setSavedConfig] = useState<Partial<BaseConfig>>(
-    props.savedConfig,
-  )
-  const [tempConfigKeys, setTempConfigKeys] = useState<string[]>([])
-  useOnce(async () => {
-    ;(globalThis as any).__spSetLoading = setLoading
-    ;(globalThis as any).__spSetSavedConfig = setSavedConfig
-    ;(globalThis as any).__spSetTempConfigKeys = setTempConfigKeys
-    return () => {
-      delete (globalThis as any).__spSetLoading
-      delete (globalThis as any).__spSetSavedConfig
-      delete (globalThis as any).__spSetTempConfigKeys
-    }
-  })
+  // 放这是因为在render那的observer是不会生效的，这里最外层也是只会运行一次
+  const SettingPanel2 = props.mobx.observer(SettingPanel)
 
   return (
-    <ShadowRootContainer>
-      <LoadingContainer isLoading={isLoading}>
-        <SettingPanel
+    <ShouldShadowRootContainer {...props}>
+      <div className={classNames(`render-root`, props.isModal && 'is-modal')}>
+        <SettingPanel2
           {...props}
-          savedConfig={savedConfig}
-          tempConfigKeys={tempConfigKeys}
+          savedConfig={props.savedConfig}
         />
-      </LoadingContainer>
-    </ShadowRootContainer>
-
+        {props.isModal && <div className="cover-bg" onClick={props.onClose}></div>}
+        {props.styleHref && <link rel="stylesheet" type="text/css" href={props.styleHref} />}
+      </div>
+    </ShouldShadowRootContainer>
   )
 }
+
 export default UIComponent

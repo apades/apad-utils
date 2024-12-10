@@ -1,7 +1,6 @@
-import type React from 'react'
 import type { Rec } from '../../../tsconfig/types/global'
 import type { BaseMobx } from '../types'
-import { forwardRef, memo } from 'react'
+import { forwardRef, memo } from 'preact/compat'
 import { makeAutoObservable, observe } from '../mobx-mini'
 import { useObserver } from './useObserver'
 
@@ -10,8 +9,8 @@ const hasSymbol = typeof Symbol === 'function' && Symbol.for
 const ReactForwardRefSymbol = hasSymbol
   ? Symbol.for('react.forward_ref')
   : typeof forwardRef === 'function'
-    // eslint-disable-next-line react/ensure-forward-ref-using-ref
-    && forwardRef(() => null).$$typeof
+
+    && (forwardRef(() => null) as any).$$typeof
 
 export function observer<P extends object, TRef = Rec>(
   baseComponent:

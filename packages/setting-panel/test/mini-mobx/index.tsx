@@ -1,13 +1,12 @@
 import type { FC } from 'react'
 import { wait } from '@pkgs/utils/src/utils'
-import * as mobx from 'mobx'
-import { observer } from 'mobx-react'
 import ReactDOM from 'react-dom/client'
-import { config, initSetting } from '../src'
-import settings from './settings'
+import { initSetting } from '../../src'
+import mobx from '../../src/react'
+import settings from '../settings'
 
 // 打包的
-const { configStore, openSettingPanel, temporarySetConfigStore } = initSetting({
+const { configStore, openSettingPanel } = initSetting({
   settings,
   useShadowDom: false,
   autoSave: true,
@@ -20,13 +19,9 @@ const { configStore, openSettingPanel, temporarySetConfigStore } = initSetting({
   mobx,
 })
 
-temporarySetConfigStore('b1', true)
-// setTimeout(() => {
-//   temporarySetConfigStore('b1', true)
-// }, 300)
 window.configStore = configStore
 
-const ObservePanel: FC = observer(() => {
+const ObservePanel: FC = mobx.observer(() => {
   return (
     <div>
       <div>

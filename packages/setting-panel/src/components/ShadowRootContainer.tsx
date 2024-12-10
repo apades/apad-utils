@@ -1,5 +1,6 @@
 import type { FC, PropsWithChildren } from 'preact/compat'
-import React, { createPortal, useMemo, useRef } from 'preact/compat'
+import { createPortal } from 'entry'
+import { useMemo, useRef } from 'preact/hooks'
 import { useOnce } from '../hooks'
 
 const ShadowRootContainer: FC<PropsWithChildren> = (props) => {
@@ -19,7 +20,7 @@ const ShadowRootContainer: FC<PropsWithChildren> = (props) => {
 
   return (
     <div ref={rootRef} style={{ all: 'initial' }}>
-      {createPortal(props.children as any, shadowRoot.shadowRoot!)}
+      {createPortal(props.children, shadowRoot.shadowRoot)}
     </div>
   )
 }

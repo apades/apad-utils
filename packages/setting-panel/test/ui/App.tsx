@@ -1,13 +1,13 @@
 import type { FC } from 'react'
 import { wait } from '@pkgs/utils/src/utils'
 import { useState } from 'react'
-import { config, createConfigStore } from '../src'
-import en from '../src/i18n/en.json'
-import { observer } from '../src/react'
-import UIComponent from '../src/UI'
-import settings from './settings'
+import { config, createConfigStore } from '../../src'
+import en from '../../src/i18n/en.json'
+import mobx, { observer } from '../../src/react'
+import UIComponent from '../../src/UI'
+import settings from '../settings'
 
-const configStore = createConfigStore(settings)
+const configStore = createConfigStore(settings, mobx)
 window.configStore = configStore
 // observe(configStore, (change) => {
 //   console.log('change', change)
@@ -55,7 +55,6 @@ const App: FC = () => {
       }}
     >
       <UIComponent
-        isLoading={false}
         i18n={en}
         settings={settings}
         configStore={configStore}
@@ -69,6 +68,9 @@ const App: FC = () => {
           await wait(2000)
           return { ...config, un: 'change 111' }
         }}
+        config={{ isLoading: false }}
+        mobx={mobx}
+        onClose={() => {}}
       />
       <ObservePanel />
     </div>

@@ -1,5 +1,5 @@
 import type { TransStringValToAny } from '../type'
-import { isNil } from 'lodash'
+import { isNil } from 'lodash-es'
 import { isNumber, isObject } from 'radash'
 
 /**

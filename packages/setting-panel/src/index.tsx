@@ -1,10 +1,7 @@
-import type mobx from 'mobx'
 import type { BaseMobx, ConfigField, InitOptions, InitSettingReturn } from './types'
-import { AsyncLock } from '@pkgs/utils/main'
-import { createElement, wait } from '@pkgs/utils/src/utils'
+import { createElement } from '@pkgs/utils/src/utils'
 import { render } from 'entry'
 import en from './i18n/en.json'
-import { makeAutoObservable, observe } from './mobx-mini'
 import UIComponent, { saveKey } from './UI'
 import './index.less'
 import './tailwind.css'
@@ -27,9 +24,10 @@ export function initSetting<Map extends Record<string, any>>(
   }
   options = Object.assign(baseOption, options)
 
-  let isLoading = true
   let savedConfig = {}
-  const configStore = createConfigStore(options.settings, options.mobx)
+  const { mobx } = options
+  const configStore = createConfigStore(options.settings, mobx)
+  const config = createConfigStore({ isLoading: true }, mobx)
 
   const updateSavedConfig = () => {
     Object.entries(savedConfig).forEach(([key, val]) => {
@@ -51,86 +49,43 @@ export function initSetting<Map extends Record<string, any>>(
     ;(async () => {
       return options.onInitLoadConfig(savedConfig as any)
     })().then((_savedConfig) => {
-      isLoading = false
+      config.isLoading = false
       savedConfig = _savedConfig
       updateSavedConfig()
-      ;(globalThis as any)?.__spSetLoading?.(false)
-      ;(globalThis as any)?.__spSetSavedConfig?.(savedConfig)
     })
   }
   else {
-    isLoading = false
+    config.isLoading = false
   }
 
-  let hasInit = false
-  let rootEl: HTMLElement = null
+  let unmount = () => {}
+  const root = createElement('div')
 
   function openSettingPanel(
     /** 渲染的位置，不传默认是开全局modal */
-    renderTarget?: HTMLElement,
+    renderTarget: HTMLElement = document.body,
   ) {
-    if (!hasInit) {
-      rootEl = createElement('div')
-      const renderEl = createElement('div', {
-        className: 'render-root',
-      })
-      if (options.useShadowDom) {
-        rootEl.attachShadow({ mode: 'open' })
-        rootEl.shadowRoot.appendChild(renderEl)
-      }
-      else {
-        rootEl.appendChild(renderEl)
-      }
-
-      if (options.styleHref || import.meta.url) {
-        const style = createElement('link', {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href:
-            options.styleHref || new URL('./index.css', import.meta.url).href,
-        })
-
-        options.useShadowDom
-          ? rootEl.shadowRoot.appendChild(style)
-          : document.head.appendChild(style)
-      }
-      const renderTo = renderTarget ?? renderEl
-
-      render(
-        <UIComponent
-          i18n={options.i18n ?? en}
-          settings={options.settings}
-          configStore={configStore}
-          rootEl={renderEl}
-          isLoading={isLoading}
-          savedConfig={savedConfig}
-          {...options}
-        />,
-        renderTo,
-      )
-
-      if (!renderTarget) {
-        renderEl.classList.add('is-modal')
-        const coverBg = createElement('div', {
-          className: 'cover-bg',
-          onclick: closeSettingPanel,
-        })
-        wait(100).then(() => {
-          renderTo.appendChild(coverBg)
-        })
-      }
-      hasInit = true
-    }
-    document.body.appendChild(rootEl)
+    renderTarget.appendChild(root)
+    unmount = render(
+      <UIComponent
+        i18n={options.i18n ?? en}
+        settings={options.settings}
+        configStore={configStore}
+        config={config}
+        savedConfig={savedConfig}
+        onClose={closeSettingPanel}
+        styleHref={options.styleHref || new URL('./index.css', import.meta.url).href}
+        {...options}
+      />,
+      root,
+    )
   }
   function closeSettingPanel() {
-    document.body.removeChild(rootEl)
+    unmount()
   }
 
   function _observe(...args: [any]): any {
-    return options.mobx
-      ? options.mobx.observe(configStore, ...args)
-      : observe(configStore, ...args)
+    return mobx.observe(configStore, ...args)
   }
 
   return {

@@ -16,7 +16,6 @@ import { useRef, useState } from 'preact/hooks'
 
 export const ConfigEntriesBox: FC<{
   config: ConfigEntries
-  tempConfigKeys: string[]
   newConfig: Partial<UISettings>
   setNewConfig: (key: string, val: any) => void
   resetConfig: (key: string) => void
@@ -34,8 +33,6 @@ export const ConfigEntriesBox: FC<{
             props.newConfig[key],
             isNumber ? `${defaultValue}` : defaultValue,
           )
-        const isTemp = props.tempConfigKeys.includes(key)
-        const tempTips = isTemp ? [props.i18n.tempSetTips] : []
 
         const isRelChild = !!val.relateBy
         if (isRelChild) {
@@ -53,17 +50,14 @@ export const ConfigEntriesBox: FC<{
               isRelChild && 'rel-child',
             )}
             key={i}
-            title={tempTips.length ? tempTips.join('\n') : undefined}
           >
             <div className="gap-[12px] flex">
               <div
                 className={classNames(
                   `items-center justify-center text-center w-[140px] whitespace-pre-wrap`,
                   hasChange && 'text-blue-500',
-                  isTemp && 'text-yellow-500 cursor-help',
                 )}
               >
-                {isTemp && '~'}
                 {' '}
                 {val.label ?? key}
                 :
@@ -85,7 +79,7 @@ export const ConfigEntriesBox: FC<{
                     } transition-all`}
                   >
                     <button
-                      className={classNames('reset', isTemp && 'is-temp')}
+                      className={classNames('reset')}
                       onClick={() => {
                         props.resetConfig(key)
                       }}
@@ -131,7 +125,7 @@ function ConfigRowAction(props: {
     return (
       <select value={value} onChange={onChange}>
         {props.config.group.map((val: any, i: number) => {
-          const isAdvVal = !isObject(val)
+          // const isAdvVal = !isObject(val)
           const value = val?.value ?? val
           const label = val.label ?? val
           return (
