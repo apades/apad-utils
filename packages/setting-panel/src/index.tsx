@@ -1,5 +1,5 @@
 import type mobx from 'mobx'
-import type { ConfigField, InitOptions, InitSettingReturn } from './types'
+import type { BaseMobx, ConfigField, InitOptions, InitSettingReturn } from './types'
 import { AsyncLock } from '@pkgs/utils/main'
 import { createElement, wait } from '@pkgs/utils/src/utils'
 import { render } from 'entry'
@@ -29,7 +29,6 @@ export function initSetting<Map extends Record<string, any>>(
 
   let isLoading = true
   let savedConfig = {}
-  const asyncInitLock = new AsyncLock()
   const configStore = createConfigStore(options.settings, options.mobx)
 
   const updateSavedConfig = () => {
@@ -52,7 +51,6 @@ export function initSetting<Map extends Record<string, any>>(
     ;(async () => {
       return options.onInitLoadConfig(savedConfig as any)
     })().then((_savedConfig) => {
-      asyncInitLock.ok()
       isLoading = false
       savedConfig = _savedConfig
       updateSavedConfig()
@@ -61,12 +59,12 @@ export function initSetting<Map extends Record<string, any>>(
     })
   }
   else {
-    asyncInitLock.ok()
     isLoading = false
   }
 
   let hasInit = false
   let rootEl: HTMLElement = null
+
   function openSettingPanel(
     /** 渲染的位置，不传默认是开全局modal */
     renderTarget?: HTMLElement,
@@ -135,28 +133,11 @@ export function initSetting<Map extends Record<string, any>>(
       : observe(configStore, ...args)
   }
 
-  let tempConfigKeys: string[] = []
   return {
     openSettingPanel,
     closeSettingPanel,
     configStore,
     observe: _observe,
-    temporarySetConfigStore: async (key, val) => {
-      await asyncInitLock.waiting()
-      if (options.mobx) {
-        options.mobx.runInAction(() => {
-          configStore[key] = val
-        })
-      }
-      else {
-        configStore[key] = val
-      }
-
-      savedConfig = { ...savedConfig, [key]: val }
-      tempConfigKeys = [...tempConfigKeys, key as string]
-      ;(globalThis as any)?.__spSetSavedConfig?.(savedConfig)
-      ;(globalThis as any)?.__spSetTempConfigKeys?.(tempConfigKeys)
-    },
   }
 }
 
@@ -164,12 +145,9 @@ export function createConfigStore<Map extends Record<string, any>>(
   settings: {
     [K in keyof Map]: ConfigField<Map[K]>
   },
-  _mobx?: typeof mobx,
+  mobx: BaseMobx,
 ): Map {
-  const _makeAutoObservable: any = _mobx
-    ? _mobx.makeAutoObservable
-    : makeAutoObservable
-  return _makeAutoObservable(
+  return mobx.makeAutoObservable(
     Object.entries(settings).reduce(
       (configMap, [key, config]: [string, ConfigField<any>]) => {
         configMap[key] = config.defaultValue ?? config

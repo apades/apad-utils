@@ -1,5 +1,6 @@
 import type mobx from 'mobx'
 import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
+import type { observer } from 'mobx-react'
 import type en from './i18n/en.json'
 
 export interface ConfigFieldBase<T> {
@@ -32,6 +33,12 @@ export type ConfigField<T> =
     type: 'color'
   })
 
+export interface BaseMobx {
+  makeAutoObservable: typeof mobx.makeAutoObservable
+  observe: typeof mobx.observe
+  observer: typeof observer
+}
+
 export interface InitOptions<Map extends Record<string, any>> {
   settings: {
     [K in keyof Map]: ConfigField<Map[K]>
@@ -57,7 +64,7 @@ export interface InitOptions<Map extends Record<string, any>> {
   /** 默认500，自动保存用的 */
   autoSaveTriggerMs?: number
   /** 默认的mobx是自己魔改的残缺版本，需要完整功能请传入mobx的module */
-  mobx?: typeof mobx
+  mobx: BaseMobx
   /** 针对 非打包工具 + useShadowDom:true 的用户 */
   styleHref?: string
   /** 默认为true */
@@ -80,10 +87,6 @@ export interface InitSettingReturn<Map extends Record<string, any>> {
    * listener的return返回函数的话可以像react useEffect那样在重新触发listener时运行该函数，可以用来清除上一次函数里相关的挂载操作然后重新挂载相关数据
    */
   observe: Observe<Map>
-  temporarySetConfigStore: <k extends keyof Map>(
-    key: k,
-    val: Map[k]
-  ) => Promise<void>
 }
 
 export type I18n = typeof en

@@ -1,6 +1,8 @@
 import type React from 'react'
 import type { Rec } from '../../../tsconfig/types/global'
+import type { BaseMobx } from '../types'
 import { forwardRef, memo } from 'react'
+import { makeAutoObservable, observe } from '../mobx-mini'
 import { useObserver } from './useObserver'
 
 const hasSymbol = typeof Symbol === 'function' && Symbol.for
@@ -62,3 +64,11 @@ export function observer<P extends object, TRef = Rec>(
 
   return observerComponent
 }
+
+export const mobx = {
+  makeAutoObservable,
+  observe,
+  observer,
+} as BaseMobx
+
+export default mobx

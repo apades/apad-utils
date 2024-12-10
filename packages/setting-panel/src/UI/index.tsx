@@ -4,6 +4,7 @@ import type { ConfigField, I18n, InitOptions } from '../types'
 import { classNames, debounce } from '@pkgs/utils/src/utils'
 import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
 import LoadingContainer from '../components/LoadingContainer'
+import ShadowRootContainer from '../components/ShadowRootContainer'
 import { useMemoizedFn, useOnce } from '../hooks'
 import { ConfigEntriesBox } from './ConfigEntriesBox'
 import './index.less'
@@ -19,9 +20,10 @@ export type Props = {
   configStore: Record<string, any>
   savedConfig?: UISettings
   tempConfigKeys?: string[]
-  rootEl?: HTMLElement | ShadowRoot
+  rootEl?: HTMLElement
   isLoading: boolean
   i18n: I18n
+  onClose: () => void
 } & InitOptions<Record<string, any>>
 
 const SettingPanel: FC<Props> = (props) => {
@@ -252,13 +254,16 @@ const UIComponent: FC<Props> = (props) => {
   })
 
   return (
-    <LoadingContainer isLoading={isLoading}>
-      <SettingPanel
-        {...props}
-        savedConfig={savedConfig}
-        tempConfigKeys={tempConfigKeys}
-      />
-    </LoadingContainer>
+    <ShadowRootContainer>
+      <LoadingContainer isLoading={isLoading}>
+        <SettingPanel
+          {...props}
+          savedConfig={savedConfig}
+          tempConfigKeys={tempConfigKeys}
+        />
+      </LoadingContainer>
+    </ShadowRootContainer>
+
   )
 }
 export default UIComponent

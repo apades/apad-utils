@@ -1,21 +1,21 @@
-import { classNames, isFunction } from '@pkgs/utils/src/utils'
+import type { VNode } from 'preact'
 import type {
   CSSProperties,
   DetailedHTMLProps,
   FC,
   HTMLAttributes,
 } from 'preact/compat'
+import { classNames, isFunction } from '@pkgs/utils/src/utils'
 import './index.less'
-import type { VNode } from 'preact'
 
 type Props = {
   isLoading: boolean
-  /**默认30px */
+  /** 默认30px */
   loadingSize?: number
   minHeight?: CSSProperties['minHeight']
   style?: CSSProperties
   children: VNode | (() => VNode)
-  /**骨架屏加载动画模式 */
+  /** 骨架屏加载动画模式 */
   skeletonMode?: boolean
 } & DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>
 
@@ -29,8 +29,8 @@ type Props = {
  * </LoadingContainer>
  * ```
  */
-let LoadingContainer: FC<Props> = (props) => {
-  let {
+const LoadingContainer: FC<Props> = (props) => {
+  const {
     loadingSize = 30,
     isLoading,
     minHeight,
@@ -44,11 +44,11 @@ let LoadingContainer: FC<Props> = (props) => {
       className={classNames(
         _props.className,
         isLoading && 'loading-container',
-        skeletonMode && 'skeleton-mode'
+        skeletonMode && 'skeleton-mode',
       )}
       style={{
         minHeight: isLoading && minHeight,
-        ...(props.style || {}),
+        ...(props.style || {} as any),
       }}
     >
       {isLoading && !props.skeletonMode && (
