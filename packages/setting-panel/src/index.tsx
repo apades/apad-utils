@@ -24,34 +24,34 @@ export function initSetting<Map extends Record<string, any>>(
   }
   options = Object.assign(baseOption, options)
 
-  let savedConfig = {}
   const { mobx } = options
   const configStore = createConfigStore(options.settings, mobx)
   const config = createConfigStore({ isLoading: true }, mobx)
+  const savedConfig = createConfigStore({}, mobx)
 
-  const updateSavedConfig = () => {
-    Object.entries(savedConfig).forEach(([key, val]) => {
+  const updateSavedConfig = (_savedConfig: any) => {
+    Object.entries(_savedConfig).forEach(([key, val]) => {
       ;(configStore as any)[key] = val
+      savedConfig[key] = val
     })
   }
   // 加载本地保存数据
   if (options.saveInLocal) {
     switch (options.savePosition) {
       case 'localStorage': {
-        savedConfig = JSON.parse(localStorage[saveKey] || '{}')
+        updateSavedConfig(JSON.parse(localStorage[saveKey] || '{}'))
         break
       }
     }
   }
-  updateSavedConfig()
+
   // 加载options的异步/同步方法数据
   if (options.onInitLoadConfig) {
     ;(async () => {
       return options.onInitLoadConfig(savedConfig as any)
-    })().then((_savedConfig) => {
+    })().then((savedConfig) => {
       config.isLoading = false
-      savedConfig = _savedConfig
-      updateSavedConfig()
+      updateSavedConfig(savedConfig)
     })
   }
   else {

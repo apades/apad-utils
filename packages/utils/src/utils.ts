@@ -185,3 +185,24 @@ export function arrayInsert<T>(tarr: T[], index: number, arr: T[]): T[] {
 
   return [...left, ...arr, ...right]
 }
+
+export function tryCatch<Return>(
+  fn: () => Return,
+): Return extends Promise<any>
+    ? Promise<[undefined, Awaited<Return>] | [Error, undefined]>
+    : [undefined, Return] | [Error, undefined] {
+  try {
+    const rs: any = fn()
+    if (rs instanceof Promise) {
+      return rs
+        .then(d => [undefined, d])
+        .catch(err => [err, undefined]) as any
+    }
+    else {
+      return [undefined, rs] as any
+    }
+  }
+  catch (error) {
+    return [error as Error, undefined] as any
+  }
+}

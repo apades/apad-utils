@@ -29,6 +29,7 @@ export type Props = {
 const SettingPanel: FC<Props> = (props) => {
   const [newConfig, _setNewConfig] = useState<Partial<BaseConfig>>({})
   useEffect(() => {
+    console.log('update', props.savedConfig)
     if (props.savedConfig)
       _setNewConfig(props.savedConfig)
   }, [props.savedConfig])
