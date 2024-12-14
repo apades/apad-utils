@@ -32,6 +32,10 @@ export type ConfigField<T> =
   | (ConfigFieldBase<T> & {
     type: 'color'
   })
+  | (ConfigFieldBase<T> & {
+    type: 'range'
+    range: [number, number]
+  })
 
 export interface BaseMobx {
   makeAutoObservable: typeof mobx.makeAutoObservable

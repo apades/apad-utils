@@ -62,9 +62,9 @@ export const ConfigEntriesBox: FC<{
                 {val.label ?? key}
                 :
               </div>
-              <div className="flex-1">
-                <div className="flex gap-[12px]">
-                  <div className="flex flex-1 items-center justify-center">
+              <div className="flex flex-1">
+                <div className="flex-1 flex gap-[12px]">
+                  <div className="flex flex-1 items-center justify-center gap-[12px]">
                     <ConfigRowAction
                       config={val}
                       onChange={(v) => {
@@ -116,36 +116,46 @@ function ConfigRowAction(props: {
     const target = e.target as HTMLInputElement
     if (target.type === 'checkbox')
       return props.onChange(target.checked)
-    props.onChange(target.value)
+    props.onChange(isNumber ? Number(target.value) : target.value)
   }
 
   const arrInputRefs = useRef<HTMLInputElement[]>([])
 
-  if (props.config?.type === 'group') {
-    return (
-      <select value={value} onChange={onChange}>
-        {props.config.group.map((val: any, i: number) => {
-          // const isAdvVal = !isObject(val)
-          const value = val?.value ?? val
-          const label = val.label ?? val
-          return (
-            <option key={i} value={value} title={val?.desc}>
-              {label}
-              {' '}
-              {!!val?.desc && '*'}
-            </option>
-          )
-        })}
-      </select>
-    )
-  }
-  if (props.config?.type === 'color') {
-    return (
-      <div className="color-row">
-        <input type="color" value={value} onChange={onChange} />
-        <input value={value} onChange={onChange} />
-      </div>
-    )
+  switch (props.config?.type) {
+    case 'group':
+      return (
+        <select value={value} onChange={onChange}>
+          {props.config.group.map((val: any, i: number) => {
+            // const isAdvVal = !isObject(val)
+            const value = val?.value ?? val
+            const label = val.label ?? val
+            return (
+              <option key={i} value={value} title={val?.desc}>
+                {label}
+                {' '}
+                {!!val?.desc && '*'}
+              </option>
+            )
+          })}
+        </select>
+      )
+
+    case 'color':
+      return (
+        <div className="row">
+          <input type="color" value={value} onChange={onChange} />
+          <input value={value} onChange={onChange} />
+        </div>
+      )
+    case 'range':
+      // eslint-disable-next-line no-case-declarations
+      const [min, max] = props.config.range
+      return (
+        <>
+          <input type="range" min={min} max={max} value={value} step={max / 100} onChange={onChange} />
+          <input className="flex-1" value={value} onChange={onChange} style={{ width: 20 }} />
+        </>
+      )
   }
 
   if (isBoolean(value)) {
