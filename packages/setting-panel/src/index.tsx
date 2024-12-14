@@ -1,5 +1,5 @@
 import type { BaseMobx, ConfigField, InitOptions, InitSettingReturn } from './types'
-import { createElement } from '@pkgs/utils/src/utils'
+import { createElement, debounce } from '@pkgs/utils/src/utils'
 import { render } from 'entry'
 import en from './i18n/en.json'
 import UIComponent, { saveKey } from './UI'
@@ -29,34 +29,60 @@ export function initSetting<Map extends Record<string, any>>(
   const config = createConfigStore({ isLoading: true }, mobx)
   const savedConfig = createConfigStore({}, mobx)
 
-  const updateSavedConfig = (_savedConfig: any) => {
-    Object.entries(_savedConfig).forEach(([key, val]) => {
-      ;(configStore as any)[key] = val
-      savedConfig[key] = val
-    })
-  }
-  // 加载本地保存数据
-  if (options.saveInLocal) {
-    switch (options.savePosition) {
-      case 'localStorage': {
-        updateSavedConfig(JSON.parse(localStorage[saveKey] || '{}'))
-        break
+  const updateConfig = (propsSavedConfig?: any) => {
+    const updateSavedConfig = (_savedConfig: any) => {
+      Object.entries(_savedConfig).forEach(([key, val]) => {
+        ;(configStore as any)[key] = val
+        savedConfig[key] = val
+      })
+    }
+    if (propsSavedConfig) {
+      return updateSavedConfig(propsSavedConfig)
+    }
+    // 加载本地保存数据
+    if (options.saveInLocal) {
+      switch (options.savePosition) {
+        case 'localStorage': {
+          updateSavedConfig(JSON.parse(localStorage[saveKey] || '{}'))
+          break
+        }
       }
+    }
+
+    // 加载options的异步/同步方法数据
+    if (options.onInitLoadConfig) {
+      ;(async () => {
+        return options.onInitLoadConfig(savedConfig as any)
+      })().then((savedConfig) => {
+        config.isLoading = false
+        updateSavedConfig(savedConfig)
+      })
+    }
+    else {
+      config.isLoading = false
     }
   }
 
-  // 加载options的异步/同步方法数据
-  if (options.onInitLoadConfig) {
-    ;(async () => {
-      return options.onInitLoadConfig(savedConfig as any)
-    })().then((savedConfig) => {
-      config.isLoading = false
-      updateSavedConfig(savedConfig)
-    })
-  }
-  else {
-    config.isLoading = false
-  }
+  const saveConfig = debounce(async () => {
+    if (options.saveInLocal) {
+      switch (options.savePosition) {
+        case 'localStorage': {
+          localStorage[saveKey] = JSON.stringify(savedConfig)
+          break
+        }
+      }
+    }
+    if (options.onSave) {
+      const newSaveData = await options.onSave({ ...savedConfig as any })
+      if (!newSaveData)
+        return
+      Object.entries(newSaveData).forEach(
+        ([key, val]) => savedConfig[key] = val,
+      )
+    }
+  }, options.autoSaveTriggerMs)
+
+  updateConfig()
 
   let unmount = () => {}
   const root = createElement('div')
@@ -66,6 +92,7 @@ export function initSetting<Map extends Record<string, any>>(
     renderTarget: HTMLElement = document.body,
   ) {
     renderTarget.appendChild(root)
+    updateConfig()
     unmount = render(
       <UIComponent
         i18n={options.i18n ?? en}
@@ -75,6 +102,7 @@ export function initSetting<Map extends Record<string, any>>(
         savedConfig={savedConfig}
         onClose={closeSettingPanel}
         styleHref={options.styleHref || new URL('./index.css', import.meta.url).href}
+        saveConfig={saveConfig}
         {...options}
       />,
       root,
@@ -93,6 +121,8 @@ export function initSetting<Map extends Record<string, any>>(
     closeSettingPanel,
     configStore,
     observe: _observe,
+    updateConfig: updateConfig as any,
+    saveConfig,
   }
 }
 

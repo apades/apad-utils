@@ -8,11 +8,10 @@ import {
   isArray,
   isBoolean,
   isEqual,
-  isObject,
   isUndefined,
   wait,
 } from '@pkgs/utils/src/utils'
-import { useRef, useState } from 'preact/hooks'
+import { useRef } from 'preact/hooks'
 
 export const ConfigEntriesBox: FC<{
   config: ConfigEntries
@@ -70,7 +69,7 @@ export const ConfigEntriesBox: FC<{
                       onChange={(v) => {
                         props.setNewConfig(key, v)
                       }}
-                      newVal={(props.newConfig as any)[key]}
+                      newVal={(props.newConfig)[key]}
                     />
                   </div>
                   <div
@@ -102,11 +101,11 @@ export const ConfigEntriesBox: FC<{
   )
 }
 
-function ConfigRowAction(props: {
+const ConfigRowAction: FC<{
   config: ConfigField<any>
   onChange: (v: any) => void
   newVal: any
-}) {
+}> = (props) => {
   const defaultValue = props.config.defaultValue ?? props.config
   let value = props.newVal ?? defaultValue
   const isNumber = typeof defaultValue == 'number'
@@ -152,7 +151,7 @@ function ConfigRowAction(props: {
       const [min, max] = props.config.range
       return (
         <>
-          <input type="range" min={min} max={max} value={value} step={max / 100} onChange={onChange} />
+          <input type="range" min={min} max={max} value={value} step={max / 100} onChange={onChange} className="max-w-[50%]" />
           <input className="flex-1" value={value} onChange={onChange} style={{ width: 20 }} />
         </>
       )

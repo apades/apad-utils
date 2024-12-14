@@ -1,11 +1,11 @@
 import type { Rec } from '@pkgs/tsconfig/types/global'
 import type { FC } from 'preact/compat'
 import type { ConfigField, I18n, InitOptions } from '../types'
-import { classNames, debounce } from '@pkgs/utils/src/utils'
-import { useCallback, useEffect, useMemo, useState } from 'preact/hooks'
+import { classNames } from '@pkgs/utils/src/utils'
+import { useMemo, useState } from 'preact/hooks'
 import LoadingContainer from '../components/LoadingContainer'
 import ShadowRootContainer from '../components/ShadowRootContainer'
-import { useMemoizedFn, useOnce } from '../hooks'
+import { useMemoizedFn, useUpdate } from '../hooks'
 import { ConfigEntriesBox } from './ConfigEntriesBox'
 import './index.less'
 
@@ -24,65 +24,38 @@ export type Props = {
   isModal?: boolean
   styleHref?: string
   config: { isLoading: boolean }
+  saveConfig: () => void
 } & InitOptions<Record<string, any>>
 
 const SettingPanel: FC<Props> = (props) => {
-  const [newConfig, _setNewConfig] = useState<Partial<BaseConfig>>({})
-  useEffect(() => {
-    console.log('update', props.savedConfig)
-    if (props.savedConfig)
-      _setNewConfig(props.savedConfig)
-  }, [props.savedConfig])
+  const _saveConfig = props.saveConfig
+  const savedConfig = props.savedConfig!
+  const newConfig = props.savedConfig!
+  const update = useUpdate()
 
   const setNewConfig = useMemoizedFn((key: string, val: any) => {
     if (props.changeConfigStoreWithSettingPanelChange)
       props.configStore[key] = val
 
-    _setNewConfig({ ...newConfig, [key]: val })
-
+    savedConfig[key] = val
+    update()
     saveConfig()
   })
   const resetConfig = useMemoizedFn((key: string) => {
     delete newConfig[key]
-    _setNewConfig({ ...newConfig })
     if (props.changeConfigStoreWithSettingPanelChange) {
       props.configStore[key]
         = props.settings[key].defaultValue ?? props.settings[key]
     }
+    update()
     saveConfig()
   })
 
-  // 保存相关
-  const _saveConfig = useMemoizedFn(async () => {
+  const saveConfig = useMemoizedFn(() => {
     if (!props.autoSave)
       return
-    console.log('saveConfig', newConfig)
-    if (props.saveInLocal) {
-      switch (props.savePosition) {
-        case 'localStorage': {
-          localStorage[saveKey] = JSON.stringify(newConfig)
-          break
-        }
-      }
-    }
-    if (props.onSave) {
-      const newSaveData = await props.onSave({ ...newConfig })
-      if (!newSaveData)
-        return
-      // 会不会出现对象地址问题
-      const changes = Object.entries(newSaveData).filter(
-        ([key, val]) => val !== newConfig[key],
-      )
-      if (!changes.length)
-        return
-      changes.forEach((key, val) => setNewConfig(key as any, val))
-    }
-    // toast({ title: '保存成功', status: 'success' })
+    _saveConfig()
   })
-  const saveConfig = useCallback(
-    debounce(_saveConfig, props.autoSaveTriggerMs),
-    [],
-  )
 
   const {
     baseConfig,

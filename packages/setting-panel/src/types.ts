@@ -91,6 +91,11 @@ export interface InitSettingReturn<Map extends Record<string, any>> {
    * listener的return返回函数的话可以像react useEffect那样在重新触发listener时运行该函数，可以用来清除上一次函数里相关的挂载操作然后重新挂载相关数据
    */
   observe: Observe<Map>
+  updateConfig: (
+    /** 传入更新了的config map */
+    savedConfig?: Partial<Map>
+  ) => Promise<void>
+  saveConfig: () => Promise<void>
 }
 
 export type I18n = typeof en

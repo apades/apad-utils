@@ -84,6 +84,11 @@ const settings = {
   color: config({ type: 'color', defaultValue: '#66ccff' }),
   arr: [1, 2, 3],
   emptyArr: [] as any[],
+  range: config({
+    defaultValue: 0.5,
+    type: 'range',
+    range: [0, 1],
+  }),
 }
 
 window.settings = settings

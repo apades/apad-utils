@@ -1,7 +1,7 @@
 import type { noop } from '@pkgs/tsconfig/types/global'
 import { AsyncLock } from '@pkgs/utils/main'
 import { isFunction, isPromiseFunction } from '@pkgs/utils/src/utils'
-import { useEffect, useMemo, useRef } from 'preact/hooks'
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 
 type ueRe = void | (() => void)
 export function useOnce(cb: (() => ueRe) | (() => Promise<ueRe>)): void {
@@ -42,4 +42,11 @@ export function useMemoizedFn<T extends noop>(fn: T) {
   }
 
   return memoizedFn.current as T
+}
+
+export function useUpdate() {
+  const [, forceUpdate] = useState(Symbol(''))
+  return () => {
+    forceUpdate(Symbol(''))
+  }
 }
