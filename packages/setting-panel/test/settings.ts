@@ -88,6 +88,7 @@ const settings = {
     defaultValue: 0.5,
     type: 'range',
     range: [0, 1],
+    desc: 'desc',
   }),
 }
 
