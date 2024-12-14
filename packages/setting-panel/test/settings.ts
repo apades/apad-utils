@@ -90,6 +90,12 @@ const settings = {
     range: [0, 1],
     desc: 'desc',
   }),
+  rangeStep: config({
+    defaultValue: 16,
+    type: 'range',
+    range: [12, 32],
+    rangeStep: 1,
+  }),
 }
 
 window.settings = settings

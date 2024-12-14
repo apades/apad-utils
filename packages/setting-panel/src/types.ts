@@ -35,6 +35,7 @@ export type ConfigField<T> =
   | (ConfigFieldBase<T> & {
     type: 'range'
     range: [number, number]
+    rangeStep?: number
   })
 
 export interface BaseMobx {

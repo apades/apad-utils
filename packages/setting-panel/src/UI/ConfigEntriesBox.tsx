@@ -149,11 +149,13 @@ const ConfigRowAction: FC<{
     case 'range':
       // eslint-disable-next-line no-case-declarations
       const [min, max] = props.config.range
+      // eslint-disable-next-line no-case-declarations
+      const step = props.config.rangeStep ?? max / 100
       return (
-        <>
-          <input type="range" min={min} max={max} value={value} step={max / 100} onChange={onChange} className="max-w-[50%]" />
-          <input className="flex-1" value={value} onChange={onChange} style={{ width: 20 }} />
-        </>
+        <div class="row">
+          <input type="range" min={min} max={max} value={value} step={step} onChange={onChange} className="max-w-[50%]" />
+          <input className="flex-1" value={value} onChange={onChange} step={step} style={{ maxWidth: 56 }} type="number" />
+        </div>
       )
   }
 
