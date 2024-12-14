@@ -25,12 +25,11 @@ export const ConfigEntriesBox: FC<{
     <div>
       {configEntries.map(([key, val]: [string, ConfigField<any>], i) => {
         const defaultValue = val.defaultValue ?? val
-        const isNumber = typeof defaultValue == 'number'
         const hasChange
           = !isUndefined(props.newConfig[key])
           && !isEqual(
             props.newConfig[key],
-            isNumber ? `${defaultValue}` : defaultValue,
+            defaultValue,
           )
 
         const isRelChild = !!val.relateBy
@@ -152,7 +151,7 @@ const ConfigRowAction: FC<{
       // eslint-disable-next-line no-case-declarations
       const step = props.config.rangeStep ?? max / 100
       return (
-        <div class="row">
+        <div className="row">
           <input type="range" min={min} max={max} value={value} step={step} onChange={onChange} className="max-w-[50%]" />
           <input className="flex-1" value={value} onChange={onChange} step={step} style={{ maxWidth: 56 }} type="number" />
         </div>
