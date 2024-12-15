@@ -33,8 +33,9 @@ export function initSetting<Map extends Record<string, any>>(
     const updateSavedConfig = (_savedConfig: any) => {
       Object.entries(_savedConfig).forEach(([key, val]) => {
         ;(configStore as any)[key] = val
-        savedConfig[key] = val
+        ;(savedConfig as any)[key] = val
       })
+      window.__spUpdate?.()
     }
     if (propsSavedConfig) {
       return updateSavedConfig(propsSavedConfig)
@@ -77,7 +78,9 @@ export function initSetting<Map extends Record<string, any>>(
       if (!newSaveData)
         return
       Object.entries(newSaveData).forEach(
-        ([key, val]) => savedConfig[key] = val,
+        ([key, val]) => {
+          savedConfig[key] = val
+        },
       )
     }
   }, options.autoSaveTriggerMs)

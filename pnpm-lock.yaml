@@ -169,11 +169,11 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       mobx:
-        specifier: ^6.10.0
-        version: 6.10.0
+        specifier: ^6.13.5
+        version: 6.13.5
       mobx-react:
-        specifier: ^9.0.0
-        version: 9.0.0(mobx@6.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        specifier: ^9.2.0
+        version: 9.2.0(mobx@6.13.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       postcss:
         specifier: ^8.4.27
         version: 8.4.27
@@ -3538,11 +3538,11 @@ packages:
   mnemonic-id@3.2.7:
     resolution: {integrity: sha512-kysx9gAGbvrzuFYxKkcRjnsg/NK61ovJOV4F1cHTRl9T5leg+bo6WI0pWIvOFh1Z/yDL0cjA5R3EEGPPLDv/XA==}
 
-  mobx-react-lite@4.0.3:
-    resolution: {integrity: sha512-wEE1oT5zvDdvplG4HnRrFgPwg5GFVVrEtl42Er85k23zeu3om8H8wbDPgdbQP88zAihVsik6xJfw6VnzUl8fQw==}
+  mobx-react-lite@4.1.0:
+    resolution: {integrity: sha512-QEP10dpHHBeQNv1pks3WnHRCem2Zp636lq54M2nKO2Sarr13pL4u6diQXf65yzXUn0mkk18SyIDCm9UOJYTi1w==}
     peerDependencies:
       mobx: ^6.9.0
-      react: ^16.8.0 || ^17 || ^18
+      react: ^16.8.0 || ^17 || ^18 || ^19
       react-dom: '*'
       react-native: '*'
     peerDependenciesMeta:
@@ -3551,11 +3551,11 @@ packages:
       react-native:
         optional: true
 
-  mobx-react@9.0.0:
-    resolution: {integrity: sha512-rhUBWXK/k4H/jMXZqbL0uTPncRSvJR23tpmJemoAEjJjm0Fkv6tTLG3Cze9MIgvf882Kradx6msizuQxLAiQwA==}
+  mobx-react@9.2.0:
+    resolution: {integrity: sha512-dkGWCx+S0/1mfiuFfHRH8D9cplmwhxOV5CkXMp38u6rQGG2Pv3FWYztS0M7ncR6TyPRQKaTG/pnitInoYE9Vrw==}
     peerDependencies:
       mobx: ^6.9.0
-      react: ^16.8.0 || ^17 || ^18
+      react: ^16.8.0 || ^17 || ^18 || ^19
       react-dom: '*'
       react-native: '*'
     peerDependenciesMeta:
@@ -3564,8 +3564,8 @@ packages:
       react-native:
         optional: true
 
-  mobx@6.10.0:
-    resolution: {integrity: sha512-WMbVpCMFtolbB8swQ5E2YRrU+Yu8iLozCVx3CdGjbBKlP7dFiCSuiG06uea3JCFN5DnvtAX7+G5Bp82e2xu0ww==}
+  mobx@6.13.5:
+    resolution: {integrity: sha512-/HTWzW2s8J1Gqt+WmUj5Y0mddZk+LInejADc79NJadrWla3rHzmRHki/mnEUH1AvOmbNTZ1BRbKxr8DSgfdjMA==}
 
   ms@2.1.2:
     resolution: {integrity: sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==}
@@ -4591,10 +4591,10 @@ packages:
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
-  use-sync-external-store@1.2.0:
-    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+  use-sync-external-store@1.4.0:
+    resolution: {integrity: sha512-9WXSPC5fMv61vaupRkCKCxsPxBocVnwakBEkMIHHpkTTg6icbJtg6jzgtLDm4bl3cSHAca52rYWih0k4K3PfHw==}
     peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
@@ -8749,23 +8749,23 @@ snapshots:
 
   mnemonic-id@3.2.7: {}
 
-  mobx-react-lite@4.0.3(mobx@6.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  mobx-react-lite@4.1.0(mobx@6.13.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      mobx: 6.10.0
+      mobx: 6.13.5
       react: 18.2.0
-      use-sync-external-store: 1.2.0(react@18.2.0)
+      use-sync-external-store: 1.4.0(react@18.2.0)
     optionalDependencies:
       react-dom: 18.2.0(react@18.2.0)
 
-  mobx-react@9.0.0(mobx@6.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
+  mobx-react@9.2.0(mobx@6.13.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
     dependencies:
-      mobx: 6.10.0
-      mobx-react-lite: 4.0.3(mobx@6.10.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      mobx: 6.13.5
+      mobx-react-lite: 4.1.0(mobx@6.13.5)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react: 18.2.0
     optionalDependencies:
       react-dom: 18.2.0(react@18.2.0)
 
-  mobx@6.10.0: {}
+  mobx@6.13.5: {}
 
   ms@2.1.2: {}
 
@@ -9902,7 +9902,7 @@ snapshots:
     dependencies:
       punycode: 2.3.0
 
-  use-sync-external-store@1.2.0(react@18.2.0):
+  use-sync-external-store@1.4.0(react@18.2.0):
     dependencies:
       react: 18.2.0
 

@@ -1,4 +1,5 @@
 import type { FC } from 'react'
+import useTargetEventListener from '@pkgs/utils/react/hooks/useTargetEventListener'
 import { wait } from '@pkgs/utils/src/utils'
 import { makeAutoObservable, observe } from 'mobx'
 import { observer } from 'mobx-react'
@@ -7,7 +8,7 @@ import { initSetting } from '../../src'
 import settings from '../settings'
 
 // 打包的
-const { configStore, openSettingPanel } = initSetting({
+const { configStore, openSettingPanel, updateConfig } = initSetting({
   settings,
   useShadowDom: false,
   autoSave: true,
@@ -39,6 +40,9 @@ const ObservePanel: FC = observer(() => {
 
 // configStore.b1 = true
 const App: FC = () => {
+  useTargetEventListener('storage', () => {
+    updateConfig()
+  }, window)
   return (
     <div
       style={{

@@ -5,7 +5,7 @@ import { classNames } from '@pkgs/utils/src/utils'
 import { useMemo, useState } from 'preact/hooks'
 import LoadingContainer from '../components/LoadingContainer'
 import ShadowRootContainer from '../components/ShadowRootContainer'
-import { useMemoizedFn, useUpdate } from '../hooks'
+import { useMemoizedFn, useOnce, useUpdate } from '../hooks'
 import { ConfigEntriesBox } from './ConfigEntriesBox'
 import './index.less'
 
@@ -32,6 +32,20 @@ const SettingPanel: FC<Props> = (props) => {
   const savedConfig = props.savedConfig!
   const newConfig = props.savedConfig!
   const update = useUpdate()
+
+  useOnce(() => {
+    window.__spUpdate = update
+    return () => {
+      delete window.__spUpdate
+    }
+  })
+  // useEffect(() => {
+  //   Object.keys(props.configStore).forEach((key) => {
+  //     const val = props.configStore[key]
+  //     console.log('val', key, val)
+  //   })
+  //   update()
+  // }, [props.configStore])
 
   const setNewConfig = useMemoizedFn((key: string, val: any) => {
     if (props.changeConfigStoreWithSettingPanelChange)
