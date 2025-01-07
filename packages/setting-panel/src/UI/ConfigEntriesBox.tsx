@@ -126,7 +126,7 @@ const ConfigRowAction: FC<{
           {props.config.group.map((val: any, i: number) => {
             // const isAdvVal = !isObject(val)
             const value = val?.value ?? val
-            const label = val.label ?? val
+            const label = val?.label ?? val
             return (
               <option key={i} value={value} title={val?.desc}>
                 {label}
