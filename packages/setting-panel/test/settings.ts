@@ -10,7 +10,7 @@ const aSet = {
     group: [
       { value: 'a', label: 'a属性', desc: 'adfadf' },
       'b',
-      { value: 'c', label: 'c属性' },
+      { value: 'c' },
     ],
   }),
   a3: { defaultValue: 'a' as 'a' | 'b', category: aCate },

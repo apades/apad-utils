@@ -57,7 +57,7 @@ export const ConfigEntriesBox: FC<{
                 )}
               >
                 {' '}
-                {val.label ?? key}
+                {val?.label ?? key}
                 :
               </div>
               <div className="flex flex-1 flex-col">
@@ -126,7 +126,7 @@ const ConfigRowAction: FC<{
           {props.config.group.map((val: any, i: number) => {
             // const isAdvVal = !isObject(val)
             const value = val?.value ?? val
-            const label = val?.label ?? val
+            const label = val?.label ?? value
             return (
               <option key={i} value={value} title={val?.desc}>
                 {label}
