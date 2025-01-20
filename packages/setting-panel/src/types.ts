@@ -1,3 +1,4 @@
+import type { ValueOf } from '@pkgs/utils/type'
 import type mobx from 'mobx'
 import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import type { observer } from 'mobx-react'
@@ -36,6 +37,10 @@ export type ConfigField<T> =
     type: 'range'
     range: [number, number]
     rangeStep?: number
+  })
+  | (ConfigFieldBase<T> & {
+    type: 'map'
+    defaultItem: ValueOf<T>
   })
 
 export interface BaseMobx {

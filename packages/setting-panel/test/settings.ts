@@ -64,6 +64,11 @@ const dSet = {
   },
 }
 
+const defaultItem = {
+  name: 'aa',
+  val: '1',
+}
+
 const settings = {
   ...aSet,
   ...bSet,
@@ -95,6 +100,21 @@ const settings = {
     type: 'range',
     range: [12, 32],
     rangeStep: 1,
+  }),
+  // map结构
+  mapSet: config<Record<string, typeof defaultItem>>({
+    type: 'map',
+    defaultValue: {},
+    defaultItem,
+  }),
+  mapArrSet: config<Record<string, typeof defaultItem[]>>({
+    type: 'map',
+    defaultValue: {},
+    defaultItem: [defaultItem],
+  }),
+  // arr extend
+  arrAdv: config({
+    defaultValue: [] as typeof defaultItem[],
   }),
 }
 
