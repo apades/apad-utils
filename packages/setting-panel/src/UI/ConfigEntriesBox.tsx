@@ -12,6 +12,8 @@ import {
   wait,
 } from '@pkgs/utils/src/utils'
 import { useRef } from 'preact/hooks'
+import ArrayInput from './ArrayInput'
+import MapInput from './MapInput'
 
 export const ConfigEntriesBox: FC<{
   config: ConfigEntries
@@ -106,7 +108,7 @@ const ConfigRowAction: FC<{
   newVal: any
 }> = (props) => {
   const defaultValue = props.config.defaultValue ?? props.config
-  let value = props.newVal ?? defaultValue
+  const value = props.newVal ?? defaultValue
   const isNumber = typeof defaultValue == 'number'
 
   type El = HTMLInputElement | HTMLSelectElement
@@ -116,8 +118,6 @@ const ConfigRowAction: FC<{
       return props.onChange(target.checked)
     props.onChange(isNumber ? Number(target.value) : target.value)
   }
-
-  const arrInputRefs = useRef<HTMLInputElement[]>([])
 
   switch (props.config?.type) {
     case 'group':
@@ -156,6 +156,8 @@ const ConfigRowAction: FC<{
           <input className="flex-1" value={value} onChange={onChange} step={step} style={{ maxWidth: 56 }} type="number" />
         </div>
       )
+    case 'map':
+      return <MapInput config={props.config} defaultValue={defaultValue} onChange={props.onChange} value={value} />
   }
 
   if (isBoolean(value)) {
@@ -169,70 +171,7 @@ const ConfigRowAction: FC<{
     )
   }
   if (isArray(value)) {
-    const getValues = () =>
-      arrInputRefs.current.filter(e => !!e).map(el => el?.value || '')
-    value = [...value]
-
-    const add = (index: number) =>
-      props.onChange(arrayInsert(getValues(), index + 1, ['']))
-
-    return (
-      <div className="arr-row">
-        {value.map((v: any, i: number) => {
-          const remove = () => {
-            arrInputRefs.current.splice(i, 1)
-            arrInputRefs.current[i - 1]?.focus()
-            props.onChange(getValues())
-          }
-          return (
-            <div key={i}>
-              <input
-                key={i}
-                ref={ref => (arrInputRefs.current[i] = ref)}
-                value={value[i]}
-                onChange={(e) => {
-                  value[i] = (e.target as HTMLInputElement).value
-                  props.onChange(getValues())
-                }}
-                onKeyDown={async (e) => {
-                  if (e.composed)
-                    return
-                  switch (e.code) {
-                    case 'Enter':
-                      e.preventDefault()
-                      add(i)
-                      await wait()
-                      arrInputRefs.current[i + 1]?.focus()
-                      break
-                    case 'Backspace':
-                      if ((`${v}`).length)
-                        return
-                      e.preventDefault()
-                      remove()
-                      break
-                    case 'ArrowUp':
-                      arrInputRefs.current[i - 1]?.focus()
-                      break
-                    case 'ArrowDown':
-                      arrInputRefs.current[i + 1]?.focus()
-                  }
-                }}
-              />
-              <button onClick={remove}>x</button>
-            </div>
-          )
-        })}
-        <div>
-          <button
-            onClick={() => {
-              add(value.length)
-            }}
-          >
-            +
-          </button>
-        </div>
-      </div>
-    )
+    return <ArrayInput value={value} onChange={props.onChange} />
   }
 
   return (

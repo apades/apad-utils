@@ -66,7 +66,8 @@ const dSet = {
 
 const defaultItem = {
   name: 'aa',
-  val: '1',
+  val: 'val',
+  num: 1,
 }
 
 const settings = {
@@ -104,14 +105,25 @@ const settings = {
   // map结构
   mapSet: config<Record<string, typeof defaultItem>>({
     type: 'map',
-    defaultValue: {},
+    defaultValue: {
+      a1: { name: 'a1 val', num: 2, val: 'a1 val' },
+    },
     defaultItem,
   }),
-  mapArrSet: config<Record<string, typeof defaultItem[]>>({
+  mapSetWithCusLabel: config<Record<string, typeof defaultItem>>({
     type: 'map',
     defaultValue: {},
-    defaultItem: [defaultItem],
+    mapKeyLabel: '自定义key名',
+    defaultItem: {
+      ...defaultItem,
+      name: { defaultValue: defaultItem.name, label: '自定义名字', desc: 'a' },
+    },
   }),
+  // mapArrSet: config<Record<string, typeof defaultItem[]>>({
+  //   type: 'map',
+  //   defaultValue: {},
+  //   defaultItem: [defaultItem],
+  // }),
   // arr extend
   arrAdv: config({
     defaultValue: [] as typeof defaultItem[],

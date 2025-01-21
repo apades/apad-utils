@@ -40,7 +40,8 @@ export type ConfigField<T> =
   })
   | (ConfigFieldBase<T> & {
     type: 'map'
-    defaultItem: ValueOf<T>
+    mapKeyLabel?: string
+    defaultItem: ValueOf<T> | { [K in keyof ValueOf<T>]: ({ label?: string, defaultValue: any, desc?: string } | any) }
   })
 
 export interface BaseMobx {

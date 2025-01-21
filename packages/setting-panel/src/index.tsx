@@ -10,6 +10,14 @@ export function config<T>(config: ConfigField<T>) {
   return config
 }
 
+export function getPureKeyValueMap(config: any) {
+  return Object.fromEntries(
+    Object.entries(config).map(([key, val]: [string, any]) => {
+      return [key, val?.defaultValue ?? val]
+    }),
+  )
+}
+
 export function initSetting<Map extends Record<string, any>>(
   options: InitOptions<Map>,
 ): InitSettingReturn<Map> {
