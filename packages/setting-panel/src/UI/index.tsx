@@ -207,7 +207,7 @@ const SettingPanel: FC<Props> = (props) => {
 }
 export const Summary: FC<{
   children: (JSX.Element | JSX.Element[])[] | JSX.Element
-  title: string
+  title: string | JSX.Element
   open?: boolean
 }> = (props) => {
   return (

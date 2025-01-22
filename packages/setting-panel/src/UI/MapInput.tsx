@@ -22,9 +22,9 @@ const MapInput: FC<MapInputProps> = (props) => {
   const mapInputRefs = useRef<MapItemsRef[]>([])
 
   const getValues = () => Object.fromEntries(
-    mapInputRefs.current.map((v) => {
+    mapInputRefs.current.filter(v => !!v.keyInput).map((v) => {
       const values = Object.fromEntries(
-        v.values.map(v => [v.key, v.input.value]),
+        v.values.map(v => [v.key, v.input?.value]),
       )
       return [v.keyInput.value, values]
     }),
@@ -32,10 +32,18 @@ const MapInput: FC<MapInputProps> = (props) => {
 
   const changeVal = () => props.onChange(getValues())
   const add = () => {
+    let index = Object.keys(props.value).length + 1
+    const v = getValues()
+    while (true) {
+      if (!v[`newKey${index}`]) {
+        break
+      }
+      index++
+    }
     props.onChange(
       {
-        ...getValues(),
-        [`newKey${Object.keys(props.value).length}`]: getPureKeyValueMap(defaultItem),
+        ...v,
+        [`newKey${index}`]: getPureKeyValueMap(defaultItem),
       },
     )
   }
@@ -45,8 +53,16 @@ const MapInput: FC<MapInputProps> = (props) => {
       {
         Object.entries(props.value).map(([mapKey, mapValue]: [string, any], mapIndex) => {
           const mapKeyLabel = config?.mapKeyLabel ?? 'key'
+          const remove = () => {
+            mapInputRefs.current.splice(mapIndex, 1)
+            props.onChange(getValues())
+          }
           return (
-            <Summary key={mapIndex} open={false} title={mapKey}>
+            <Summary
+              key={mapIndex}
+              open={false}
+              title={mapKey}
+            >
               {/* mapKey */}
               <div className="row">
                 {mapKeyLabel}
@@ -60,6 +76,7 @@ const MapInput: FC<MapInputProps> = (props) => {
                   }}
                   onChange={changeVal}
                 />
+                <button onClick={remove}>x</button>
               </div>
               <div className="bg-gray-400">
                 {
