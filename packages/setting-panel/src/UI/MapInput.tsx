@@ -77,7 +77,7 @@ const MapInput: FC<MapInputProps> = (props) => {
                 />
                 <button onClick={remove}>x</button>
               </div>
-              <div className="bg-gray-400 w-f grid grid-cols-2">
+              <div className="bg-gray-400 w-f grid grid-cols-[auto,1fr]">
                 {
                   Object.entries(mapValue).map(([key, value]: [string, any], i) => {
                     const label = defaultItem[key]?.label || key
