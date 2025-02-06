@@ -65,8 +65,8 @@ const dSet = {
 }
 
 const defaultItem = {
-  name: 'aa',
-  val: 'val',
+  dagagagagagagag: 'aa',
+  dasgagasdgadgdasgasg: 'val',
   num: 1,
 }
 
@@ -106,7 +106,7 @@ const settings = {
   mapSet: config<Record<string, typeof defaultItem>>({
     type: 'map',
     defaultValue: {
-      a1: { name: 'a1 val', num: 2, val: 'a1 val' },
+      a1: { dagagagagagagag: 'a1 val', num: 2, dasgagasdgadgdasgasg: 'a1 val' },
     },
     defaultItem,
   }),
@@ -116,7 +116,7 @@ const settings = {
     mapKeyLabel: '自定义key名',
     defaultItem: {
       ...defaultItem,
-      name: { defaultValue: defaultItem.name, label: '自定义名字', desc: 'a' },
+      dagagagagagagag: { defaultValue: defaultItem.dagagagagagagag, label: '自定义名字', desc: 'a' },
     },
   }),
   // mapArrSet: config<Record<string, typeof defaultItem[]>>({

@@ -1,6 +1,6 @@
-import type { FC } from 'preact/compat'
 import type { ConfigField } from '../types'
 import { arrayInsert, isArray } from '@pkgs/utils/src/utils'
+import { type FC, Fragment } from 'preact/compat'
 import { useRef } from 'preact/hooks'
 import { Summary } from '.'
 import { getPureKeyValueMap } from '..'
@@ -65,10 +65,9 @@ const MapInput: FC<MapInputProps> = (props) => {
             >
               {/* mapKey */}
               <div className="row">
-                {mapKeyLabel}
-                :
+                <div>{mapKeyLabel}</div>
                 <input
-                  className="ml-auto"
+                  className="w-[100px] flex-1"
                   value={mapKey}
                   ref={(ref) => {
                     mapInputRefs.current[mapIndex] ??= { keyInput: ref, values: [] }
@@ -78,24 +77,23 @@ const MapInput: FC<MapInputProps> = (props) => {
                 />
                 <button onClick={remove}>x</button>
               </div>
-              <div className="bg-gray-400">
+              <div className="bg-gray-400 w-f grid grid-cols-2">
                 {
                   Object.entries(mapValue).map(([key, value]: [string, any], i) => {
                     const label = defaultItem[key]?.label || key
 
                     return (
-                      <div className="row" key={i}>
-                        {label}
-                        :
+                      <Fragment key={i}>
+                        <div className="flex-1 overflow-hidden text-ellipsis" title={label}>{label}</div>
                         <input
-                          className="ml-auto"
                           value={value}
                           ref={(ref) => {
                             mapInputRefs.current[mapIndex].values[i] ??= { key, input: ref }
                           }}
                           onChange={changeVal}
+                          className="flex-1"
                         />
-                      </div>
+                      </Fragment>
                     )
                   })
                 }

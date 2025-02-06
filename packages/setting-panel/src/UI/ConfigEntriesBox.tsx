@@ -63,7 +63,7 @@ export const ConfigEntriesBox: FC<{
                 :
               </div>
               <div className="flex flex-1 flex-col">
-                <div className="flex-1 flex gap-[12px]">
+                <div className="flex gap-[12px]">
                   <div className="flex flex-1 items-center justify-center gap-[12px]">
                     <ConfigRowAction
                       config={val}
