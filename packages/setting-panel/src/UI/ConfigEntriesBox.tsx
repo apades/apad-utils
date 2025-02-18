@@ -13,6 +13,7 @@ import {
   wait,
 } from '@pkgs/utils/src/utils'
 import { useRef } from 'preact/hooks'
+import { getPureKeyValueMap } from '..'
 import ArrayInput from './ArrayInput'
 import MapInput from './MapInput'
 
@@ -38,7 +39,7 @@ export const ConfigEntriesBox: FC<{
         const isRelChild = !!val.relateBy
         if (isRelChild) {
           if (isFunction(val.relateBy)) {
-            if (!val.relateBy({ ...props.config, ...props.newConfig }))
+            if (!val.relateBy(getPureKeyValueMap({ ...props.config, ...props.newConfig })))
               return null
           }
           else {
