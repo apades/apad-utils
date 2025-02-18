@@ -8,6 +8,7 @@ import {
   isArray,
   isBoolean,
   isEqual,
+  isFunction,
   isUndefined,
   wait,
 } from '@pkgs/utils/src/utils'
@@ -36,11 +37,17 @@ export const ConfigEntriesBox: FC<{
 
         const isRelChild = !!val.relateBy
         if (isRelChild) {
-          const tar = props.config[val.relateBy]
-          const tarDefaultValue = tar.defaultValue ?? tar
-          const tarVal = props.newConfig[val.relateBy] ?? tarDefaultValue
-          if (tarVal !== val.relateByValue)
-            return null
+          if (isFunction(val.relateBy)) {
+            if (!val.relateBy({ ...props.config, ...props.newConfig }))
+              return null
+          }
+          else {
+            const tar = props.config[val.relateBy]
+            const tarDefaultValue = tar.defaultValue ?? tar
+            const tarVal = props.newConfig[val.relateBy] ?? tarDefaultValue
+            if (tarVal !== val.relateByValue)
+              return null
+          }
         }
 
         return (

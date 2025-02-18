@@ -1,4 +1,4 @@
-import type { ValueOf } from '@pkgs/utils/type'
+import type { Rec, ValueOf } from '@pkgs/utils/type'
 import type mobx from 'mobx'
 import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import type { observer } from 'mobx-react'
@@ -13,7 +13,7 @@ export interface ConfigFieldBase<T> {
   /** 分类 */
   category?: string
   /** 与settings字段关联的 */
-  relateBy?: string
+  relateBy?: string | ((settings: Rec) => boolean)
   /** 等于relateBy的值时，才显示该设置，默认defaultValue是boolean时为true */
   relateByValue?: any
 }

@@ -87,6 +87,8 @@ const settings = {
   }),
   rel1: false,
   rel2: config({ defaultValue: '22', relateBy: 'rel1', relateByValue: true }),
+  rel3: false,
+  rel4: config({ defaultValue: false, relateBy: v => v.rel1 && !v.rel3 }),
   color: config({ type: 'color', defaultValue: '#66ccff' }),
   arr: [1, 2, 3],
   emptyArr: [] as any[],
