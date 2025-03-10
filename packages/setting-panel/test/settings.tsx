@@ -130,6 +130,34 @@ const settings = {
   arrAdv: config({
     defaultValue: [] as typeof defaultItem[],
   }),
+  custom: config({
+    defaultValue: 'Shift + ArrowRight',
+    render: (val, onChange) => (
+      <input
+        value={val}
+        onKeyDown={(e) => {
+          e.preventDefault()
+          const { key, shiftKey, ctrlKey } = e
+
+          console.log('key', key, shiftKey, ctrlKey)
+          const actions: string[] = []
+          if (!key)
+            return
+          if (shiftKey && key !== 'Shift')
+            actions.push('Shift')
+          if (ctrlKey && key !== 'Control')
+            actions.push('Ctrl')
+
+          actions.push(key.length === 1
+            ? key.toUpperCase()
+            : key)
+          onChange(
+            actions.join(' + '),
+          )
+        }}
+      />
+    ),
+  }),
 }
 
 window.settings = settings

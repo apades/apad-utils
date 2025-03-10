@@ -13,7 +13,7 @@ import {
   wait,
 } from '@pkgs/utils/src/utils'
 import { useRef } from 'preact/hooks'
-import { getPureKeyValueMap } from '..'
+import { config, getPureKeyValueMap } from '..'
 import ArrayInput from './ArrayInput'
 import MapInput from './MapInput'
 
@@ -72,10 +72,11 @@ export const ConfigEntriesBox: FC<{
               </div>
               <div className="flex flex-1 flex-col">
                 <div className="flex gap-[12px]">
-                  <div className="flex flex-1 items-center justify-center gap-[12px]">
+                  <div className="flex flex-1 items-center justify-center gap-[12px] [&>*]:mr-auto">
                     <ConfigRowAction
                       config={val}
                       onChange={(v) => {
+                        console.log('onchange', v)
                         props.setNewConfig(key, v)
                       }}
                       newVal={(props.newConfig)[key]}
@@ -127,6 +128,8 @@ const ConfigRowAction: FC<{
     props.onChange(isNumber ? Number(target.value) : target.value)
   }
 
+  if (props.config.render)
+    return props.config.render(value, props.onChange)
   switch (props.config?.type) {
     case 'group':
       return (
@@ -185,7 +188,6 @@ const ConfigRowAction: FC<{
   return (
     <input
       type={isNumber ? 'number' : 'text'}
-      className="input"
       value={value}
       onInput={onChange}
       onBlur={onChange}

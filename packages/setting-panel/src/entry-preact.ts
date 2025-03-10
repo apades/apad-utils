@@ -6,4 +6,5 @@ export function render(vNode: any, parent: HTMLElement) {
     preactRender(null, parent)
   }
 }
+export type { VNode as ReactNode } from 'preact'
 export { createPortal } from 'preact/compat'

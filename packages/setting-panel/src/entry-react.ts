@@ -8,4 +8,5 @@ export function render(vNode: any, parent: HTMLElement) {
   }
 }
 
+export type { ReactNode } from 'react'
 export { createPortal } from 'react-dom'
