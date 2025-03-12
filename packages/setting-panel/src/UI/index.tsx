@@ -25,6 +25,7 @@ export type Props = {
   styleHref?: string
   config: { isLoading: boolean }
   saveConfig: () => void
+  category?: string
 } & InitOptions<Record<string, any>>
 
 const SettingPanel: FC<Props> = (props) => {
@@ -127,7 +128,7 @@ const SettingPanel: FC<Props> = (props) => {
     }
   }, [props.settings])
 
-  const [nowCategory, setNowCategory] = useState(props.i18n.main)
+  const [nowCategory, setNowCategory] = useState(props.category || props.i18n.main)
 
   const showAdv = advConfigEntries.length || cateAdvConfigEntries.length
 

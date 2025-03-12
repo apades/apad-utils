@@ -99,9 +99,10 @@ export function initSetting<Map extends Record<string, any>>(
   const root = createElement('div')
 
   function openSettingPanel(
-    /** 渲染的位置，不传默认是开全局modal */
-    renderTarget: HTMLElement = document.body,
+    props?: HTMLElement | { category: string, renderTarget: HTMLElement },
   ) {
+    const { renderTarget = document.body, category } = { renderTarget: props instanceof HTMLElement ? props : props?.renderTarget, category: props instanceof HTMLElement ? undefined : props?.category }
+
     renderTarget.appendChild(root)
     updateConfig()
     unmount = render(
@@ -114,6 +115,7 @@ export function initSetting<Map extends Record<string, any>>(
         onClose={closeSettingPanel}
         styleHref={options.styleHref || new URL('./index.css', import.meta.url).href}
         saveConfig={saveConfig}
+        category={category}
         {...options}
       />,
       root,

@@ -45,6 +45,7 @@ const App: FC = () => {
       }}
     >
       <button onClick={() => openSettingPanel()}>open</button>
+      <button onClick={() => openSettingPanel({ category: 'c系列' })}>c系列</button>
       <div style={{ marginTop: 24 }}></div>
       <ObservePanel />
     </div>

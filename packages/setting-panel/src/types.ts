@@ -91,7 +91,7 @@ export interface InitSettingReturn<Map extends Record<string, any>> {
   /** 打开设置面板的UI */
   openSettingPanel: (
     /** 渲染的位置，不传默认是开全局modal */
-    renderTarget?: HTMLElement
+    renderTarget?: HTMLElement | { category: string, renderTarget?: HTMLElement }
   ) => void
   closeSettingPanel: () => void
   /**
