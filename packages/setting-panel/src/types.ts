@@ -5,7 +5,7 @@ import type { IObjectDidChange, IValueDidChange, Lambda } from 'mobx'
 import type { observer } from 'mobx-react'
 import type en from './i18n/en.json'
 
-export interface ConfigFieldBase<T> {
+export interface ConfigFieldBase<T, ext = any> {
   defaultValue?: T
   desc?: string
   /** 不填默认使用key作为label */
@@ -18,6 +18,7 @@ export interface ConfigFieldBase<T> {
   /** 等于relateBy的值时，才显示该设置，默认defaultValue是boolean时为true */
   relateByValue?: any
   render?: (val: T, onChange: (val: T) => Promise<void>) => ReactNode
+  ext?: ext
 }
 interface ConfigGroupField<T> {
   value: T
