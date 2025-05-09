@@ -1,7 +1,7 @@
 {
   "name": "@apad/type-utils",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "typescript type utils, only type",
   "author": "apades",
   "license": "MIT",
@@ -25,7 +25,7 @@
     }
   },
   "files": [
-    "src"
+    "lib"
   ],
   "publishConfig": {
     "access": "public"
