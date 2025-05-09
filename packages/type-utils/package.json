@@ -1,7 +1,7 @@
 {
   "name": "@apad/type-utils",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "typescript type utils, only type",
   "author": "apades",
   "license": "MIT",
@@ -24,6 +24,7 @@
       "types": "./lib/index.d.ts"
     }
   },
+  "types": "./lib/index.d.ts",
   "files": [
     "lib"
   ],
