@@ -1,4 +1,4 @@
-import { IfEquals } from './utils'
+import type { IfEquals } from './utils'
 
 type DeepWritablePrimitive =
   | undefined
@@ -6,7 +6,7 @@ type DeepWritablePrimitive =
   | boolean
   | string
   | number
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line ts/no-unsafe-function-type
   | Function
 
 /**
@@ -25,12 +25,12 @@ type DeepWritablePrimitive =
 export type DeepWritable<T> = T extends DeepWritablePrimitive
   ? T
   : T extends Array<infer U>
-  ? DeepWritableArray<U>
-  : T extends Map<infer K, infer V>
-  ? DeepWritableMap<K, V>
-  : T extends Set<infer T>
-  ? DeepWritableSet<T>
-  : DeepWritableObject<T>
+    ? DeepWritableArray<U>
+    : T extends Map<infer K, infer V>
+      ? DeepWritableMap<K, V>
+      : T extends Set<infer T>
+        ? DeepWritableSet<T>
+        : DeepWritableObject<T>
 
 type DeepWritableArray<T> = Array<DeepWritable<T>>
 type DeepWritableMap<K, V> = Map<K, DeepWritable<V>>
@@ -59,10 +59,10 @@ export type RequiredLiteralKeys<T> = keyof {
   [K in keyof T as string extends K
     ? never
     : number extends K
-    ? never
-    : {} extends Pick<T, K>
-    ? never
-    : K]: 0
+      ? never
+      : object extends Pick<T, K>
+        ? never
+        : K]: 0
 }
 
 /**
@@ -81,10 +81,10 @@ export type OptionalLiteralKeys<T> = keyof {
   [K in keyof T as string extends K
     ? never
     : number extends K
-    ? never
-    : {} extends Pick<T, K>
-    ? K
-    : never]: 0
+      ? never
+      : object extends Pick<T, K>
+        ? K
+        : never]: 0
 }
 
 /**
@@ -133,8 +133,3 @@ export type OptionalKeysInclude<T, Keys extends keyof T> = Partial<T> & {
 export type Entries<T> = {
   [K in keyof T]: [K, T[K]]
 }[keyof T][]
-
-type Test = {
-  a: string
-  b: boolean
-}

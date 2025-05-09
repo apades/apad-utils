@@ -1,4 +1,4 @@
-import { TupleToUnion } from './union'
+import type { TupleToUnion } from './union'
 
 /**
  * reverse array
@@ -79,6 +79,7 @@ export type Unshift<T extends any[], Ext> = [Ext, ...T]
  * type Result = Pop<[1, 2, 3]> // [1, 2]
  * ```
  */
+// eslint-disable-next-line unused-imports/no-unused-vars
 export type Pop<T extends any[]> = T extends [...infer L, infer R] ? L : never
 
 /**
@@ -88,6 +89,7 @@ export type Pop<T extends any[]> = T extends [...infer L, infer R] ? L : never
  * type Result = Shift<[1, 2, 3]> // [2, 3]
  * ```
  */
+// eslint-disable-next-line unused-imports/no-unused-vars
 export type Shift<T extends any[]> = T extends [infer L, ...infer R] ? R : never
 
 /**
@@ -99,7 +101,7 @@ export type Shift<T extends any[]> = T extends [infer L, ...infer R] ? R : never
  */
 export type Flatten<S extends any[], T extends any[] = []> = S extends [
   infer X,
-  ...infer Y
+  ...infer Y,
 ]
   ? X extends any[]
     ? Flatten<[...X, ...Y], T>

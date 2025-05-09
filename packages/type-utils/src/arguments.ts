@@ -1,4 +1,4 @@
-import { Reverse } from './array'
+import type { Reverse } from './array'
 
 /**
  * extend function argument

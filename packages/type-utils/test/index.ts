@@ -1,6 +1,7 @@
-import { Omit } from '../src/utils'
+/* eslint-disable unused-imports/no-unused-vars */
+import type { Omit } from '../src/utils'
 
-type TestObj = {
+interface TestObj {
   a: number
   b: string
 }

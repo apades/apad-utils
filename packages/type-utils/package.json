@@ -1,20 +1,32 @@
 {
   "name": "@apad/type-utils",
-  "version": "0.0.1",
+  "type": "module",
+  "version": "1.0.0",
   "description": "typescript type utils, only type",
-  "main": "./src/index.js",
+  "author": "apades",
+  "license": "MIT",
   "homepage": "https://github.com/apades/apad-utils/tree/master/packages/@apad/type-utils",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apades/apad-utils.git",
     "directory": "packages/@apad/type-utils"
   },
-  "files": [
-    "src"
-  ],
   "bugs": {
     "url": "https://github.com/apades/apad-utils/issues"
   },
+  "keywords": [
+    "typescript",
+    "type",
+    "utils"
+  ],
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "files": [
+    "src"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -22,10 +34,6 @@
     "lib": "lib"
   },
   "scripts": {
-  },
-  "keywords": [
-    "typescript","type","utils"
-  ],
-  "author": "apades",
-  "license": "MIT"
+    "build": "tsup src/index.ts --dts --format esm --outDir lib"
+  }
 }
