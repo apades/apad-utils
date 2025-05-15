@@ -81,3 +81,13 @@ export type FilterUnionStartWith<
   Union,
   Prefix extends string,
 > = Union extends `${Prefix}${string}` ? Union : never
+
+export type FilterUnionEndWith<
+  Union,
+  Suffix extends string,
+> = Union extends `${string}${Suffix}` ? Union : never
+
+export type FilterUnionUnEndWith<
+  Union,
+  Suffix extends string,
+> = Union extends `${string}${Suffix}` ? never : Union

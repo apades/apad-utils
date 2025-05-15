@@ -1,5 +1,5 @@
-import type { First } from './array'
-import type { SplitStringToArray, SplitStringToUnion } from './string'
+import type { Array } from './array'
+import type { String } from './string'
 import type { FilterUnionUnStartWith } from './union'
 
 export type Noop = (this: any, ...args: any[]) => any
@@ -97,4 +97,4 @@ export type DeepLeafKeys<T> = T extends Record<string, unknown>
  * type Params = GetPathParamsUnion<'/path/p2/:a1/p4/p5/:a2/p3'> // 'a1' | 'a2'
  * ```
  */
-export type GetPathParamsUnion<Path extends string> = First<SplitStringToArray<'/', FilterUnionUnStartWith<SplitStringToUnion<'/:', Path>, '/'>>>
+export type GetPathParamsUnion<Path extends string> = Array.First<String.Split<'/', FilterUnionUnStartWith<String.SplitToUnion<'/:', Path>, '/'>>>

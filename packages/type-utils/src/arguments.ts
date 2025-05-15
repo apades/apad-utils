@@ -1,4 +1,4 @@
-import type { Reverse } from './array'
+import type { Array } from './array'
 
 /**
  * extend function argument
@@ -23,5 +23,5 @@ export type AppendArgument<Fn, Ext> = Fn extends (...args: infer R) => infer T
 export type FlipArguments<T extends (...args: any[]) => any> = T extends (
   ...args: infer P
 ) => infer U
-  ? (...args: Reverse<P>) => U
+  ? (...args: Array.Reverse<P>) => U
   : never
