@@ -35,7 +35,7 @@ export const ConfigEntriesBox: FC<{
             props.newConfig[key],
             defaultValue,
           )
-        const newVal = (props.newConfig)[key]
+        const newVal = (props.newConfig)[key] ?? defaultValue
 
         const isRelChild = !!val.relateBy
         if (isRelChild) {
