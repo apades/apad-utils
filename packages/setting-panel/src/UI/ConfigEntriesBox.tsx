@@ -73,9 +73,9 @@ export const ConfigEntriesBox: FC<{
                 {val?.label ?? key}
                 :
               </div>
-              <div className="flex flex-1 flex-col">
+              <div className="flex flex-1 flex-col overflow-hidden">
                 <div className="flex gap-[12px]">
-                  <div className="flex flex-1 items-center justify-center gap-[12px] [&>*]:mr-auto">
+                  <div className="flex flex-1 items-center justify-center gap-[12px] [&>*]:mr-auto overflow-hidden">
                     <ConfigRowAction
                       config={val}
                       onChange={(v) => {
