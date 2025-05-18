@@ -58,9 +58,9 @@ export interface InitOptions<Map extends Record<string, any>> {
     [K in keyof Map]: ConfigField<Map[K]>
   }
   /** 初始化时载入设置，saveInLocal为false时返回的是空object */
-  onInitLoadConfig?: (config: Map) => Promise<Map> | Map
+  onInitLoadConfig?: (config: Partial<Map>) => Promise<Partial<Map>> | Partial<Map>
   /** 保存时的数据，如果不关闭saveInLocal默认也会保存一份本地，可以返回新数据进行保存，注意不能delete */
-  onSave?: (config: Map) => Promise<void | Map> | void | Map
+  onSave?: (config: Partial<Map>) => Promise<void | Partial<Map>> | void | Partial<Map>
   /**
    * 保存的位置，默认用localStorage
    *
