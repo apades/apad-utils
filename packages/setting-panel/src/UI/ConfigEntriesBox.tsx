@@ -35,6 +35,7 @@ export const ConfigEntriesBox: FC<{
             props.newConfig[key],
             defaultValue,
           )
+        const newVal = (props.newConfig)[key]
 
         const isRelChild = !!val.relateBy
         if (isRelChild) {
@@ -50,6 +51,8 @@ export const ConfigEntriesBox: FC<{
               return null
           }
         }
+
+        const optionDesc = val?.type === 'group' && val.group?.find((v: any) => v === newVal || v?.value === newVal)?.desc
 
         return (
           <div
@@ -79,7 +82,7 @@ export const ConfigEntriesBox: FC<{
                         console.log('onchange', v)
                         props.setNewConfig(key, v)
                       }}
-                      newVal={(props.newConfig)[key]}
+                      newVal={newVal}
                     />
                   </div>
                   <div
@@ -102,6 +105,13 @@ export const ConfigEntriesBox: FC<{
                     {val.desc}
                   </div>
                 )}
+                {
+                  optionDesc && (
+                    <div className="mt-[2px] flex-1 text-[12px] text-yellow-600">
+                      {optionDesc}
+                    </div>
+                  )
+                }
               </div>
             </div>
           </div>
