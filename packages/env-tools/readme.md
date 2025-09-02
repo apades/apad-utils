@@ -4,14 +4,15 @@ easy read `.env` , `.env.*` to web bundler and use it in web
 ## exm
 first, create `.env.dev` file in project root, config like
 ```text
-a=aaa
-b=bbb
-c=false
+str=adf
+bool=true
+num=1111
+bignum=12345678901234567890
 ```
 
 webpack config:
 ```js
-import { getDefinesObject } from '@apad/env-tools/lib/bundler'
+import { getDefinesObject } from '@apad/env-tools/bundler'
 
 module.export = {
     // ...
@@ -24,10 +25,10 @@ module.export = {
 
 web:
 ```js
-import { getEnv } from '@apad/env-tools/lib/web'
+import { getEnv } from '@apad/env-tools/env'
 
-console.log(getEnv().a)
-console.log(process.env.b)
+console.log(getEnv().str === 'adf')
+console.log(process.env.num === 1111)
 ```
 
 *if you have some env only want to use in own machine, create a `.env` file can cover every `.env.*`*
@@ -35,7 +36,7 @@ console.log(process.env.b)
 ## some useful api
 show quickly env configure modal
 ```js
-import { showEnvConfigureModal, extendEnv } from '@apad/env-tools/lib/web'
+import { showEnvConfigureModal, extendEnv } from '@apad/env-tools/web'
 
 showEnvConfigureModal()
 // if you want to show you own env in modal, use this extend

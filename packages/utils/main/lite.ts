@@ -1,5 +1,4 @@
-import type { AsyncFn, Noop } from '../type'
-import { isEqual } from 'radash'
+import type { AsyncFn } from '../type'
 
 /**
  * 返回格式 `hh:mm:ss`
@@ -31,41 +30,6 @@ export function isAsyncFunction(fn: Function): boolean {
 
 export async function wait(time = 0) {
   return new Promise<void>(res => setTimeout(res, time))
-}
-
-export function onceCall<T extends Noop>(fn: T): T {
-  if (isAsyncFunction(fn))
-    return oncePromise(fn)
-  let rs: ReturnType<typeof fn>
-  let lastArgs: any
-  let hasCall = false
-
-  return ((...args: any[]) => {
-    if (!hasCall || !isEqual(args, lastArgs)) {
-      hasCall = true
-      rs = fn(...args)
-    }
-    lastArgs = args
-    return rs
-  }) as T
-}
-
-/** 包住async函数，让它只会运行一次，之后再调用函数返回的还是第一次运行结果，不会再调用函数 */
-export function oncePromise<T extends Noop>(fn: T): T {
-  let promise: Promise<any>
-  let lastArgs: any
-
-  return ((...args: any[]) => {
-    if (!promise || !isEqual(args, lastArgs)) {
-      promise = new Promise((res, rej) => {
-        fn(...args)
-          .then(res)
-          .catch(rej)
-      })
-    }
-    lastArgs = args
-    return promise
-  }) as T
 }
 
 export function getDeepPrototype<T = any>(from: any, equal: T): T {
@@ -122,5 +86,24 @@ export function switchLatest<Args extends readonly unknown[], Return>(
         err => lastKey === key && rej(err),
       )
     })
+  }
+}
+
+export function tryCatch<Return>(
+  fn: () => Return,
+): Return extends Promise<any>
+  ? Promise<[undefined, Awaited<Return>] | [Error, undefined]>
+  : [undefined, Return] | [Error, undefined] {
+  try {
+    const rs: any = fn()
+    if (rs instanceof Promise) {
+      return rs
+        .then((d) => [undefined, d])
+        .catch((err) => [err, undefined]) as any
+    } else {
+      return [undefined, rs] as any
+    }
+  } catch (error) {
+    return [error as Error, undefined] as any
   }
 }

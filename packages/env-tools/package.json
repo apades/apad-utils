@@ -1,6 +1,6 @@
 {
   "name": "@apad/env-tools",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "用来打包工具的process.env.*用的工具",
   "author": "apades",
   "license": "MIT",
@@ -13,16 +13,50 @@
   "bugs": {
     "url": "https://github.com/apades/apad-utils/issues"
   },
-  "main": "index.js",
   "files": [
     "lib"
   ],
   "publishConfig": {
     "access": "public"
   },
+  "type": "module",
   "scripts": {
-    "build": "tsup web.ts bundler.ts --clean --out-dir lib --dts --format esm,cjs --global-name envTools",
+    "build": "rm lib -drf && tsup index.ts web.ts env.ts bundler.ts --clean --out-dir lib --dts --format esm,cjs",
     "build:dependencies": "cd ../.. && turbo run build --filter=@apad/env-tools^..."
+  },
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./web": {
+      "import": "./lib/web.js",
+      "require": "./lib/web.cjs"
+    },
+    "./bundler": {
+      "import": "./lib/bundler.js",
+      "require": "./lib/bundler.cjs"
+    },
+    "./env": {
+      "import": "./lib/env.js",
+      "require": "./lib/env.cjs"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "lib/index.d.ts"
+      ],
+      "web": [
+        "lib/web.d.ts"
+      ],
+      "bundler": [
+        "lib/bundler.d.ts"
+      ],
+      "env": [
+        "lib/env.d.ts"
+      ]
+    }
   },
   "dependencies": {
     "dotenv": "^16.0.3",

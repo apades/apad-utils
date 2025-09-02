@@ -1,0 +1,9 @@
+{
+  "name": "env-tools-test",
+  "scripts": {
+    "test": "vite"
+  },
+  "devDependencies": {
+    "@apad/env-tools": "workspace:"
+  }
+}

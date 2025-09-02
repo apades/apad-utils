@@ -1,5 +1,4 @@
-import { createElement } from '@pkgs/utils/src/utils'
-import { isBoolean, isNumber, isString } from 'lodash-es'
+import { createElement, isBoolean, isNumber, isString } from '@pkgs/utils/src/utils'
 import { getEnv } from './env'
 
 export * from './env'
