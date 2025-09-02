@@ -1,6 +1,6 @@
 {
   "name": "@apad/env-tools",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Reading .env file and easy to use it",
   "author": "apades",
   "license": "MIT",
@@ -64,5 +64,12 @@
   },
   "directories": {
     "lib": "lib"
-  }
+  },
+  "keywords": [
+    "dotenv",
+    "env",
+    ".env",
+    "environment",
+    "config"
+  ]
 }
