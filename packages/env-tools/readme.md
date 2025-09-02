@@ -10,7 +10,8 @@ num=1111
 bignum=12345678901234567890
 ```
 
-webpack config:
+### bundler
+webpack:
 ```js
 import { getDefinesObject } from '@apad/env-tools/bundler'
 
@@ -23,7 +24,37 @@ module.export = {
 }
 ```
 
-web:
+vite: 
+```js
+import { defineConfig } from 'vite'
+import { getDefinesObject } from '@apad/env-tools/bundler'
+
+export default defineConfig({
+  define: getDefinesObject(),
+})
+```
+
+tsup:
+```js
+import { defineConfig } from 'tsup'
+import { getDefinesObject } from '@apad/env-tools/bundler'
+
+export default defineConfig({
+  define: getDefinesObject(),
+})
+```
+
+esbuild:
+```js
+import { build } from 'esbuild'
+import { getDefinesObject } from '@apad/env-tools/bundler'
+
+build({
+  define: getDefinesObject(),
+})
+```
+
+### web
 ```js
 import { getEnv } from '@apad/env-tools/env'
 
