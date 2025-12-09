@@ -1,6 +1,6 @@
 {
   "name": "@apad/setting-panel",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "out-of-the-box feature and ts hint support. design with signal pattern(like mobx), provide user interface and easy manage settings",
   "author": "apades",
   "license": "MIT",
@@ -45,8 +45,8 @@
     "build:react-utils": "tsup src/react/index.ts --config ./build/tsup.react.ts -d react"
   },
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
     "react": "^18.2.0",

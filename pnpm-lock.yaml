@@ -235,9 +235,6 @@ importers:
       '@apad/env-tools':
         specifier: 'workspace:'
         version: link:../../packages/env-tools
-      esbuild:
-        specifier: ^0.25.9
-        version: 0.25.9
 
 packages:
 
